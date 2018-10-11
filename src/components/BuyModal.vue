@@ -7,7 +7,7 @@
                     <section class="modal-card-body">
                         <b-field label="Price">
                             <b-input
-                                :value="price"
+                                v-model="price"
                                 placeholder="Your Price"
                                 required>
                             </b-input>
