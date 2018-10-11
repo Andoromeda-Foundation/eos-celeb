@@ -12,31 +12,35 @@ export function getMyBalancesByContract ({ tokenContract = 'eosio.token', symbol
 export async function getTokenPrice () {
   const { rows } = await eos().getTableRows({
     json: 'true',
-    code: 'dacincubator',
-    scope: 'dacincubator',
+    code: 'crazytown.bp',
+    scope: 'crazytown.bp',
     limit: 50,
-    table: 'market'
+    table: 'bag'
   })
-  const { supply } = rows[0]
+console.log("getTokenPrice")
+    console.log(rows)
+  const { owner,price } = rows[0]
   // @Magic Number: 10000000000 = 10^10
   return (
-    Number(supply.slice(0, -5)) / 10000000000).toFixed(4)
+    Number(price) / 10000000000).toFixed(4)
 }
 
 export async function getMarketData () {
   const { rows } = await eos().getTableRows({
     json: 'true',
-    code: 'dacincubator',
-    scope: 'dacincubator',
+    code: 'crazytown.bp',
+    scope: 'crazytown.bp',
     limit: 50,
-    table: 'market'
+    table: 'bag'
   })
-  const { supply, balance } = rows[0]
-  const price = (Number(supply.slice(0, -5)) / 10000000000).toFixed(4)
+    console.log("getMarketData")
+    console.log(rows)
+  const { owner, balance,price } = rows[0]
+  // const price = (Number(supply.slice(0, -5)) / 10000000000).toFixed(4)
   // @Magic Number: 10000000000 = 10^10
   return {
     price,
-    supply,
+    owner,
     balance
   }
 }

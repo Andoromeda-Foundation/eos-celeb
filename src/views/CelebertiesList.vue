@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="content">
-                        主人留言: 我是菜鸡.
+
                         <button class="button is-large" @click="buy(celeb)"> 以 {{celeb.price}} 购买 </button>
                         </div>
                     </div>
@@ -39,6 +39,7 @@
 <script>
 import { getCelebs } from '../blockchain/celeb'
 import BuyModal from '@/components/BuyModal'
+import {getTokenPrice} from '../blockchain/index'
 export default {
   name: 'celeberties-list',
   components: {
@@ -52,6 +53,9 @@ export default {
   async created () {
     this.celebs = await getCelebs();
     console.log(this.celebs)
+      var tb = await getTokenPrice();
+    console.log("ddddd");
+    console.log(tb)
   },
   methods: {
     buy (celeb) {
@@ -74,5 +78,14 @@ export default {
 }
 .card-content {
     padding-top: 2.5rem;
+}
+.image img {
+    display: block;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+}
+.card:hover{
+    transform: scale(1.05);
 }
 </style>
