@@ -26,28 +26,38 @@
                         主人留言: 我是菜鸡.
                         <a href="#">#css</a> <a href="#">#responsive</a>
                         <br>
-                        <button class="button is-large" @click="buy(celeb.id)"> 以 {{celeb.price}} 购买 </button>
+                        <button class="button is-large" @click="buy(celeb)"> 以 {{celeb.price}} 购买 </button>
                         </div>
                     </div>
                     </div>
             </div>
         </div>
+        <b-modal :active.sync="isComponentModalActive" has-modal-card>
+            <buy-modal :person="currentBuy"></buy-modal>
+        </b-modal>
     </div>
 </template>
 
 <script>
 import { getCelebs } from '../blockchain/celeb'
+import BuyModal from "@/components/BuyModal";
 export default {
   name: 'celeberties-list',
+  components: {
+      BuyModal
+  },
   data: () => ({
-    celebs: []
+    celebs: [],
+    isComponentModalActive: false,
+    currentBuy: -1
   }),
   async created () {
     this.celebs = await getCelebs()
   },
   methods: {
-    buy (id) {
-      console.info(id)
+    buy (celeb) {
+      this.currentBuy = celeb
+      this.isComponentModalActive = true
     }
   }
 }
