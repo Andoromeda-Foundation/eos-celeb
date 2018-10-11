@@ -41,4 +41,3 @@ export async function getMarketData () {
   }
 }
 
-export { getContractGlobal, getCrowdSaleOrders } from './myeosgroupon'
