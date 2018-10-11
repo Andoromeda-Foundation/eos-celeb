@@ -26,7 +26,7 @@
                         主人留言: 我是菜鸡.
                         <a href="#">#css</a> <a href="#">#responsive</a>
                         <br>
-                        <button class="button is-large"> 以 {{celeb.price}} 购买 </button>
+                        <button class="button is-large" @click="buy(celeb.id)"> 以 {{celeb.price}} 购买 </button>
                         </div>
                     </div>
                     </div>
@@ -36,24 +36,28 @@
 </template>
 
 <script>
-import { getCelebs } from "../blockchain/celeb";
+import { getCelebs } from '../blockchain/celeb'
 export default {
-  name: "celeberties-list",
+  name: 'celeberties-list',
   data: () => ({
     celebs: []
   }),
-  async created() {
-      this.celebs = await getCelebs()
+  async created () {
+    this.celebs = await getCelebs()
   },
-  methods: {}
-};
+  methods: {
+    buy (id) {
+      console.info(id)
+    }
+  }
+}
 </script>
 
 <style scoped>
 .card {
-    text-align: center
+  text-align: center;
 }
 .media-content * {
-     text-align: center
+  text-align: center;
 }
 </style>

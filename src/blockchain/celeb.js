@@ -1,7 +1,7 @@
 import { eos } from './store'
-import MockData from "./mock_celeb.json";
+import MockData from './mock_celeb.json'
 
-export async function getContractGlobal() {
+export async function getContractGlobal () {
   const { rows } = await eos().getTableRows({
     json: 'true',
     code: 'myeosgroupon',
@@ -12,11 +12,11 @@ export async function getContractGlobal() {
   return rows[0]
 }
 
-export async function getCelebs() {
+export async function getCelebs () {
   return MockData
 }
 
-export async function getCelebsPrice(celebIds) {
+export async function getCelebsPrice (celebIds) {
   const queryPool = celebIds.map(id => {
     return eos().getTableRows({
       json: 'true',
