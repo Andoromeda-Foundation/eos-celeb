@@ -50,7 +50,8 @@ export default {
     currentBuy: -1
   }),
   async created () {
-    this.celebs = await getCelebs()
+    this.celebs = await getCelebs();
+    console.log(this.celebs)
   },
   methods: {
     buy (celeb) {
@@ -67,5 +68,11 @@ export default {
 }
 .media-content * {
   text-align: center;
+}
+.image{
+    height: 250px !important;
+}
+.card-content {
+    padding-top: 2.5rem;
 }
 </style>
