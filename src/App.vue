@@ -7,7 +7,7 @@
       </div>
       <div class="level-right" v-if="account !== null">
             <p class="level-item has-text-centered">
-              {{account.name}}
+              {{account.name}} 已登录
             </p>
             <button class="button" @click="forgetId">退出登录</button>
       </div>
@@ -32,52 +32,51 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
-import { network } from './config';
+import { mapState, mapActions, mapGetters } from 'vuex'
+import { network } from './config'
 
-const requiredFields = { accounts: [network] };
+const requiredFields = { accounts: [network] }
 
 export default {
   name: 'app',
   data: () => ({}),
-  created() {
+  created () {
     // @TODO: replace with Scatter JS
     document.addEventListener('scatterLoaded', () => {
-      console.log('Scatter Loaded');
-      this.handleScatterLoaded();
-    });
+      console.log('Scatter Loaded')
+      this.handleScatterLoaded()
+    })
   },
   methods: {
     ...mapActions(['initScatter', 'setIdentity']),
-    handleScatterLoaded() {
-      const { scatter } = window;
-      this.initScatter(scatter);
+    handleScatterLoaded () {
+      const { scatter } = window
+      this.initScatter(scatter)
       // this.requestId();
     },
-    async requestId() {
-      await this.suggestNetworkSetting();
-      const identity = await this.scatter.getIdentity(requiredFields);
-      this.setIdentity(identity);
+    async requestId () {
+      await this.suggestNetworkSetting()
+      const identity = await this.scatter.getIdentity(requiredFields)
+      this.setIdentity(identity)
     },
-    async forgetId() {
-      await this.scatter.forgetIdentity();
-      this.setIdentity(null);
+    async forgetId () {
+      await this.scatter.forgetIdentity()
+      this.setIdentity(null)
     },
-    async suggestNetworkSetting() {
+    async suggestNetworkSetting () {
       try {
-        await this.scatter.suggestNetwork(network);
+        await this.scatter.suggestNetwork(network)
       } catch (error) {
-        console.info('User canceled to suggestNetwork');
+        console.info('User canceled to suggestNetwork')
       }
-    },
+    }
   },
   computed: {
     ...mapState(['identity', 'scatter', 'eos']),
-    ...mapGetters(['account']),
-  },
-};
+    ...mapGetters(['account'])
+  }
+}
 </script>
-
 
 <style>
 #app {

@@ -24,8 +24,6 @@
 
                         <div class="content">
                         主人留言: 我是菜鸡.
-                        <a href="#">#css</a> <a href="#">#responsive</a>
-                        <br>
                         <button class="button is-large" @click="buy(celeb)"> 以 {{celeb.price}} 购买 </button>
                         </div>
                     </div>
@@ -40,11 +38,11 @@
 
 <script>
 import { getCelebs } from '../blockchain/celeb'
-import BuyModal from "@/components/BuyModal";
+import BuyModal from '@/components/BuyModal'
 export default {
   name: 'celeberties-list',
   components: {
-      BuyModal
+    BuyModal
   },
   data: () => ({
     celebs: [],
