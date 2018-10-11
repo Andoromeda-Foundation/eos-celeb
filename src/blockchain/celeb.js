@@ -14,6 +14,16 @@ export async function getContractGlobal () {
 
 export async function getCelebs () {
   return MockData
+  /*
+  const { rows } = await eos().getTableRows({
+    json: 'true',
+    code: 'crazytown.bp',
+    scope: 'crazytown.bp',
+    limit: 10,
+    table: 'bag'
+  })
+  return rows[0]  
+  */
 }
 
 export async function getCelebsPrice (celebIds) {

@@ -35,7 +35,7 @@ export async function getMarketData () {
   })
     console.log("getMarketData")
     console.log(rows)
-  const { owner, balance,price } = rows[0]
+  const { owner, balance, price } = rows[0]
   // const price = (Number(supply.slice(0, -5)) / 10000000000).toFixed(4)
   // @Magic Number: 10000000000 = 10^10
   return {
