@@ -64,6 +64,8 @@ void eoscrazytown::newbag(account_name &from, asset &eos ) {
 
 void eoscrazytown::setslogan(account_name &from, uint64_t id,string memo) {
     auto itr = bags.find(id);
+    eosio_assert(itr != bags.end(), "no character exist");
+
     eosio_assert(from == itr->owner, "not the owner...");
         bags.modify(itr, from, [&](auto& t) {
         t.slogan  = memo;
