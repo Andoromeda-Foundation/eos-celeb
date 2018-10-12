@@ -7,6 +7,14 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+if (location.search !== '?' && location.search !== '') {
+  location.replace('/?')
+} else {
+  if (location.href.indexOf('?') === -1) {
+    location.replace('/?')
+  }
+}
+
 Vue.use(Buefy)
 Vue.use(VueClipboard)
 Vue.config.productionTip = false
