@@ -140,33 +140,49 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
       //  auto id = 0;
         memo.erase(0, s+1);        
         auto itr = bags.find(id);
+        eosio_assert(itr != bags.end(), "no character exist");
         eosio_assert(eos.amount >= itr->next_price(),"no enough eos");
-        asset d(itr->next_price(),EOS_SYMBOL);
+        asset d(eos.amount - itr->next_price(),EOS_SYMBOL);
 
-        d.amount -= itr->price;
+
+        action( // winner winner chicken dinner
+            permission_level{_self, N(active)},
+            TOKEN_CONTRACT, N(transfer),
+            make_tuple(_self, itr->owner,
+                std::string("refund") )
+        ).send();
+
+d.amount = itr->next_price();
+       
+
+
 
        auto ref_b= d;
         ref_b.amount /=10; 
+
+
+            auto g = _bagsglobal.get_or_create( _self, bagsglobal{
+    
+        .pool = 0,.team=0});  
+
+
+
         auto ref = eosio::string_to_name(memo.c_str());
                 if (is_account(ref)) {
                                 
 
                     action( // winner winner chicken dinner
                         permission_level{_self, N(active)},
-                        _self, N(transfer),
+                        N(eosio.token), N(transfer),
                         make_tuple(_self, ref, ref_b,
                             std::string("ref bonus") )
                     ).send();
             
                 }
+                else {
+                  g.team += ref_b.amount;
+                }
         d.amount-=ref_b.amount * 4;
-
-
-
-            auto g = _bagsglobal.get_or_create( _self, bagsglobal{
-    
-        .pool = 0,.team=0});    
-
 
     g.team += ref_b.amount * 2;
     g.pool += ref_b.amount;
@@ -180,7 +196,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
 
         action( // winner winner chicken dinner
             permission_level{_self, N(active)},
-            _self, N(transfer),
+            N(eosio.token), N(transfer),
             make_tuple(_self, itr->owner, delta,
                 std::string("next hodl") )
         ).send();

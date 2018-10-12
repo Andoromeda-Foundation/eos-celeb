@@ -4,12 +4,21 @@ cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4
 /usr/local/eosio/bin/eosiocpp -g eoscrazytown/eoscrazytown.abi  eoscrazytown/eoscrazytown.cpp
 /usr/local/eosio/bin/eosiocpp -o eoscrazytown/eoscrazytown.wast eoscrazytown/eoscrazytown.cpp
 
-#cleos -u http://api.eosbeijing.one push action eosio.token transfer '[ "eosotcbackup", "crazytown.bp", "0.0245 EOS", "buy 0" ]' -p eosotcbackup@active
+# push action eosio.token transfer '[ "eosotcbackup", "crazytown.bp", "0.0330 EOS", "buy 0" ]' -p eosotcbackup@active
+
+#cleos -u http://api.eosbeijing.one push action crazytown.bp newbag '[ "minakokojima", "0.0100 EOS" ]' -p crazytown.bp@active minakokojima@active
+
 
 
 cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
 
-#cleos -u http://api-direct.eosasia.one push action crazytown.bp init '["0196d5b5d9ec1bc78ba927d2db2cb327d836f002601c77bd8c3f144a07ddc737"]' -p crazytown.bp@active
+#cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp bag
+#cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp bagsglobal
+
+#cleos -u http://api-direct.eosasia.one push action crazytown.bp init '[]' -p crazytown.bp@active
+
+
+#cleos -u http://api.eosbeijing.one push action crazytown.bp init '["0196d5b5d9ec1bc78ba927d2db2cb327d836f002601c77bd8c3f144a07ddc737"]' -p crazytown.bp@active
 
 #cleos -u http://api-direct.eosasia.one push action crazytown.bp reveal '["0196d5b5d9ec1bc78ba927d2db2cb327d836f002601c77bd8c3f144a07ddc737","0196d5b5d9ec1bc78ba927d2db2cb327d836f002601c77bd8c3f144a07ddc737"]' -p crazytown.bp@active
 #cleos -u http://api-direct.eosasia.one push action crazytown.bp reveal '["7a2dee663b23200c63fe195f76c9cb0f255ff623e578134060dd3fbc9dfd06a2","7f86a67f22e04c1ff4a21ade119ec95f8e618b06588b160ee68035544eb40014"]' -p crazytown.bp@active
@@ -71,8 +80,7 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 
 #cleos -u http://api-direct.eosasia.one push action crazytown.bp clear '' -p crazytown.bp@active
 
-#cleos -u http://api-direct.eosasia.one push action crazytown.bp newbag '[ "minakokojima", "0.0100 EOS" ]' -p crazytown.bp@active minakokojima@active
-
+#
 #cleos -u http://api-direct.eosasia.one push action crazytown.bp setslogan '[ "minakokojima", "0", "EOS Asia" ]' -p minakokojima@active
 
 
@@ -103,7 +111,7 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 #cleos -u http://api-direct.eosasia.one get table kyubeydex.bp PXL buyorder
 
 #
-#cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp bag
+
 
 #cleos -u http://api-direct.eosasia.one get table crazytown.bp crazytown.bp buyorder
 
