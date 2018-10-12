@@ -85,7 +85,7 @@ export default {
           duration: 5000,
           message: `您已成功以 ${priceReadable} 购买 ${buyTarget}。`,
           position: 'is-bottom',
-          queue: false,
+          queue: false
         })
         this.$parent.close()
         this.$store.dispatch('updateCeleb')
@@ -98,7 +98,7 @@ export default {
               duration: 5000,
               message: `您在 Scatter 中取消了 ${buyTarget} 的购买。`,
               position: 'is-bottom',
-              queue: false,
+              queue: false
             })
           } else {
             this.$dialog.alert({

@@ -15,6 +15,12 @@
           </div>
         </div>
         <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">最后购买者</p>
+            <p class="title" :title="globalInfo.last">{{ truncate(globalInfo.last) }}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
           <b-field label="排序方式">
             <b-select rounded v-model="orderBy">
               <option value="default">默认</option>
@@ -70,7 +76,7 @@ export default {
     isDialogActive: false,
     currentBuy: null,
     globalCountdown: '00:00:00',
-    orderBy: 'default',
+    orderBy: 'default'
   }),
   created: function () {
     this.countdownUpdater = setInterval(() => {
@@ -109,6 +115,17 @@ export default {
         return list
       }
     },
+    truncate (str) {
+      try {
+        if (str.length > 10) {
+          return str.substr(0, 10) + '...'
+        } else {
+          return str
+        }
+      } catch (e) {
+        return str
+      }
+    }
   }
 }
 </script>

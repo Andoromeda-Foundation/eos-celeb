@@ -41,20 +41,20 @@ export default {
     copy () {
       this.$copyText(this.getRefer()).then(() => {
         this.$toast.open({
-            message: '邀请链接已复制到剪贴板',
-            type: 'is-success',
-            duration: 3000,
-            position: 'is-bottom',
-            queue: false,
+          message: '邀请链接已复制到剪贴板',
+          type: 'is-success',
+          duration: 3000,
+          position: 'is-bottom',
+          queue: false
         })
         this.$parent.close()
       }, () => {
         this.$toast.open({
-            message: '邀请链接复制失败，请手工复制',
-            type: 'is-danger',
-            duration: 5000,
-            position: 'is-bottom',
-            queue: false,
+          message: '邀请链接复制失败，请手工复制',
+          type: 'is-danger',
+          duration: 5000,
+          position: 'is-bottom',
+          queue: false
         })
       })
     }

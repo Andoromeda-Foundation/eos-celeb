@@ -84,11 +84,11 @@ export default {
 
     if (Date.now() < 1539403200000) {
       this.$snackbar.open({
-          message: '公告：北京时间 2018 年 10 月 13 日中午 12:00 正式开放购买',
-          type: 'is-warning',
-          position: 'is-top',
-          actionText: 'OK',
-          indefinite: true,
+        message: '公告：北京时间 2018 年 10 月 13 日中午 12:00 正式开放购买',
+        type: 'is-warning',
+        position: 'is-top',
+        actionText: 'OK',
+        indefinite: true
       })
     }
   },
