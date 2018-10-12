@@ -89,33 +89,49 @@ export default {
           }
         })
       } catch (error) {
-        const errorStr = String(error)
-        for (let errorKeyword in errorMessages) {
-          // Found a known error
-          const errorProc = errorMessages[errorKeyword]
-          if (errorStr.indexOf(errorKeyword) > -1) {
+        if (typeof error == 'object') {
+          if (error.message.indexOf('User rejected the signature request') > -1) {
+            this.$parent.close()
+            this.$dialog.alert(`您在 Scatter 中取消了 ${buyTarget} 的购买。`);
+          } else {
             this.$dialog.alert({
               title: '购买失败',
-              message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>${errorProc.message}`,
+              message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br>${escapeHtml(error.message)}`,
               onConfirm: () => {
-                if (errorProc.refresh) {
-                  this.$parent.close()
-                  this.$store.dispatch('updateCeleb')
-                }
+                this.$parent.close()
+                this.$store.dispatch('updateCeleb')
               }
             })
-            return
           }
+        } else {
+          const errorStr = String(error)
+          for (let errorKeyword in errorMessages) {
+            // Found a known error
+            const errorProc = errorMessages[errorKeyword]
+            if (errorStr.indexOf(errorKeyword) > -1) {
+              this.$dialog.alert({
+                title: '购买失败',
+                message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>${errorProc.message}`,
+                onConfirm: () => {
+                  if (errorProc.refresh) {
+                    this.$parent.close()
+                    this.$store.dispatch('updateCeleb')
+                  }
+                }
+              })
+              return
+            }
+          }
+          // Error: unknown error
+          this.$dialog.alert({
+            title: '购买失败',
+            message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${escapeHtml(errorStr)}</pre>`,
+            onConfirm: () => {
+              this.$parent.close()
+              this.$store.dispatch('updateCeleb')
+            }
+          })
         }
-        // Error: unknown error
-        this.$dialog.alert({
-          title: '购买失败',
-          message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${escapeHtml(errorStr)}</pre>`,
-          onConfirm: () => {
-            this.$parent.close()
-            this.$store.dispatch('updateCeleb')
-          }
-        })
       }
     }
   },

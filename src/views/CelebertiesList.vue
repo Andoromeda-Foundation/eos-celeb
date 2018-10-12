@@ -10,7 +10,8 @@
             </div>
             <div class="celeb-name"><p class="title">{{celebBaseList[priceInfo.id].name}}</p></div>
             <div class="celeb-price"><p class="subtitle has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
-            <button class="button is-rounded is-light buy-button" @click="buy(priceInfo)"> 购买</button>
+            <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
+            <button class="button is-rounded is-light buy-button" v-if="account !== null" @click="buy(priceInfo)">购买</button>
           </div>
         </div>
       </div>
@@ -22,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import BuyModal from '@/components/BuyModal'
 export default {
   name: 'celeberties-list',
@@ -30,7 +31,8 @@ export default {
     BuyModal
   },
   computed: {
-    ...mapState(['celebBaseList', 'celebPriceList', 'dataIsLoading'])
+    ...mapState(['celebBaseList', 'celebPriceList', 'dataIsLoading']),
+    ...mapGetters(['account'])
   },
   data: () => ({
     isDialogActive: false,

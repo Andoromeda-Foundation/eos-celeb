@@ -25,7 +25,7 @@
                   <a class="button is-primary is-inverted is-rounded" @click="requestId">登录</a>
                 </div>
                 <div class="navbar-item" v-if="account === null && !scatter">
-                  <a class="button is-primary is-inverted is-outlined is-rounded" href="#">下载 Scatter 后登录</a>
+                  <a class="button is-primary is-inverted is-outlined is-rounded" href="https://get-scatter.com/" target="_blank">下载 Scatter 后登录</a>
                 </div>
                 <div class="navbar-item" v-if="account !== null">
                   {{account.name}} 已登录
