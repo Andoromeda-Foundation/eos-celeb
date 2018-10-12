@@ -13,15 +13,12 @@
             </div>
             <div class="navbar-menu">
               <div class="navbar-start">
-                <a class="navbar-item" href="#">
-                  首页
-                </a>
-                <a class="navbar-item" href="#">
+                <router-link to="/" class="navbar-item">
                   名人列表
-                </a>
-                <a class="navbar-item" href="#">
+                </router-link>
+                <router-link to="/about" class="navbar-item">
                   关于
-                </a>
+                </router-link>
               </div>
               <div class="navbar-end">
                 <div class="navbar-item" v-if="account === null && scatter">
