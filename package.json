@@ -11,6 +11,7 @@
     "buefy": "^0.7.0",
     "eosjs": "^16.0.9",
     "js-cookie": "^2.2.0",
+    "lodash.orderby": "^4.6.0",
     "query-string": "^6.2.0",
     "vue": "^2.5.17",
     "vue-clipboard2": "^0.2.1",
