@@ -17,9 +17,9 @@ export async function getTokenPrice () {
     limit: 50,
     table: 'bag'
   })
-console.log("getTokenPrice")
-    console.log(rows)
-  const { owner,price } = rows[0]
+  console.log('getTokenPrice')
+  console.log(rows)
+  const { owner, price } = rows[0]
   // @Magic Number: 10000000000 = 10^10
   return (
     Number(price) / 10000000000).toFixed(4)
@@ -33,8 +33,8 @@ export async function getMarketData () {
     limit: 50,
     table: 'bag'
   })
-    console.log("getMarketData")
-    console.log(rows)
+  console.log('getMarketData')
+  console.log(rows)
   const { owner, balance, price } = rows[0]
   // const price = (Number(supply.slice(0, -5)) / 10000000000).toFixed(4)
   // @Magic Number: 10000000000 = 10^10

@@ -22,7 +22,7 @@ export async function getCelebs () {
     limit: 10,
     table: 'bag'
   })
-  return rows[0]  
+  return rows[0]
   */
 }
 

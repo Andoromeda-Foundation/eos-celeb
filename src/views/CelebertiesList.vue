@@ -39,7 +39,7 @@
 <script>
 import { getCelebs } from '../blockchain/celeb'
 import BuyModal from '@/components/BuyModal'
-import {getTokenPrice} from '../blockchain/index'
+import { getTokenPrice } from '../blockchain/index'
 export default {
   name: 'celeberties-list',
   components: {
@@ -51,10 +51,10 @@ export default {
     currentBuy: -1
   }),
   async created () {
-    this.celebs = await getCelebs();
+    this.celebs = await getCelebs()
     console.log(this.celebs)
-      var tb = await getTokenPrice();
-    console.log("ddddd");
+    var tb = await getTokenPrice()
+    console.log('ddddd')
     console.log(tb)
   },
   methods: {
