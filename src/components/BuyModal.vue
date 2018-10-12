@@ -89,10 +89,10 @@ export default {
           }
         })
       } catch (error) {
-        if (typeof error == 'object') {
+        if (typeof error === 'object') {
           if (error.message.indexOf('User rejected the signature request') > -1) {
             this.$parent.close()
-            this.$dialog.alert(`您在 Scatter 中取消了 ${buyTarget} 的购买。`);
+            this.$dialog.alert(`您在 Scatter 中取消了 ${buyTarget} 的购买。`)
           } else {
             this.$dialog.alert({
               title: '购买失败',
