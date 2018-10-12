@@ -80,19 +80,26 @@ export default {
             authorization: [`${account.name}@${account.authority}`]
           }
         )
-        this.$dialog.alert({
-          title: '购买成功',
+        this.$toast.open({
+          type: 'is-success',
+          duration: 5000,
           message: `您已成功以 ${priceReadable} 购买 ${buyTarget}。`,
-          onConfirm: () => {
-            this.$parent.close()
-            this.$store.dispatch('updateCeleb')
-          }
+          position: 'is-bottom',
+          queue: false,
         })
+        this.$parent.close()
+        this.$store.dispatch('updateCeleb')
       } catch (error) {
         if (typeof error === 'object') {
           if (error.message.indexOf('User rejected the signature request') > -1) {
             this.$parent.close()
-            this.$dialog.alert(`您在 Scatter 中取消了 ${buyTarget} 的购买。`)
+            this.$toast.open({
+              type: 'is-danger',
+              duration: 5000,
+              message: `您在 Scatter 中取消了 ${buyTarget} 的购买。`,
+              position: 'is-bottom',
+              queue: false,
+            })
           } else {
             this.$dialog.alert({
               title: '购买失败',
