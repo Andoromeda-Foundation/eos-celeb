@@ -48,13 +48,14 @@ void eoscrazytown::test()
 void eoscrazytown::newbag(account_name &from, asset &eos)
 {
 
-    // require_auth(_self);
-
+    require_auth(_self);
+    for (int i=0;i<10;++i){
     bags.emplace(from, [&](auto &p) {
         p.id = bags.available_primary_key();
         p.owner = from;
         p.price = eos.amount;
     });
+    }
 }
 
 void eoscrazytown::setslogan(account_name &from, uint64_t id, string memo)
@@ -144,14 +145,16 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         eosio_assert(eos.amount >= itr->next_price(), "no enough eos");
         asset d(eos.amount - itr->next_price(), EOS_SYMBOL);
 
+        if (d.amount > 0){
         action( // winner winner chicken dinner
             permission_level{_self, N(active)},
             TOKEN_CONTRACT, N(transfer),
             make_tuple(_self, from, d,
                        std::string("refund")))
             .send();
+        }
 
-        d.amount = itr->next_price();
+        d.amount = itr->next_price() - itr->price;
 
         auto ref_b = d;
         ref_b.amount /= 10;
@@ -162,14 +165,15 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
 
         auto ref = eosio::string_to_name(memo.c_str());
         if (is_account(ref) && ref != from)
-        {
-
+        {   
+            if (ref_b.amount > 0) {
             action( // winner winner chicken dinner
                 permission_level{_self, N(active)},
                 N(eosio.token), N(transfer),
                 make_tuple(_self, ref, ref_b,
                            std::string("ref bonus")))
                 .send();
+            }
         }
         else
         {
@@ -187,12 +191,14 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         auto delta = d;
         delta.amount += itr->price;
 
+    if(delta.amount > 0){
         action( // winner winner chicken dinner
             permission_level{_self, N(active)},
             N(eosio.token), N(transfer),
             make_tuple(_self, itr->owner, delta,
                        std::string("next hodl")))
             .send();
+    }
 
         bags.modify(itr, 0, [&](auto &t) {
             t.owner = from;

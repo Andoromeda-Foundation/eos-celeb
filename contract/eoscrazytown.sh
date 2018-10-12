@@ -9,6 +9,7 @@ cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4
 #cleos -u http://api.eosbeijing.one push action crazytown.bp newbag '[ "minakokojima", "0.0100 EOS" ]' -p crazytown.bp@active minakokojima@active
 
 
+cleos -u http://api.eosbeijing.one push action crazytown.bp newbag '[ "crazytown.bp", "0.0100 EOS" ]' -p crazytown.bp@active crazytown.bp@active
 
 cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
 
