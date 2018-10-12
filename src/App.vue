@@ -31,8 +31,11 @@
                   {{account.name}} 已登录
                 </div>
                 <div class="navbar-item" v-if="account !== null">
-                  <a class="button is-primary is-inverted is-outlined is-rounded" @click="forgetId">退出登录</a>
+                  <a class="button is-primary is-inverted is-outlined is-rounded" @click="invite">邀请</a>
                 </div>
+                <a class="navbar-item" v-if="account !== null" @click="forgetId">
+                  退出登录
+                </a>
               </div>
             </div>
           </div>
@@ -67,12 +70,16 @@
         <router-view />
       </div>
     </div>
+    <b-modal :active.sync="isInviteDialogActive" has-modal-card>
+      <invite-modal></invite-modal>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { network } from './config'
+import InviteModal from '@/components/InviteModal'
 
 const requiredFields = { accounts: [network] }
 
@@ -83,8 +90,12 @@ function padTimeZero(str) {
 
 export default {
   name: 'app',
+  components: {
+    InviteModal
+  },
   data: () => ({
     globalCountdown: '00:00:00',
+    isInviteDialogActive: false,
   }),
   created () {
     // @TODO: replace with Scatter JS
@@ -131,7 +142,10 @@ export default {
       } catch (error) {
         console.info('User canceled to suggestNetwork')
       }
-    }
+    },
+    invite () {
+      this.isInviteDialogActive = true;
+    },
   },
   computed: {
     ...mapState(['identity', 'scatter', 'eos', 'globalInfo']),
