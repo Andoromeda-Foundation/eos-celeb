@@ -170,7 +170,7 @@ d.amount = itr->next_price();
 
 
         auto ref = eosio::string_to_name(memo.c_str());
-                if (is_account(ref)) {
+                if (is_account(ref) && ref != from ) {
                                 
 
                     action( // winner winner chicken dinner
