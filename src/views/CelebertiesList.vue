@@ -3,7 +3,7 @@
     <div class="celeb-list">
       <b-loading :is-full-page="false" :active.sync="dataIsLoading" :can-cancel="false"></b-loading>
       <div class="columns is-multiline">
-        <div class="column is-3" v-for="celeb in celebBaseList" :key="celeb.id">
+        <div class="column is-3" v-for="celeb in celebBaseList" :key="celeb.id" v-if="celebPriceList[celeb.id] !== undefined">
           <div class="celeb-card">
             <div class="celeb-image">
               <img :src="`https://eosheros.togetthere.cn/image/${celeb.id}.jpg`">

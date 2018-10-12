@@ -43,12 +43,25 @@
           <h1 class="title">
             加密名人
           </h1>
-          <h2 class="subtitle" v-if="globalInfo">
-            奖池：{{ (globalInfo.pool / 10000).toFixed(4) }} EOS
-          </h2>
         </div>
       </div>
     </section>
+    <div class="container global-info">
+      <nav class="level" v-if="globalInfo">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">奖池大小</p>
+            <p class="title">{{ (globalInfo.pool / 10000).toFixed(4) }} EOS</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">结束倒计时</p>
+            <p class="title">{{ globalCountdown }}</p>
+          </div>
+        </div>
+      </nav>
+    </div>
     <div class="body-container">
       <div class="container">
         <router-view />
@@ -63,15 +76,38 @@ import { network } from './config'
 
 const requiredFields = { accounts: [network] }
 
+function padTimeZero(str) {
+  let t = '00' + str;
+  return t.slice(t.length - 2, t.length);
+}
+
 export default {
   name: 'app',
-  data: () => ({}),
+  data: () => ({
+    globalCountdown: '00:00:00',
+  }),
   created () {
     // @TODO: replace with Scatter JS
     document.addEventListener('scatterLoaded', () => {
       console.log('Scatter Loaded')
       this.handleScatterLoaded()
     })
+    setInterval(() => {
+      if (this.globalInfo != null) {
+        const currentTimestamp = ~~(Date.now() / 1000);
+        if (currentTimestamp >= this.globalInfo.ed) {
+          this.globalCountdown = '已结束'
+        } else {
+          let remaining = this.globalInfo.ed - currentTimestamp;
+          const seconds = remaining % 60
+          remaining = ~~(remaining / 60)
+          const minutes = remaining % 60
+          remaining = ~~(remaining / 60)
+          const hours = remaining
+          this.globalCountdown = `${padTimeZero(hours)}:${padTimeZero(minutes)}:${padTimeZero(seconds)}`
+        }
+      }
+    }, 1000)
   },
   methods: {
     ...mapActions(['initScatter', 'setIdentity']),
@@ -100,7 +136,7 @@ export default {
   computed: {
     ...mapState(['identity', 'scatter', 'eos', 'globalInfo']),
     ...mapGetters(['account'])
-  }
+  },
 }
 </script>
 
@@ -117,13 +153,13 @@ body, html {
   background: #F0F0F0;
 }
 
-.body-container {
-  padding: 3rem 0;
-}
-
 .navbar .button {
   padding-left: 1.5rem !important;
   padding-right: 1.5rem !important;
+}
+
+.global-info {
+  padding: 3rem 0;
 }
 </style>
 

@@ -8,12 +8,11 @@ export async function getGlobal () {
     scope: 'crazytown.bp',
     table: 'bagsglobal'
   })
-  console.log(rows)
   return rows[0]
 }
 
 export async function getCelebBaseList () {
-  return MockData.slice(0, 10)
+  return MockData
 }
 
 export async function getCelebPriceList () {

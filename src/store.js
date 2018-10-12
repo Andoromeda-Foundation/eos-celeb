@@ -73,7 +73,6 @@ export default new Vuex.Store({
     },
     async updateGlobal ({ commit }) {
       const globalInfo = await API.getGlobal()
-      console.log(globalInfo)
       commit('setGlobal', globalInfo)
     },
     updateBalance ({ commit }) {
