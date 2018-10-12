@@ -2,7 +2,7 @@
 // Use EOS Asia for Mainnet https://api1.eosasia.one'
 export const eosOptions = {
   eosasia: {
-    httpEndpoint: 'https://api-direct.eosasia.one',
+    httpEndpoint: 'https://geo.eosasia.one',
     verbose: true,
     chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
   },
@@ -39,7 +39,7 @@ export const networks = {
   eosasia: {
     protocol: 'https',
     blockchain: 'eos',
-    host: 'api-direct.eosasia.one',
+    host: 'geo.eosasia.one',
     port: 443,
     chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
   }
