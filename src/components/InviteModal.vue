@@ -30,7 +30,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Clipboard from 'clipboard'
 
 export default {
   name: 'InviteModal',
@@ -41,16 +40,16 @@ export default {
     },
     copy () {
       this.$copyText(this.getRefer()).then(() => {
-        this.$dialog.alert('邀请链接已复制到剪贴板');
+        this.$dialog.alert('邀请链接已复制到剪贴板')
         this.$parent.close()
       }, () => {
-        this.$dialog.alert('邀请链接复制失败，请手工复制');
+        this.$dialog.alert('邀请链接复制失败，请手工复制')
       })
     }
   },
   computed: {
     ...mapState(['identity', 'scatter', 'eos', 'account']),
-    ...mapGetters(['account']),
+    ...mapGetters(['account'])
   }
 }
 </script>

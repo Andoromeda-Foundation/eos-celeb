@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import BuyModal from '@/components/BuyModal'
 export default {
   name: 'celeberties-list',
@@ -30,7 +30,7 @@ export default {
     BuyModal
   },
   computed: {
-    ...mapState(['celebBaseList', 'celebPriceList', 'dataIsLoading']),
+    ...mapState(['celebBaseList', 'celebPriceList', 'dataIsLoading'])
   },
   data: () => ({
     isDialogActive: false,
