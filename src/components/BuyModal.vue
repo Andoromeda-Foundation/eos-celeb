@@ -55,13 +55,17 @@ export default {
       const { account, eos } = this
       const price = this.getPrice()
       const priceReadable = `${(price / 10000).toFixed(4)} EOS`
-      const memo = `buy ${this.celebInfo.id}`
+      const memo = ['buy', String(this.celebInfo.id)];
+      const referrer = localStorage.getItem('eos_celeb_referrer');
+      if (referrer) {
+        memo.push(referrer);
+      }
       try {
         await eos.transfer(
           account.name,
           'crazytown.bp',
           priceReadable,
-          `${memo}`,
+          `${memo.join(' ')}`,
           {
             authorization: [`${account.name}@${account.authority}`]
           }
