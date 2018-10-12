@@ -1,14 +1,14 @@
 import { eos } from './store'
 import MockData from './mock_celeb.json'
 
-export async function getContractGlobal () {
+export async function getGlobal () {
   const { rows } = await eos().getTableRows({
     json: 'true',
-    code: 'myeosgroupon',
-    scope: 'myeosgroupon',
-    limit: 50,
-    table: 'global'
+    code: 'crazytown.bp',
+    scope: 'crazytown.bp',
+    table: 'bagsglobal'
   })
+  console.log(rows)
   return rows[0]
 }
 

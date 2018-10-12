@@ -43,8 +43,8 @@
           <h1 class="title">
             加密名人
           </h1>
-          <h2 class="subtitle">
-            名人列表
+          <h2 class="subtitle" v-if="globalInfo">
+            奖池：{{ (globalInfo.pool / 10000).toFixed(4) }} EOS
           </h2>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['identity', 'scatter', 'eos']),
+    ...mapState(['identity', 'scatter', 'eos', 'globalInfo']),
     ...mapGetters(['account'])
   }
 }

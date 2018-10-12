@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Eos from 'eosjs'
 import * as API from './blockchain/celeb';
-import { getMyBalancesByContract, getMarketData } from './blockchain'
+import { getMyBalancesByContract } from './blockchain'
 import { network } from './config'
 
 Vue.use(Vuex)
@@ -18,7 +18,8 @@ export default new Vuex.Store({
     },
     celebBaseList: [],
     celebPriceList: {},
-    dataIsLoading: true
+    dataIsLoading: true,
+    globalInfo: null,
   },
   getters: {
     account: ({ scatter }) => {
@@ -51,11 +52,15 @@ export default new Vuex.Store({
     },
     setDataLoading (state, loading) {
       state.dataIsLoading = loading
-    }
+    },
+    setGlobal (state, globalInfo) {
+      state.globalInfo = globalInfo
+    },
   },
   actions: {
     initScatter ({ commit, dispatch }, scatter) {
       commit('setScatter', scatter)
+      dispatch('updateGlobal')
       dispatch('updateCeleb')
     },
     async updateCeleb ({ commit }) {
@@ -65,6 +70,11 @@ export default new Vuex.Store({
       commit('setCelebBase', celebBaseList)
       commit('setCelebPrice', celebPriceList)
       commit('setDataLoading', false)
+    },
+    async updateGlobal ({ commit }) {
+      const globalInfo = await API.getGlobal()
+      console.log(globalInfo)
+      commit('setGlobal', globalInfo)
     },
     updateBalance ({ commit }) {
       getMyBalancesByContract({ symbol: 'eos' })
