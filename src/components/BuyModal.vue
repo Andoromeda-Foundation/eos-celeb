@@ -40,6 +40,15 @@ const errorMessages = {
   }
 }
 
+function escapeHtml(unsafe) {
+  return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 export default {
   name: 'BuyModal',
   props: ['priceInfo'],
@@ -55,6 +64,7 @@ export default {
       const { account, eos } = this
       const price = this.getPrice()
       const priceReadable = `${(price / 10000).toFixed(4)} EOS`
+      const buyTarget = this.celebBaseList[this.priceInfo.id].name
       const memo = ['buy', String(this.priceInfo.id)];
       const referrer = localStorage.getItem('eos_celeb_referrer');
       if (referrer) {
@@ -72,7 +82,7 @@ export default {
         )
         this.$dialog.alert({
           title: '购买成功',
-          message: `您已成功以 ${priceReadable} 购买 ${this.celebBaseList[this.priceInfo.id].name}。`,
+          message: `您已成功以 ${priceReadable} 购买 ${buyTarget}。`,
           onConfirm: () => {
             this.$parent.close()
             this.$store.dispatch('updateCeleb')
@@ -81,11 +91,12 @@ export default {
       } catch (error) {
         error = String(error)
         for (let errorKeyword in errorMessages) {
+          // Found a known error
           const errorProc = errorMessages[errorKeyword];
           if (error.indexOf(errorKeyword) > -1) {
             this.$dialog.alert({
               title: '购买失败',
-              message: `抱歉，以 ${priceReadable} 购买 ${this.celebBaseList[this.priceInfo.id].name} 失败：<br>${errorProc.message}`,
+              message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>${errorProc.message}`,
               onConfirm: () => {
                 if (errorProc.refresh) {
                   this.$parent.close()
@@ -93,12 +104,13 @@ export default {
                 }
               },
             })
-            break
+            return
           }
         }
+        // Error: unknown error
         this.$dialog.alert({
           title: '购买失败',
-          message: `抱歉，以 ${priceReadable} 购买 ${this.celebBaseList[this.priceInfo.id].name} 失败：<br><pre>${error}</pre>`,
+          message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${escapeHtml(error)}</pre>`,
           onConfirm: () => {
             this.$parent.close()
             this.$store.dispatch('updateCeleb')
