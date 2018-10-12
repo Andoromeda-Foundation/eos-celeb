@@ -16,8 +16,8 @@ export default new Vuex.Store({
       eos: '0.0000 EOS',
       kby: '0.0000 KBY'
     },
-    celebBaseList: [],
-    celebPriceList: {},
+    celebBaseList: {},
+    celebPriceList: [],
     dataIsLoading: true,
     globalInfo: null,
   },
@@ -41,11 +41,7 @@ export default new Vuex.Store({
       state.celebBaseList = baseList
     },
     setCelebPrice (state, priceList) {
-      let newMap = {}
-      priceList.forEach(item => {
-        newMap[item.id] = item
-      })
-      state.celebPriceList = newMap
+      state.celebPriceList = priceList
     },
     setBalance (state, { symbol, balance }) {
       state.balance[symbol] = balance || `0.0000 ${symbol.toUpperCase()}`

@@ -1,5 +1,13 @@
 import { eos } from './store'
-import MockData from './mock_celeb.json'
+import celebList from './mock_celeb.json'
+import celebIdList from './mock_celebid.json'
+
+const celebIdMap = {}
+celebList.forEach(celeb => { celebIdMap[celeb.id] = celeb })
+const celebIdContractMap = {}
+for (let contractId in celebIdList) {
+  celebIdContractMap[contractId] = celebIdMap[celebIdList[contractId]]
+}
 
 export async function getGlobal () {
   const { rows } = await eos().getTableRows({
@@ -12,7 +20,7 @@ export async function getGlobal () {
 }
 
 export async function getCelebBaseList () {
-  return MockData
+  return celebIdContractMap
 }
 
 export async function getCelebPriceList () {

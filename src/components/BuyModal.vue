@@ -2,7 +2,7 @@
   <form action="">
     <div class="modal-card" style="width: auto">
       <header class="modal-card-head">
-        <p class="modal-card-title">购买 {{celebInfo.name}}</p>
+        <p class="modal-card-title">购买 {{celebBaseList[priceInfo.id].name}}</p>
       </header>
       <section class="modal-card-body">
         <b-field label="价格">
@@ -42,20 +42,20 @@ const errorMessages = {
 
 export default {
   name: 'BuyModal',
-  props: ['celebInfo'],
+  props: ['priceInfo'],
   methods: {
     getPrice () {
-      if (!this.celebInfo) {
+      if (!this.priceInfo) {
         return 0;
       } else {
-        return this.celebPriceList[this.celebInfo.id].price * 1.35;
+        return this.priceInfo.price * 1.35;
       }
     },
     async buy () {
       const { account, eos } = this
       const price = this.getPrice()
       const priceReadable = `${(price / 10000).toFixed(4)} EOS`
-      const memo = ['buy', String(this.celebInfo.id)];
+      const memo = ['buy', String(this.priceInfo.id)];
       const referrer = localStorage.getItem('eos_celeb_referrer');
       if (referrer) {
         memo.push(referrer);
@@ -72,10 +72,12 @@ export default {
         )
         this.$dialog.alert({
           title: '购买成功',
-          message: `您已成功以 ${priceReadable} 购买 ${this.celebInfo.name}。`
+          message: `您已成功以 ${priceReadable} 购买 ${this.celebBaseList[this.priceInfo.id].name}。`,
+          onConfirm: () => {
+            this.$parent.close()
+            this.$store.dispatch('updateCeleb')
+          },
         });
-        this.$parent.close()
-        this.$store.dispatch('updateCeleb')
       } catch (error) {
         error = String(error)
         for (let errorKeyword in errorMessages) {
@@ -83,19 +85,30 @@ export default {
           if (error.indexOf(errorKeyword) > -1) {
             this.$dialog.alert({
               title: '购买失败',
-              message: `抱歉，以 ${priceReadable} 购买 ${this.celebInfo.name} 失败：<br>${errorProc.message}`
-            });
-            if (errorProc.refresh) {
-              this.$parent.close()
-              this.$store.dispatch('updateCeleb')
-            }
+              message: `抱歉，以 ${priceReadable} 购买 ${this.celebBaseList[this.priceInfo.id].name} 失败：<br>${errorProc.message}`,
+              onConfirm: () => {
+                if (errorProc.refresh) {
+                  this.$parent.close()
+                  this.$store.dispatch('updateCeleb')
+                }
+              },
+            })
+            break
           }
         }
+        this.$dialog.alert({
+          title: '购买失败',
+          message: `抱歉，以 ${priceReadable} 购买 ${this.celebBaseList[this.priceInfo.id].name} 失败：<br><pre>${error}</pre>`,
+          onConfirm: () => {
+            this.$parent.close()
+            this.$store.dispatch('updateCeleb')
+          },
+        })
       }
     }
   },
   computed: {
-    ...mapState(['identity', 'scatter', 'eos', 'account', 'celebPriceList']),
+    ...mapState(['identity', 'scatter', 'eos', 'account', 'celebBaseList']),
     ...mapGetters(['account']),
   }
 }

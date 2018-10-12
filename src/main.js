@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import queryString from 'query-string'
 
 import Vue from 'vue'
 import Buefy from 'buefy'

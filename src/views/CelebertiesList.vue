@@ -3,25 +3,19 @@
     <div class="celeb-list">
       <b-loading :is-full-page="false" :active.sync="dataIsLoading" :can-cancel="false"></b-loading>
       <div class="columns is-multiline">
-        <div class="column is-3" v-for="celeb in celebBaseList" :key="celeb.id" v-if="celebPriceList[celeb.id] !== undefined">
+        <div class="column is-3" v-for="priceInfo in celebPriceList" :key="priceInfo.id" v-if="celebBaseList[priceInfo.id]">
           <div class="celeb-card">
             <div class="celeb-image">
-              <img :src="`https://eosheros.togetthere.cn/image/${celeb.id}.jpg`">
+              <img :src="`https://eosheros.togetthere.cn/image/${celebBaseList[priceInfo.id].id}.jpg`">
             </div>
-            <div class="celeb-name"><p class="title">{{celeb.name}}</p></div>
-            <div v-if="celebPriceList[celeb.id] !== undefined">
-              <div class="celeb-price"><p class="subtitle has-text-info">{{ (celebPriceList[celeb.id].price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
-              <button class="button is-rounded is-light buy-button" @click="buy(celeb)"> 购买</button>
-            </div>
-            <div v-if="celebPriceList[celeb.id] === undefined">
-              <div class="celeb-price"><p class="subtitle has-text-grey-light">Unavailable</p></div>
-              <button class="button is-rounded is-light buy-button" disabled> 无法购买</button>
-            </div>
+            <div class="celeb-name"><p class="title">{{celebBaseList[priceInfo.id].name}}</p></div>
+            <div class="celeb-price"><p class="subtitle has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
+            <button class="button is-rounded is-light buy-button" @click="buy(priceInfo)"> 购买</button>
           </div>
         </div>
       </div>
       <b-modal :active.sync="isDialogActive" has-modal-card>
-        <buy-modal :celebInfo="currentBuy"></buy-modal>
+        <buy-modal :priceInfo="currentBuy"></buy-modal>
       </b-modal>
     </div>
   </div>
@@ -43,8 +37,8 @@ export default {
     currentBuy: null
   }),
   methods: {
-    buy (celeb) {
-      this.currentBuy = celeb
+    buy (priceInfo) {
+      this.currentBuy = priceInfo
       this.isDialogActive = true
     }
   }
