@@ -29,6 +29,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+
+const errorMessages = {
+  "overdrawn balance": {
+    message: "您的账户余额不足",
+  },
+  "no enough eos": {
+    message: "有人比您抢先一步买下了该名人",
+    refresh: true,
+  }
+}
+
 export default {
   name: 'BuyModal',
   props: ['celebInfo'],
@@ -57,13 +68,26 @@ export default {
         )
         this.$dialog.alert({
           title: '购买成功',
-          message: `您已成功以 ${priceReadable} EOS 购买 ${this.celebInfo.name}。`
+          message: `您已成功以 ${priceReadable} 购买 ${this.celebInfo.name}。`
         });
+        this.$parent.close()
+        // TODO: refresh
       } catch (error) {
-        this.$dialog.alert({
-          title: '购买失败',
-          message: `抱歉，以 ${priceReadable} EOS 购买 ${this.celebInfo.name} 失败。`
-        });
+        error = String(error)
+        for (let errorKeyword in errorMessages) {
+          const errorProc = errorMessages[errorKeyword];
+          if (error.indexOf(errorKeyword) > -1) {
+            this.$dialog.alert({
+              title: '购买失败',
+              message: `抱歉，以 ${priceReadable} 购买 ${this.celebInfo.name} 失败：<br>${errorProc.message}`
+            });
+            if (errorProc.refresh) {
+              this.$parent.close()
+              // TODO: refresh
+            }
+          }
+        }
+
       }
     }
   },
