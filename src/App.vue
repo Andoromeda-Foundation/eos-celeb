@@ -1,33 +1,62 @@
 <template>
-  <div id="app" class="container">
-    <nav class="level" style="height: 4rem">
-      <div class="level-left">
-        <router-link to="/" class="level-item has-text-centered">Home</router-link>
-        <router-link to="/about" class="level-item has-text-centered">About</router-link>
-      </div>
-      <div class="level-right" v-if="account !== null">
-            <p class="level-item has-text-centered">
-              {{account.name}} 已登录
-            </p>
-            <button class="button" @click="forgetId">退出登录</button>
-      </div>
-    </nav>
-    <div class="please-login" v-if="account === null">
-      <section class="hero is-primary">
-        <div class="hero-body">
+  <div>
+    <section class="hero is-primary is-bold">
+      <div class="hero-head">
+        <nav class="navbar is-spaced">
           <div class="container">
-            <h1 class="title">
-              欢迎来到加密名人
-            </h1>
-            <h2 class="subtitle">
-              请使用钱包进行登录以继续
-            </h2>
-            <button class="button" @click="requestId" :disabled="!scatter"> 登录 </button>
+            <div class="navbar-brand">
+              <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+            <div class="navbar-menu">
+              <div class="navbar-start">
+                <a class="navbar-item" href="#">
+                  首页
+                </a>
+                <a class="navbar-item" href="#">
+                  名人列表
+                </a>
+                <a class="navbar-item" href="#">
+                  关于
+                </a>
+              </div>
+              <div class="navbar-end">
+                <div class="navbar-item" v-if="account === null && scatter">
+                  <a class="button is-primary is-inverted is-rounded" @click="requestId">&nbsp;&nbsp;登录&nbsp;&nbsp;</a>
+                </div>
+                <div class="navbar-item" v-if="account === null && !scatter">
+                  <a class="button is-primary is-inverted is-outlined is-rounded" href="#">&nbsp;&nbsp;下载 Scatter 后登录&nbsp;&nbsp;</a>
+                </div>
+                <div class="navbar-item" v-if="account !== null">
+                  {{account.name}} 已登录
+                </div>
+                <div class="navbar-item" v-if="account !== null">
+                  <a class="button is-primary is-inverted is-outlined is-rounded" @click="forgetId">&nbsp;&nbsp;退出登录&nbsp;&nbsp;</a>
+                </div>
+              </div>
+            </div>
           </div>
+        </nav>
+      </div>
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            加密名人
+          </h1>
+          <h2 class="subtitle">
+            名人列表
+          </h2>
         </div>
-      </section>
+      </div>
+    </section>
+    <div class="body-container">
+      <div class="container">
+        <router-view />
+      </div>
     </div>
-    <router-view v-else/>
   </div>
 </template>
 
@@ -79,23 +108,35 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
-  color: #2c3e50;
+.body-container {
+  padding: 3rem 0;
+  background: #EEE;
 }
-#nav {
-  padding: 30px;
-}
+</style>
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+<style lang="scss">
+@import "~bulma/sass/utilities/_all";
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+// Set your colors
+$primary: #51BCCF;
+$primary-invert: findColorInvert($primary);
+
+$colors: (
+    "white": ($white, $black),
+    "black": ($black, $white),
+    "light": ($light, $light-invert),
+    "dark": ($dark, $dark-invert),
+    "primary": ($primary, $primary-invert),
+    "info": ($info, $info-invert),
+    "success": ($success, $success-invert),
+    "warning": ($warning, $warning-invert),
+    "danger": ($danger, $danger-invert),
+);
+
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
 </style>

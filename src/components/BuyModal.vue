@@ -24,7 +24,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 export default {
-  name: 'Buy Modal',
+  name: 'BuyModal',
   props: ['person'],
   data: () => ({
     price: '0.0000 EOS'
