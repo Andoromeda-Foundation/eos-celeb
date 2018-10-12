@@ -71,7 +71,7 @@ export default {
           message: `您已成功以 ${priceReadable} 购买 ${this.celebInfo.name}。`
         });
         this.$parent.close()
-        // TODO: refresh
+        this.$store.dispatch('updateCeleb')
       } catch (error) {
         error = String(error)
         for (let errorKeyword in errorMessages) {
@@ -83,17 +83,16 @@ export default {
             });
             if (errorProc.refresh) {
               this.$parent.close()
-              // TODO: refresh
+              this.$store.dispatch('updateCeleb')
             }
           }
         }
-
       }
     }
   },
   computed: {
     ...mapState(['identity', 'scatter', 'eos', 'account', 'celebPriceList']),
-    ...mapGetters(['account'])
+    ...mapGetters(['account']),
   }
 }
 </script>

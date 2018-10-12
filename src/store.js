@@ -49,8 +49,8 @@ export default new Vuex.Store({
     setBalance (state, { symbol, balance }) {
       state.balance[symbol] = balance || `0.0000 ${symbol.toUpperCase()}`
     },
-    setDataNotLoading (state) {
-      state.dataIsLoading = false
+    setDataLoading (state, loading) {
+      state.dataIsLoading = loading
     }
   },
   actions: {
@@ -59,11 +59,12 @@ export default new Vuex.Store({
       dispatch('updateCeleb')
     },
     async updateCeleb ({ commit }) {
+      commit('setDataLoading', true)
       const celebBaseList = await API.getCelebBaseList()
       const celebPriceList = await API.getCelebPriceList()
       commit('setCelebBase', celebBaseList)
       commit('setCelebPrice', celebPriceList)
-      commit('setDataNotLoading')
+      commit('setDataLoading', false)
     },
     updateBalance ({ commit }) {
       getMyBalancesByContract({ symbol: 'eos' })
