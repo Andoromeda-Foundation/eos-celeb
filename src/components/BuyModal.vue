@@ -31,22 +31,22 @@
 import { mapState, mapGetters } from 'vuex'
 
 const errorMessages = {
-  "overdrawn balance": {
-    message: "您的账户余额不足",
+  'overdrawn balance': {
+    message: '您的账户余额不足'
   },
-  "no enough eos": {
-    message: "有人比您抢先一步买下了该名人",
-    refresh: true,
+  'no enough eos': {
+    message: '有人比您抢先一步买下了该名人',
+    refresh: true
   }
 }
 
-function escapeHtml(unsafe) {
+function escapeHtml (unsafe) {
   return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
 }
 
 export default {
@@ -55,9 +55,9 @@ export default {
   methods: {
     getPrice () {
       if (!this.priceInfo) {
-        return 0;
+        return 0
       } else {
-        return this.priceInfo.price * 1.35;
+        return this.priceInfo.price * 1.35
       }
     },
     async buy () {
@@ -65,10 +65,10 @@ export default {
       const price = this.getPrice()
       const priceReadable = `${(price / 10000).toFixed(4)} EOS`
       const buyTarget = this.celebBaseList[this.priceInfo.id].name
-      const memo = ['buy', String(this.priceInfo.id)];
-      const referrer = localStorage.getItem('eos_celeb_referrer');
+      const memo = ['buy', String(this.priceInfo.id)]
+      const referrer = localStorage.getItem('eos_celeb_referrer')
       if (referrer) {
-        memo.push(referrer);
+        memo.push(referrer)
       }
       try {
         await eos.transfer(
@@ -86,14 +86,14 @@ export default {
           onConfirm: () => {
             this.$parent.close()
             this.$store.dispatch('updateCeleb')
-          },
-        });
+          }
+        })
       } catch (error) {
-        error = String(error)
+        const errorStr = String(error)
         for (let errorKeyword in errorMessages) {
           // Found a known error
-          const errorProc = errorMessages[errorKeyword];
-          if (error.indexOf(errorKeyword) > -1) {
+          const errorProc = errorMessages[errorKeyword]
+          if (errorStr.indexOf(errorKeyword) > -1) {
             this.$dialog.alert({
               title: '购买失败',
               message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>${errorProc.message}`,
@@ -102,7 +102,7 @@ export default {
                   this.$parent.close()
                   this.$store.dispatch('updateCeleb')
                 }
-              },
+              }
             })
             return
           }
@@ -110,18 +110,18 @@ export default {
         // Error: unknown error
         this.$dialog.alert({
           title: '购买失败',
-          message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${escapeHtml(error)}</pre>`,
+          message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${escapeHtml(errorStr)}</pre>`,
           onConfirm: () => {
             this.$parent.close()
             this.$store.dispatch('updateCeleb')
-          },
+          }
         })
       }
     }
   },
   computed: {
     ...mapState(['identity', 'scatter', 'eos', 'account', 'celebBaseList']),
-    ...mapGetters(['account']),
+    ...mapGetters(['account'])
   }
 }
 </script>

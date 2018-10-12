@@ -83,9 +83,9 @@ import InviteModal from '@/components/InviteModal'
 
 const requiredFields = { accounts: [network] }
 
-function padTimeZero(str) {
-  let t = '00' + str;
-  return t.slice(t.length - 2, t.length);
+function padTimeZero (str) {
+  let t = '00' + str
+  return t.slice(t.length - 2, t.length)
 }
 
 export default {
@@ -95,7 +95,7 @@ export default {
   },
   data: () => ({
     globalCountdown: '00:00:00',
-    isInviteDialogActive: false,
+    isInviteDialogActive: false
   }),
   created () {
     // @TODO: replace with Scatter JS
@@ -105,11 +105,11 @@ export default {
     })
     setInterval(() => {
       if (this.globalInfo != null) {
-        const currentTimestamp = ~~(Date.now() / 1000);
+        const currentTimestamp = ~~(Date.now() / 1000)
         if (currentTimestamp >= this.globalInfo.ed) {
           this.globalCountdown = '已结束'
         } else {
-          let remaining = this.globalInfo.ed - currentTimestamp;
+          let remaining = this.globalInfo.ed - currentTimestamp
           const seconds = remaining % 60
           remaining = ~~(remaining / 60)
           const minutes = remaining % 60
@@ -144,13 +144,13 @@ export default {
       }
     },
     invite () {
-      this.isInviteDialogActive = true;
-    },
+      this.isInviteDialogActive = true
+    }
   },
   computed: {
     ...mapState(['identity', 'scatter', 'eos', 'globalInfo']),
     ...mapGetters(['account'])
-  },
+  }
 }
 </script>
 

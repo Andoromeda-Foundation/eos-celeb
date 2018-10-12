@@ -28,7 +28,7 @@ export async function getCelebPriceList () {
     json: 'true',
     code: 'crazytown.bp',
     scope: 'crazytown.bp',
-    limit: 10,
+    limit: 200,
     table: 'bag'
   })
   return rows
