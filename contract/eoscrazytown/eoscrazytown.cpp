@@ -147,7 +147,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         action( // winner winner chicken dinner
             permission_level{_self, N(active)},
             TOKEN_CONTRACT, N(transfer),
-            make_tuple(_self, itr->owner,
+            make_tuple(_self, itr->owner, d,
                        std::string("refund")))
             .send();
 
