@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Eos from 'eosjs'
+import * as API from './blockchain/celeb';
 import { getMyBalancesByContract, getMarketData } from './blockchain'
 import { network } from './config'
 
@@ -15,9 +16,9 @@ export default new Vuex.Store({
       eos: '0.0000 EOS',
       kby: '0.0000 KBY'
     },
-    tokenPrice: '0.0000 EOS',
-    supply: '0.0000 KBY',
-    mbalance: '0.0000 EOS'
+    celebBaseList: [],
+    celebPriceList: {},
+    dataIsLoading: true
   },
   getters: {
     account: ({ scatter }) => {
@@ -35,24 +36,34 @@ export default new Vuex.Store({
     setIdentity (state, identity) {
       state.identity = identity
     },
-    setMarketData (state, data) {
-      const { price, supply, balance } = data
-      state.tokenPrice = `${price} EOS`
-      state.supply = supply
-      state.mbalance = balance
+    setCelebBase (state, baseList) {
+      state.celebBaseList = baseList
+    },
+    setCelebPrice (state, priceList) {
+      let newMap = {}
+      priceList.forEach(item => {
+        newMap[item.id] = item
+      })
+      state.celebPriceList = newMap
     },
     setBalance (state, { symbol, balance }) {
       state.balance[symbol] = balance || `0.0000 ${symbol.toUpperCase()}`
+    },
+    setDataNotLoading (state) {
+      state.dataIsLoading = false
     }
   },
   actions: {
     initScatter ({ commit, dispatch }, scatter) {
       commit('setScatter', scatter)
-      dispatch('updateMarketData')
+      dispatch('updateCeleb')
     },
-    async updateMarketData ({ commit }) {
-      const marketData = await getMarketData()
-      commit('setMarketData', marketData)
+    async updateCeleb ({ commit }) {
+      const celebBaseList = await API.getCelebBaseList()
+      const celebPriceList = await API.getCelebPriceList()
+      commit('setCelebBase', celebBaseList)
+      commit('setCelebPrice', celebPriceList)
+      commit('setDataNotLoading')
     },
     updateBalance ({ commit }) {
       getMyBalancesByContract({ symbol: 'eos' })

@@ -12,9 +12,11 @@ export async function getContractGlobal () {
   return rows[0]
 }
 
-export async function getCelebs () {
-  return MockData
-  /*
+export async function getCelebBaseList () {
+  return MockData.slice(0, 10)
+}
+
+export async function getCelebPriceList () {
   const { rows } = await eos().getTableRows({
     json: 'true',
     code: 'crazytown.bp',
@@ -22,11 +24,12 @@ export async function getCelebs () {
     limit: 10,
     table: 'bag'
   })
-  return rows[0]
-  */
+  return rows
 }
 
+/*
 export async function getCelebsPrice (celebIds) {
+  debugger;
   const queryPool = celebIds.map(id => {
     return eos().getTableRows({
       json: 'true',
@@ -38,3 +41,4 @@ export async function getCelebsPrice (celebIds) {
   })
   return Promise.all(queryPool)
 }
+*/

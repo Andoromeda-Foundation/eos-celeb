@@ -1,91 +1,96 @@
 <template>
+  <div>
     <div class="celeb-list">
-        <!-- {{celebs}} -->
-        <div class="columns is-multiline">
-            <div class="column is-3" v-for="celeb in celebs" :key="celeb.id">
-                <div class="card">
-                    <div class="card-image">
-                        <figure class="image is-4by4">
-                            <img :src="`https://eosheros.togetthere.cn/image/${celeb.id}.jpg`" class="is-rounded celeb-avatar" alt="Placeholder image">
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                        <!-- <div class="media-left">
-                            <figure class="image is-48x48">
-                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                            </figure>
-                        </div> -->
-                        <div class="media-content">
-                            <p class="title is-4">{{celeb.name}}</p>
-                            <p class="subtitle is-6"> {{celeb.price}} </p>
-                        </div>
-                        </div>
-
-                        <div class="content">
-
-                        <button class="button is-large" @click="buy(celeb)"> 以 {{celeb.price}} 购买 </button>
-                        </div>
-                    </div>
-                    </div>
+      <b-loading :is-full-page="false" :active.sync="dataIsLoading" :can-cancel="false"></b-loading>
+      <div class="columns is-multiline">
+        <div class="column is-3" v-for="celeb in celebBaseList" :key="celeb.id">
+          <div class="celeb-card">
+            <div class="celeb-image">
+              <img :src="`https://eosheros.togetthere.cn/image/${celeb.id}.jpg`">
             </div>
+            <div class="celeb-name"><p class="title">{{celeb.name}}</p></div>
+            <div v-if="celebPriceList[celeb.id] !== undefined">
+              <div class="celeb-price"><p class="subtitle has-text-info">{{ (celebPriceList[celeb.id].price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
+              <button class="button is-rounded is-light buy-button" @click="buy(celeb)"> 购买</button>
+            </div>
+            <div v-if="celebPriceList[celeb.id] === undefined">
+              <div class="celeb-price"><p class="subtitle has-text-grey-light">Unavailable</p></div>
+              <button class="button is-rounded is-light buy-button" disabled> 无法购买</button>
+            </div>
+          </div>
         </div>
-        <b-modal :active.sync="isComponentModalActive" has-modal-card>
-            <buy-modal :person="currentBuy"></buy-modal>
-        </b-modal>
+      </div>
+      <b-modal :active.sync="isDialogActive" has-modal-card>
+        <buy-modal :celebInfo="currentBuy"></buy-modal>
+      </b-modal>
     </div>
+  </div>
 </template>
 
 <script>
-import { getCelebs } from '../blockchain/celeb'
+import { mapState, mapGetters } from 'vuex'
 import BuyModal from '@/components/BuyModal'
-import { getTokenPrice } from '../blockchain/index'
 export default {
   name: 'celeberties-list',
   components: {
     BuyModal
   },
-  data: () => ({
-    celebs: [],
-    isComponentModalActive: false,
-    currentBuy: -1
-  }),
-  async created () {
-    this.celebs = await getCelebs()
-    console.log(this.celebs)
-    var tb = await getTokenPrice()
-    console.log('ddddd')
-    console.log(tb)
+  computed: {
+    ...mapState(['celebBaseList', 'celebPriceList', 'dataIsLoading']),
   },
+  data: () => ({
+    isDialogActive: false,
+    currentBuy: null
+  }),
   methods: {
     buy (celeb) {
       this.currentBuy = celeb
-      this.isComponentModalActive = true
+      this.isDialogActive = true
     }
   }
 }
 </script>
 
 <style scoped>
-.card {
+.celeb-list {
+  min-height: 500px;
+}
+
+.celeb-card {
+  border-radius: 10px;
+  background: #FFF;
   text-align: center;
+  padding: 2rem;
+  margin: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03), 0 10px 15px rgba(0,0,0,0.04);
+  transition: box-shadow .2s ease-out;
 }
-.media-content * {
-  text-align: center;
+
+.celeb-card:hover {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.09), 0 15px 30px rgba(0,0,0,0.09);
 }
-.image{
-    height: 250px !important;
+
+.celeb-card .celeb-image img {
+  border: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
-.card-content {
-    padding-top: 2.5rem;
+
+.celeb-card .celeb-name {
+  margin: 0.5rem 0;
 }
-.image img {
-    display: block;
-    width: 90%;
-    height: 90%;
-    margin: auto;
+
+.celeb-card .celeb-price {
+  margin: 0.5rem 0;
 }
-.card:hover{
-    transform: scale(1.05);
+
+.celeb-card .buy-button {
+  min-width: 150px;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 </style>

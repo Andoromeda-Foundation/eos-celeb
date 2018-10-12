@@ -25,16 +25,16 @@
               </div>
               <div class="navbar-end">
                 <div class="navbar-item" v-if="account === null && scatter">
-                  <a class="button is-primary is-inverted is-rounded" @click="requestId">&nbsp;&nbsp;登录&nbsp;&nbsp;</a>
+                  <a class="button is-primary is-inverted is-rounded" @click="requestId">登录</a>
                 </div>
                 <div class="navbar-item" v-if="account === null && !scatter">
-                  <a class="button is-primary is-inverted is-outlined is-rounded" href="#">&nbsp;&nbsp;下载 Scatter 后登录&nbsp;&nbsp;</a>
+                  <a class="button is-primary is-inverted is-outlined is-rounded" href="#">下载 Scatter 后登录</a>
                 </div>
                 <div class="navbar-item" v-if="account !== null">
                   {{account.name}} 已登录
                 </div>
                 <div class="navbar-item" v-if="account !== null">
-                  <a class="button is-primary is-inverted is-outlined is-rounded" @click="forgetId">&nbsp;&nbsp;退出登录&nbsp;&nbsp;</a>
+                  <a class="button is-primary is-inverted is-outlined is-rounded" @click="forgetId">退出登录</a>
                 </div>
               </div>
             </div>
@@ -108,9 +108,25 @@ export default {
 </script>
 
 <style>
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+body, html {
+  background: #F0F0F0;
+}
+
 .body-container {
   padding: 3rem 0;
-  background: #EEE;
+}
+
+.navbar .button {
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
 }
 </style>
 
