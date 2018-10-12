@@ -56,20 +56,30 @@ export default new Vuex.Store({
   actions: {
     initScatter ({ commit, dispatch }, scatter) {
       commit('setScatter', scatter)
-      dispatch('updateGlobal')
       dispatch('updateCeleb')
+      setInterval(() => {
+        dispatch('updateCeleb', true)
+      }, 30 * 1000)
     },
-    async updateCeleb ({ commit }) {
-      commit('setDataLoading', true)
-      const celebBaseList = await API.getCelebBaseList()
-      const celebPriceList = await API.getCelebPriceList()
-      commit('setCelebBase', celebBaseList)
-      commit('setCelebPrice', celebPriceList)
+    async updateCeleb ({ commit }, isBackground) {
+      try {
+        if (!isBackground) {
+          commit('setDataLoading', true)
+        }
+        const celebBaseList = await API.getCelebBaseList()
+        const celebPriceList = await API.getCelebPriceList()
+        commit('setCelebBase', celebBaseList)
+        commit('setCelebPrice', celebPriceList)
+      } catch (e) {
+        console.error(e)
+      }
       commit('setDataLoading', false)
-    },
-    async updateGlobal ({ commit }) {
-      const globalInfo = await API.getGlobal()
-      commit('setGlobal', globalInfo)
+      try {
+        const globalInfo = await API.getGlobal()
+        commit('setGlobal', globalInfo)
+      } catch (e) {
+        console.error(e)
+      }
     },
     updateBalance ({ commit }) {
       getMyBalancesByContract({ symbol: 'eos' })
