@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   EOSCelebrity: 'EOS Celebrity',
   switch_lang: 'Switch Lang.',
   ENGLISH: 'ENGLISH',
