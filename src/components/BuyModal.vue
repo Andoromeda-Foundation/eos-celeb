@@ -2,10 +2,10 @@
   <form action="">
     <div class="modal-card" style="width: auto">
       <header class="modal-card-head">
-        <p class="modal-card-title">购买 {{celebBaseList[priceInfo.id].name}}</p>
+        <p class="modal-card-title">{{$t('buy_modal_title')}} {{celebBaseList[priceInfo.id].name}}</p>
       </header>
       <section class="modal-card-body">
-        <b-field label="价格">
+        <b-field :label="$t('buy_modal_label')">
           <b-field>
             <b-input
               v-bind:value="(getPrice() / 10000).toFixed(4)"
@@ -20,8 +20,8 @@
         </b-field>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-rounded is-primary" @click="buy">使用 Scatter 支付</button>
-        <button class="button is-rounded " type="button" @click="$parent.close()">取消</button>
+        <button class="button is-rounded is-primary" @click="buy">{{$t('buy_modal_pay')}}</button>
+        <button class="button is-rounded" type="button" @click="$parent.close()">{{$t('buy_modal_cancel')}}</button>
       </footer>
     </div>
   </form>
@@ -33,14 +33,14 @@ import * as util from '../blockchain/util'
 
 const errorMessages = {
   'overdrawn balance': {
-    message: '您的账户余额不足'
+    message: 'buy_modal_msg_fail_overdrawn',
   },
   'no enough eos': {
-    message: '有人比您抢先一步买下了该名人',
+    message: 'buy_modal_msg_fail_no_enough',
     refresh: true
   },
   'not correct time': {
-    message: '还没有到开始时间，或已超过结束时间'
+    message: 'buy_modal_msg_fail_time',
   }
 }
 
@@ -78,7 +78,7 @@ export default {
         this.$toast.open({
           type: 'is-success',
           duration: 5000,
-          message: `您已成功以 ${priceReadable} 购买 ${buyTarget}。`,
+          message: this.$t('buy_modal_msg_success', { priceReadable, buyTarget }),
           position: 'is-bottom',
           queue: false
         })
@@ -91,14 +91,18 @@ export default {
             this.$toast.open({
               type: 'is-danger',
               duration: 5000,
-              message: `您在 Scatter 中取消了 ${buyTarget} 的购买。`,
+              message: this.$t('buy_modal_msg_cancel', { buyTarget }),
               position: 'is-bottom',
               queue: false
             })
           } else {
             this.$dialog.alert({
-              title: '购买失败',
-              message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br>${util.escapeHtml(error.message)}`,
+              title: this.$t('buy_modal_msg_fail_title'),
+              message: this.$t('buy_modal_msg_fail_body', {
+                priceReadable,
+                buyTarget,
+                content: `Unknown Error: <br>${util.escapeHtml(error.message)}`,
+              }),
               onConfirm: () => {
                 this.$parent.close()
                 this.$store.dispatch('updateCeleb')
@@ -112,8 +116,12 @@ export default {
             const errorProc = errorMessages[errorKeyword]
             if (errorStr.indexOf(errorKeyword) > -1) {
               this.$dialog.alert({
-                title: '购买失败',
-                message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>${errorProc.message}`,
+                title: this.$t('buy_modal_msg_fail_title'),
+                message: this.$t('buy_modal_msg_fail_body', {
+                  priceReadable,
+                  buyTarget,
+                  content: this.$t(errorProc.message),
+                }),
                 onConfirm: () => {
                   if (errorProc.refresh) {
                     this.$parent.close()
@@ -126,8 +134,12 @@ export default {
           }
           // Error: unknown error
           this.$dialog.alert({
-            title: '购买失败',
-            message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`,
+            title: this.$t('buy_modal_msg_fail_title'),
+            message: this.$t('buy_modal_msg_fail_body', {
+              priceReadable,
+              buyTarget,
+              content: `Unknown Error: <br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`,
+            }),
             onConfirm: () => {
               this.$parent.close()
               this.$store.dispatch('updateCeleb')

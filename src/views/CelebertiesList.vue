@@ -4,36 +4,36 @@
       <nav class="level" v-if="globalInfo">
         <div class="level-item has-text-centered">
           <div>
-            <p class="heading">奖池大小</p>
+            <p class="heading">{{$t('info_pot')}}</p>
             <p class="title">{{ (globalInfo.pool / 10000).toFixed(4) }} EOS</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
-            <p class="heading">结束倒计时</p>
+            <p class="heading">{{$t('info_count_down')}}</p>
             <p class="title">{{ globalCountdown }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
-            <p class="heading">最后购买者</p>
+            <p class="heading">{{$t('info_last_buyer')}}</p>
             <p class="title" :title="globalInfo.last">{{ truncate(globalInfo.last) }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
-          <b-field label="排序">
+          <b-field :label="$t('info_order_by')">
             <b-select rounded v-model="orderBy">
-              <option value="desc">价格从高到低</option>
-              <option value="asc">价格从低到高</option>
+              <option value="desc">{{$t('info_order_by_desc')}}</option>
+              <option value="asc">{{$t('info_order_by_asc')}}</option>
             </b-select>
           </b-field>
         </div>
         <div class="level-item has-text-centered">
-          <b-field label="过滤">
+          <b-field :label="$t('info_filter')">
             <b-select rounded v-model="filter">
-              <option value="none">显示全部名人</option>
-              <option value="buy" :disabled="account === null">我的名人</option>
-              <option value="not-buy" :disabled="account === null">未拥有的名人</option>
+              <option value="none">{{$t('info_filter_none')}}</option>
+              <option value="buy" :disabled="account === null">{{$t('info_filter_buy')}}</option>
+              <option value="not-buy" :disabled="account === null">{{$t('info_filter_not_buy')}}</option>
             </b-select>
           </b-field>
         </div>
@@ -49,15 +49,15 @@
             </div>
             <div class="celeb-name"><p class="title">{{celebBaseList[priceInfo.id].name}}</p></div>
             <div class="celeb-holder">
-              <p class="holder">持有者: {{priceInfo.owner}}</p>
+              <p class="holder">{{$t('card_owner')}}: {{priceInfo.owner}}</p>
               <b-message type="is-info" size="is-small" class="slogan" v-if="priceInfo.slogan">
                 {{priceInfo.slogan}}
               </b-message>
             </div>
             <div class="celeb-price"><p class="is-size-4 has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
-            <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
-            <button class="button is-rounded is-light buy-button" v-if="account !== null && priceInfo.owner != account.name" @click="buy(priceInfo)">购买</button>
-            <button class="button is-rounded is-primary buy-button" v-if="account !== null && priceInfo.owner == account.name" @click="edit(priceInfo)">修改标语</button>
+            <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>{{$t('card_buy_after_login')}}</button>
+            <button class="button is-rounded is-light buy-button" v-if="account !== null && priceInfo.owner != account.name" @click="buy(priceInfo)">{{$t('card_buy')}}</button>
+            <button class="button is-rounded is-primary buy-button" v-if="account !== null && priceInfo.owner == account.name" @click="edit(priceInfo)">{{$t('card_edit_slogan')}}</button>
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@ export default {
       if (this.globalInfo != null) {
         const currentTimestamp = ~~(Date.now() / 1000)
         if (currentTimestamp >= this.globalInfo.ed) {
-          this.globalCountdown = '已结束'
+          this.globalCountdown = this.$t('info_count_down_end');
         } else {
           let remaining = this.globalInfo.ed - currentTimestamp
           const seconds = remaining % 60

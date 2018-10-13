@@ -1,7 +1,7 @@
-import zhCN from './zh'
+import zh from './zh'
 import en from './en'
 
 export const messages = {
-  'zh': zhCN,
+  'zh': zh,
   'en': en
 }

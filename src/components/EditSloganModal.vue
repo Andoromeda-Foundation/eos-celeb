@@ -2,16 +2,16 @@
   <form action="">
     <div class="modal-card" style="min-width: 500px; width: auto">
       <header class="modal-card-head">
-        <p class="modal-card-title">修改标语</p>
+        <p class="modal-card-title">{{$t('edit_slogan_modal_title')}}</p>
       </header>
       <section class="modal-card-body">
-        <b-field label="标语内容 (最长 64 字符)">
+        <b-field :label="$t('edit_slogan_modal_label')">
           <b-input maxlength="64" type="textarea" v-model="slogan"></b-input>
         </b-field>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-rounded is-primary" @click="edit()">保存修改</button>
-        <button class="button is-rounded" @click="$parent.close()">取消</button>
+        <button class="button is-rounded is-primary" @click="edit()">{{$t('edit_slogan_modal_save')}}</button>
+        <button class="button is-rounded" @click="$parent.close()">{{$t('edit_slogan_modal_cancel')}}</button>
       </footer>
     </div>
   </form>
@@ -44,7 +44,7 @@ export default {
         this.$toast.open({
           type: 'is-success',
           duration: 5000,
-          message: `为 ${sloganTarget} 设置标语成功！`,
+          message: this.$t('edit_slogan_modal_msg_success', { sloganTarget }),
           position: 'is-bottom',
           queue: false
         })
@@ -57,21 +57,21 @@ export default {
             this.$toast.open({
               type: 'is-danger',
               duration: 5000,
-              message: `您取消了对 ${sloganTarget} 标语的设置。`,
+              message: this.$t('edit_slogan_modal_msg_cancel', { sloganTarget }),
               position: 'is-bottom',
               queue: false
             })
           } else {
             this.$dialog.alert({
-              title: '设置标语失败',
-              message: `为 ${sloganTarget} 设置标语失败：<br>未知错误：<br>${util.escapeHtml(error.message)}`
+              title: this.$t('edit_slogan_modal_msg_fail_title'),
+              message: this.$t('edit_slogan_modal_msg_fail_body', { sloganTarget, content: util.escapeHtml(error.message) }),
             })
           }
         } else {
           const errorStr = String(error)
           this.$dialog.alert({
-            title: '设置标语失败',
-            message: `为 ${sloganTarget} 设置标语失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`
+            title: this.$t('edit_slogan_modal_msg_fail_title'),
+            message: this.$t('edit_slogan_modal_msg_fail_body', { sloganTarget, content: `<pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>` }),
           })
         }
       }

@@ -2,10 +2,10 @@
   <form action="">
     <div class="modal-card" style="min-width: 500px; width: auto">
       <header class="modal-card-head">
-        <p class="modal-card-title">邀请好友获得奖励</p>
+        <p class="modal-card-title">{{$t('invite_modal_title')}}</p>
       </header>
       <section class="modal-card-body">
-        <b-field label="邀请连接">
+        <b-field :label="$t('invite_modal_label')">
           <b-field>
             <b-input
               id="refLink"
@@ -15,14 +15,14 @@
             </b-input>
             <p class="control">
               <a class="button is-primary" @click="copy">
-                复制
+                {{$t('invite_modal_copy')}}
               </a>
             </p>
           </b-field>
         </b-field>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-rounded" @click="$parent.close()">关闭</button>
+        <button class="button is-rounded" @click="$parent.close()">{{$t('invite_modal_close')}}</button>
       </footer>
     </div>
   </form>
@@ -41,7 +41,7 @@ export default {
     copy () {
       this.$copyText(this.getRefer()).then(() => {
         this.$toast.open({
-          message: '邀请链接已复制到剪贴板',
+          message: this.$t('invite_modal_copy_success'),
           type: 'is-success',
           duration: 3000,
           position: 'is-bottom',
@@ -50,7 +50,7 @@ export default {
         this.$parent.close()
       }, () => {
         this.$toast.open({
-          message: '邀请链接复制失败，请手工复制',
+          message: this.$t('invite_modal_copy_fail'),
           type: 'is-danger',
           duration: 5000,
           position: 'is-bottom',

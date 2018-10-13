@@ -14,34 +14,34 @@
             <div :class="['navbar-menu', { 'is-active': isNavActive }]">
               <div class="navbar-start">
                 <router-link to="/" class="navbar-item">
-                  名人列表
+                  {{$t('nav_celeb_list')}}
                 </router-link>
                 <router-link to="/about" class="navbar-item">
-                  关于
+                  {{$t('nav_about')}}
                 </router-link>
               </div>
               <div class="navbar-end">
                 <div class="navbar-item">
-                  <b-select rounded v-model="$i18n.locale" :placeholder="$t('switch_lang')">
-                    <option value="en">{{$t('ENGLISH')}}</option>
-                    <option value="zh">{{$t('CHINESE')}}</option>
-                    <option disabled="disabled">{{$t('JAPANESE')}}</option>
+                  <b-select rounded v-model="$i18n.locale" :placeholder="$t('nav_switch_lang')">
+                    <option value="en">{{$t('nav_switch_lang_en')}}</option>
+                    <option value="zh">{{$t('nav_switch_lang_zh')}}</option>
+                    <option disabled="disabled">{{$t('nav_switch_lang_jp')}}</option>
                   </b-select>
                 </div>
                 <div class="navbar-item" v-if="account === null && scatter">
-                  <a class="button is-primary is-inverted is-rounded" @click="requestId">登录</a>
+                  <a class="button is-primary is-inverted is-rounded" @click="requestId">{{$t('nav_sign_in')}}</a>
                 </div>
                 <div class="navbar-item" v-if="account === null && !scatter">
-                  <a class="button is-primary is-inverted is-outlined is-rounded" href="https://get-scatter.com/" target="_blank">下载 Scatter 后登录</a>
+                  <a class="button is-primary is-inverted is-outlined is-rounded" href="https://get-scatter.com/" target="_blank">{{$t('nav_sign_in_scatter')}}</a>
                 </div>
                 <div class="navbar-item" v-if="account !== null">
-                  {{account.name}} 已登录
+                  Welcome {{account.name}}
                 </div>
                 <div class="navbar-item" v-if="account !== null">
-                  <a class="button is-primary is-inverted is-outlined is-rounded" @click="invite">邀请</a>
+                  <a class="button is-primary is-inverted is-outlined is-rounded" @click="invite">{{$t('nav_invite')}}</a>
                 </div>
                 <a class="navbar-item" v-if="account !== null" @click="forgetId">
-                  退出登录
+                  {{$t('nav_sign_out')}}
                 </a>
               </div>
             </div>
@@ -64,10 +64,10 @@
     <b-modal :active.sync="isInviteDialogActive" has-modal-card>
       <invite-modal></invite-modal>
     </b-modal>
-    <footer class="footer">
+    <footer class="footer has-background-grey-dark has-text-light">
       <div class="content has-text-centered">
         <p>
-          <strong>EOS Celebrity</strong> Some Right Reserved.
+          <strong class="has-text-white">EOS Celebrity</strong> Some Right Reserved.
         </p>
       </div>
     </footer>
@@ -96,16 +96,6 @@ export default {
       console.log('Scatter Loaded')
       this.handleScatterLoaded()
     })
-
-    if (Date.now() < 1539403200000) {
-      this.$snackbar.open({
-        message: '公告：北京时间 2018 年 10 月 13 日中午 12:00 正式开放购买',
-        type: 'is-warning',
-        position: 'is-top',
-        actionText: 'OK',
-        indefinite: true
-      })
-    }
   },
   methods: {
     ...mapActions(['initScatter', 'setIdentity']),
