@@ -100,13 +100,14 @@ export default {
       this.handleScatterLoaded()
     })
 
-    if (Date.now() < 1539432000000) {
+    if (localStorage.getItem('eos_celeb_ann') !== '1') {
       this.$snackbar.open({
         message: this.$t('announcement'),
         type: 'is-warning',
         position: 'is-top',
         actionText: 'OK',
-        indefinite: true
+        indefinite: true,
+        onAction: () => localStorage.setItem('eos_celeb_ann', '1'),
       })
     }
   },

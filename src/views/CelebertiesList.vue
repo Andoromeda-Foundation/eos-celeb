@@ -8,16 +8,10 @@
             <p class="title">{{ (globalInfo.pool / 10000).toFixed(4) }} EOS</p>
           </div>
         </div>
-        <div class="level-item has-text-centered" v-if="!newCelebCountdown">
+        <div class="level-item has-text-centered">
           <div>
             <p class="heading">{{$t('info_count_down')}}</p>
             <p class="title">{{ globalCountdown }}</p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered" v-if="newCelebCountdown">
-          <div>
-            <p class="heading">{{$t('info_new_celeb_count_down')}}</p>
-            <p class="title">{{ newCelebCountdown }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
@@ -104,7 +98,6 @@ export default {
     isEditSloganDialogActive: false,
     currentBuy: null,
     globalCountdown: '00:00:00',
-    newCelebCountdown: null,
     orderBy: 'desc',
     filter: 'none'
   }),
@@ -123,12 +116,6 @@ export default {
           let remaining = this.globalInfo.ed - currentTimestamp
           this.globalCountdown = util.formatCountdown(remaining)
         }
-      }
-      if (Date.now() < 1539432000000) {
-        let remaining = ~~((1539432000000 - Date.now()) / 1000)
-        this.newCelebCountdown = util.formatCountdown(remaining)
-      } else {
-        this.newCelebCountdown = null
       }
     }, 1000)
   },
