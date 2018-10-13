@@ -182,14 +182,20 @@ export default {
   min-height: 500px;
 }
 
+.celeb-list .column {
+  margin: 0.5rem 0;
+}
+
 .celeb-card {
   border-radius: 10px;
   background: #fff;
   text-align: center;
   padding: 2rem;
-  margin: 0.5rem;
+  margin: 0 0.5rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03), 0 10px 15px rgba(0, 0, 0, 0.04);
   transition: box-shadow 0.2s ease-out;
+  position: relative;
+  height: 100%;
 }
 
 .celeb-card:hover {
@@ -223,7 +229,7 @@ export default {
 
 .celeb-card .buy-button {
   min-width: 150px;
-  margin: 1rem 0;
+  margin: 1rem 0 0 0;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
