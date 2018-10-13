@@ -5,13 +5,13 @@
         <nav class="navbar is-spaced">
           <div class="container">
             <div class="navbar-brand">
-              <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+              <div class="navbar-burger burger" @click="switchNav()">
                 <span></span>
                 <span></span>
                 <span></span>
               </div>
             </div>
-            <div class="navbar-menu">
+            <div :class="['navbar-menu', { 'is-active': isNavActive }]">
               <div class="navbar-start">
                 <router-link to="/" class="navbar-item">
                   名人列表
@@ -21,11 +21,13 @@
                 </router-link>
               </div>
               <div class="navbar-end">
-                <b-select v-model="$i18n.locale" :placeholder="$t('switch_lang')">
+                <div class="navbar-item">
+                  <b-select rounded v-model="$i18n.locale" :placeholder="$t('switch_lang')">
                     <option value="en">{{$t('ENGLISH')}}</option>
                     <option value="zh">{{$t('CHINESE')}}</option>
                     <option disabled="disabled">{{$t('JAPANESE')}}</option>
-                </b-select>
+                  </b-select>
+                </div>
                 <div class="navbar-item" v-if="account === null && scatter">
                   <a class="button is-primary is-inverted is-rounded" @click="requestId">登录</a>
                 </div>
@@ -85,7 +87,8 @@ export default {
     InviteModal
   },
   data: () => ({
-    isInviteDialogActive: false
+    isInviteDialogActive: false,
+    isNavActive: false
   }),
   created () {
     // @TODO: replace with Scatter JS
@@ -126,6 +129,9 @@ export default {
       } catch (error) {
         console.info('User canceled to suggestNetwork')
       }
+    },
+    switchNav () {
+      this.isNavActive = !this.isNavActive
     },
     invite () {
       this.isInviteDialogActive = true
