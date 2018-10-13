@@ -1,4 +1,5 @@
 export default {
+  announcement: 'Announcement: We will open a set of new celebrities at Oct 13 20:00 PM CST +8.',
   EOSCelebrity: 'EOS Celebrity',
   nav_switch_lang: 'Language',
   nav_switch_lang_en: 'ENGLISH',
@@ -14,6 +15,7 @@ export default {
   info_pot: 'Pot',
   info_count_down: 'Close Count Down',
   info_count_down_end: 'Closed',
+  info_new_celeb_count_down: 'New Item Count Down',
   info_last_buyer: 'Last Buyer',
   info_order_by: 'Sort',
   info_order_by_asc: 'Price Descending',

@@ -102,7 +102,7 @@ export default {
 
     if (Date.now() < 1539432000000) {
       this.$snackbar.open({
-        message: '公告：北京时间 2018 年 10 月 13 日晚上 8:00 开放一批新名人购买',
+        message: this.$t('announcement'),
         type: 'is-warning',
         position: 'is-top',
         actionText: 'OK',

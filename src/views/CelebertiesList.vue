@@ -8,10 +8,16 @@
             <p class="title">{{ (globalInfo.pool / 10000).toFixed(4) }} EOS</p>
           </div>
         </div>
-        <div class="level-item has-text-centered">
+        <div class="level-item has-text-centered" v-if="!newCelebCountdown">
           <div>
             <p class="heading">{{$t('info_count_down')}}</p>
             <p class="title">{{ globalCountdown }}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered" v-if="newCelebCountdown">
+          <div>
+            <p class="heading">{{$t('info_new_celeb_count_down')}}</p>
+            <p class="title">{{ newCelebCountdown }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
@@ -76,11 +82,7 @@ import { mapState, mapGetters } from 'vuex'
 import BuyModal from '@/components/BuyModal'
 import EditSloganModal from '@/components/EditSloganModal'
 import orderBy from 'lodash.orderby'
-
-function padTimeZero (str) {
-  let t = '00' + str
-  return t.slice(t.length - 2, t.length)
-}
+import * as util from '../blockchain/util';
 
 export default {
   name: 'celeberties-list',
@@ -102,6 +104,7 @@ export default {
     isEditSloganDialogActive: false,
     currentBuy: null,
     globalCountdown: '00:00:00',
+    newCelebCountdown: null,
     orderBy: 'desc',
     filter: 'none'
   }),
@@ -118,15 +121,14 @@ export default {
           this.globalCountdown = this.$t('info_count_down_end')
         } else {
           let remaining = this.globalInfo.ed - currentTimestamp
-          const seconds = remaining % 60
-          remaining = ~~(remaining / 60)
-          const minutes = remaining % 60
-          remaining = ~~(remaining / 60)
-          const hours = remaining
-          this.globalCountdown = `${padTimeZero(hours)}:${padTimeZero(
-            minutes
-          )}:${padTimeZero(seconds)}`
+          this.globalCountdown = util.formatCountdown(remaining)
         }
+      }
+      if (Date.now() < 1539432000000) {
+        let remaining = ~~((1539432000000 - Date.now()) / 1000);
+        this.newCelebCountdown = util.formatCountdown(remaining)
+      } else {
+        this.newCelebCountdown = null
       }
     }, 1000)
   },

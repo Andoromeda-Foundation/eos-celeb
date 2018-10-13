@@ -1,4 +1,5 @@
 export default {
+  announcement: '公告：北京时间 2018 年 10 月 13 日晚上 8:00 开放一批新名人购买',
   EOSCelebrity: 'EOS 加密名人',
   nav_switch_lang: '切换语言',
   nav_switch_lang_en: '英语',
@@ -14,6 +15,7 @@ export default {
   info_pot: '奖池',
   info_count_down: '结束倒计时',
   info_count_down_end: '已结束',
+  info_new_celeb_count_down: '新名人倒计时',
   info_last_buyer: '最后买家',
   info_order_by: '排序',
   info_order_by_asc: '价格从低到高',
