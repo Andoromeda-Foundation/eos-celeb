@@ -46,12 +46,17 @@
             </div>
             <div class="celeb-price"><p class="is-size-4 has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
             <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
-            <button class="button is-rounded is-light buy-button" v-if="account !== null" @click="buy(priceInfo)">购买</button>
+            <!-- TODO: Switch back logic -->
+            <button class="button is-rounded is-light buy-button" v-if="account !== null && priceInfo.owner == account.name" @click="buy(priceInfo)">购买</button>
+            <button class="button is-rounded is-primary buy-button" v-if="account !== null && priceInfo.owner != account.name" @click="edit(priceInfo)">修改标语</button>
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isDialogActive" has-modal-card>
+      <b-modal :active.sync="isBuyDialogActive" has-modal-card>
         <buy-modal :priceInfo="currentBuy"></buy-modal>
+      </b-modal>
+      <b-modal :active.sync="isEditSloganDialogActive" has-modal-card>
+        <edit-slogan-modal :priceInfo="currentBuy"></edit-slogan-modal>
       </b-modal>
     </div>
   </div>
@@ -60,6 +65,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import BuyModal from '@/components/BuyModal'
+import EditSloganModal from '@/components/EditSloganModal'
 import orderBy from 'lodash.orderby'
 
 function padTimeZero (str) {
@@ -70,7 +76,8 @@ function padTimeZero (str) {
 export default {
   name: 'celeberties-list',
   components: {
-    BuyModal
+    BuyModal,
+    EditSloganModal
   },
   computed: {
     ...mapState([
@@ -82,7 +89,8 @@ export default {
     ...mapGetters(['account'])
   },
   data: () => ({
-    isDialogActive: false,
+    isBuyDialogActive: false,
+    isEditSloganDialogActive: false,
     currentBuy: null,
     globalCountdown: '00:00:00',
     orderBy: 'default'
@@ -120,7 +128,11 @@ export default {
   methods: {
     buy (priceInfo) {
       this.currentBuy = priceInfo
-      this.isDialogActive = true
+      this.isBuyDialogActive = true
+    },
+    edit (priceInfo) {
+      this.currentBuy = priceInfo
+      this.isEditSloganDialogActive = true
     },
     orderList (list) {
       if (this.orderBy === 'asc') {

@@ -34,18 +34,8 @@ export async function getCelebPriceList () {
   return rows
 }
 
-/*
-export async function getCelebsPrice (celebIds) {
-  debugger;
-  const queryPool = celebIds.map(id => {
-    return eos().getTableRows({
-      json: 'true',
-      code: 'myeosgroupon', // the contract
-      scope: id, // 'scope' should be the id
-      limit: 50,
-      table: 'celeb' // change table name if needed
-    })
+export async function setSlogan () {
+  await eos().contract('crazytown.bp').then((contract) => {
+    console.log(contract)
   })
-  return Promise.all(queryPool)
 }
-*/
