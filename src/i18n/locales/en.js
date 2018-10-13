@@ -5,6 +5,7 @@ export default {
   nav_switch_lang_zh: 'CHINESE',
   nav_switch_lang_jp: 'JAPANESE',
   nav_celeb_list: 'Celebrity List',
+  nav_leaderboard: 'Leaderboard',
   nav_about: 'About',
   nav_sign_in: 'Sign In',
   nav_sign_in_scatter: 'Sign In After Downloading Scatter',
@@ -50,4 +51,9 @@ export default {
   edit_slogan_modal_msg_cancel: 'You cancelled slogan edit for {sloganTarget}.',
   edit_slogan_modal_msg_fail_title: 'Failed',
   edit_slogan_modal_msg_fail_body: 'Failed to set slogan for {sloganTarget}:<br>Unknown Error:<br>{content}',
+  leaderboard_label_rank: 'Rank',
+  leaderboard_label_name: 'Name',
+  leaderboard_label_total_value: 'Asset Value',
+  leaderboard_label_celeb_count: 'Owned Celebrities',
+  leaderboard_label_celeb_top: 'Most Valued 5 Celebrities',
 }

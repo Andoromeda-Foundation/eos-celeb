@@ -13,6 +13,9 @@
             </div>
             <div :class="['navbar-menu', { 'is-active': isNavActive }]">
               <div class="navbar-start">
+                <router-link to="/leaderboard" class="navbar-item">
+                  {{$t('nav_leaderboard')}}
+                </router-link>
                 <router-link to="/" class="navbar-item">
                   {{$t('nav_celeb_list')}}
                 </router-link>

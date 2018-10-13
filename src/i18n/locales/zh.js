@@ -5,6 +5,7 @@ export default {
   nav_switch_lang_zh: '中文',
   nav_switch_lang_jp: '日语',
   nav_celeb_list: '名人列表',
+  nav_leaderboard: '排行榜',
   nav_about: '关于',
   nav_sign_in: '登录',
   nav_sign_in_scatter: '下载 Scatter 后登录',
@@ -50,4 +51,9 @@ export default {
   edit_slogan_modal_msg_cancel: '您取消了对 {sloganTarget} 标语的设置。',
   edit_slogan_modal_msg_fail_title: '设置标语失败',
   edit_slogan_modal_msg_fail_body: '为 {sloganTarget} 设置标语失败：<br>未知错误：<br>{content}',
+  leaderboard_label_rank: '排名',
+  leaderboard_label_name: '用户',
+  leaderboard_label_total_value: '总资产',
+  leaderboard_label_celeb_count: '名人数',
+  leaderboard_label_celeb_top: '拥有名人 (价值 TOP 5)',
 }
