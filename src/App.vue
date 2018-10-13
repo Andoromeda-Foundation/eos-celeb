@@ -73,73 +73,73 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
-import { network } from "./config";
-import InviteModal from "@/components/InviteModal";
+import { mapState, mapActions, mapGetters } from 'vuex'
+import { network } from './config'
+import InviteModal from '@/components/InviteModal'
 
-const requiredFields = { accounts: [network] };
+const requiredFields = { accounts: [network] }
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     InviteModal
   },
   data: () => ({
     isInviteDialogActive: false
   }),
-  created() {
+  created () {
     // @TODO: replace with Scatter JS
-    document.addEventListener("scatterLoaded", () => {
-      console.log("Scatter Loaded");
-      this.handleScatterLoaded();
-    });
+    document.addEventListener('scatterLoaded', () => {
+      console.log('Scatter Loaded')
+      this.handleScatterLoaded()
+    })
 
     if (Date.now() < 1539403200000) {
       this.$snackbar.open({
-        message: "公告：北京时间 2018 年 10 月 13 日中午 12:00 正式开放购买",
-        type: "is-warning",
-        position: "is-top",
-        actionText: "OK",
+        message: '公告：北京时间 2018 年 10 月 13 日中午 12:00 正式开放购买',
+        type: 'is-warning',
+        position: 'is-top',
+        actionText: 'OK',
         indefinite: true
-      });
+      })
     }
   },
   methods: {
-    ...mapActions(["initScatter", "setIdentity"]),
-    handleScatterLoaded() {
-      const { scatter } = window;
-      this.initScatter(scatter);
+    ...mapActions(['initScatter', 'setIdentity']),
+    handleScatterLoaded () {
+      const { scatter } = window
+      this.initScatter(scatter)
       // this.requestId();
     },
-    async requestId() {
-      await this.suggestNetworkSetting();
-      const identity = await this.scatter.getIdentity(requiredFields);
-      this.setIdentity(identity);
+    async requestId () {
+      await this.suggestNetworkSetting()
+      const identity = await this.scatter.getIdentity(requiredFields)
+      this.setIdentity(identity)
     },
-    async forgetId() {
-      await this.scatter.forgetIdentity();
-      this.setIdentity(null);
+    async forgetId () {
+      await this.scatter.forgetIdentity()
+      this.setIdentity(null)
     },
-    async suggestNetworkSetting() {
+    async suggestNetworkSetting () {
       try {
-        await this.scatter.suggestNetwork(network);
+        await this.scatter.suggestNetwork(network)
       } catch (error) {
-        console.info("User canceled to suggestNetwork");
+        console.info('User canceled to suggestNetwork')
       }
     },
-    invite() {
-      this.isInviteDialogActive = true;
+    invite () {
+      this.isInviteDialogActive = true
     },
-    switchI18n(code) {
+    switchI18n (code) {
       console.info('Triggered Switch I18n to: ' + code)
       this.$i18n.locale = code
     }
   },
   computed: {
-    ...mapState(["identity", "scatter", "eos"]),
-    ...mapGetters(["account"])
+    ...mapState(['identity', 'scatter', 'eos']),
+    ...mapGetters(['account'])
   }
-};
+}
 </script>
 
 <style>
