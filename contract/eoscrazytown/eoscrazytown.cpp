@@ -12,9 +12,20 @@ void eoscrazytown::init(const checksum256 &hash)
     g.hash = hash;
     _global.set(g, _self); */
 
+    for (int i=0;i<100;++i) {
+        auto itr = bags.find(i);        
+        bags.modify(itr, 0, [&](auto &t) {
+            t.price = 1000;
+        });
+    }
+/*
+    _bagsglobal.remove();    
+
     auto g = _bagsglobal.get_or_create(_self, bagsglobal{
-                                                  .pool = 0, .team = 0, .last = N(crazytown.bp), .st = now() + 60 * 60 * 11, .ed = now() + 60 * 60 * 11 + 60 * 60 * 24});
-    _bagsglobal.set(g, _self);
+         .pool = 0, .team = 0, .last = N(vitalik11111), .st = 1539403200, .ed = 1539403200 + 60 * 60 * 24});
+
+                                                  
+    _bagsglobal.set(g, _self);*/
 }
 // @abi action
 void eoscrazytown::clear()
@@ -62,7 +73,7 @@ void eoscrazytown::setslogan(account_name &from, uint64_t id, string memo)
 {
     auto itr = bags.find(id);
     eosio_assert(itr != bags.end(), "no character exist");
-
+    eosio_assert(memo.size() <= 64, "too long");
     eosio_assert(from == itr->owner, "not the owner...");
     bags.modify(itr, from, [&](auto &t) {
         t.slogan = memo;
@@ -126,9 +137,14 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
     eosio_assert(eos.amount > 0, "must buy a positive amount");
     //    eosio_assert(memo != "" , "must have something in memo") ;
     //    eosio_assert(memo.size() >= 21  , "bets wrong...") ;
-
+    
     if (memo.substr(0, 3) == "buy")
-    {
+    {   
+
+        auto g = _bagsglobal.get();
+
+        eosio_assert( g.st <= now() && now() <= g.ed, "not correct time.");                                                      
+
 
         memo.erase(0, 4);
         std::size_t s = memo.find(' ');
@@ -138,14 +154,18 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         }
 
         auto id = string_to_price(memo.substr(0, s));
+        eosio_assert(id <= 100 || now() >= 1539403200 + 8*60*60, "no character exist");
         //  auto id = 0;
         memo.erase(0, s + 1);
         auto itr = bags.find(id);
         eosio_assert(itr != bags.end(), "no character exist");
         eosio_assert(eos.amount >= itr->next_price(), "no enough eos");
+        eosio_assert(from != itr->owner, "cannot buy with yourself" );
+
         asset d(eos.amount - itr->next_price(), EOS_SYMBOL);
 
-        if (d.amount > 0){
+        if (d.amount > 0 && _self != from){
+
         action( // winner winner chicken dinner
             permission_level{_self, N(active)},
             TOKEN_CONTRACT, N(transfer),
@@ -159,12 +179,9 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         auto ref_b = d;
         ref_b.amount /= 10;
 
-        auto g = _bagsglobal.get_or_create(_self, bagsglobal{
-
-                                                      .pool = 0, .team = 0});
 
         auto ref = eosio::string_to_name(memo.c_str());
-        if (is_account(ref) && ref != from)
+        if (is_account(ref) && ref != from && _self != from)
         {   
             if (ref_b.amount > 0) {
             action( // winner winner chicken dinner
@@ -191,7 +208,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         auto delta = d;
         delta.amount += itr->price;
 
-    if(delta.amount > 0){
+    if(delta.amount > 0 &&  _self !=itr->owner){
         action( // winner winner chicken dinner
             permission_level{_self, N(active)},
             N(eosio.token), N(transfer),
@@ -202,7 +219,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
 
         bags.modify(itr, 0, [&](auto &t) {
             t.owner = from;
-            t.price = eos.amount;
+            t.price = itr->next_price();
         });
 
         return;
@@ -314,6 +331,8 @@ const int64_t eoscrazytown::getTotalBets(const vector<int64_t> &v)
 void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
 { // hash for next round
     require_auth(_self);
+
+ //   eosio_assert(players.begin() != players.end(), "must have at least one player");
 
     card dragon = seed.hash[0] % 52;
     card tiger = seed.hash[1] % 52;
@@ -436,7 +455,7 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
                        bonus != 0 ? string("Winner Winner Chicken Dinner. " + presult) : string("Better Luck Next Time")));
     }
 
-    auto g = _global.get_or_create(_self, st_global{.hash = hash});
+    auto g = _global.get();
     g.hash = hash;
     g.dragon = dragon;
     g.tiger = tiger;
