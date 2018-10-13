@@ -40,9 +40,11 @@
               <img :src="`https://eosheros.togetthere.cn/image/${celebBaseList[priceInfo.id].id}.jpg`">
             </div>
             <div class="celeb-name"><p class="title">{{celebBaseList[priceInfo.id].name}}</p></div>
-            <div class="celeb-holder"><p class="subtitle">持有者： {{priceInfo.owner}}</p></div>
-            <div class="celeb-holder"><p class="subtitle">标语： {{priceInfo.slogan === "" ? "空" : priceInfo.slogan}}</p></div>
-            <div class="celeb-price"><p class="subtitle has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
+            <div class="celeb-holder">
+              <p class="holder">持有者: {{priceInfo.owner}}</p>
+              <p class="slogan" v-if="priceInfo.slogan">标语: {{priceInfo.slogan}}</p>
+            </div>
+            <div class="celeb-price"><p class="is-size-4 has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
             <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
             <button class="button is-rounded is-light buy-button" v-if="account !== null" @click="buy(priceInfo)">购买</button>
           </div>
@@ -174,6 +176,10 @@ export default {
 
 .celeb-card .celeb-name {
   margin: 0.5rem 0;
+}
+
+.celeb-card .celeb-holder {
+  margin: 1rem 0;
 }
 
 .celeb-card .celeb-price {
