@@ -41,6 +41,9 @@ const errorMessages = {
   },
   'not correct time': {
     message: 'buy_modal_msg_fail_time'
+  },
+  'no character exist': {
+    message: 'buy_modal_msg_fail_celeb_not_exist'
   }
 }
 

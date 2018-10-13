@@ -39,6 +39,7 @@ export default {
   buy_modal_msg_fail_overdrawn: 'Insufficient balance',
   buy_modal_msg_fail_no_enough: 'Some one has already purchased it',
   buy_modal_msg_fail_time: 'Purchase stage not started or is closed',
+  buy_modal_msg_fail_celeb_not_exist: 'Celebrity does not exist or not open for purchase',
   invite_modal_title: 'Invite Friend and Get Bonus',
   invite_modal_label: 'Invitation URL',
   invite_modal_copy: 'Copy',

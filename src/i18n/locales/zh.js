@@ -39,6 +39,7 @@ export default {
   buy_modal_msg_fail_overdrawn: '您的账户余额不足',
   buy_modal_msg_fail_no_enough: '有人比您抢先一步买下了该名人',
   buy_modal_msg_fail_time: '还没有到开始时间，或已超过结束时间',
+  buy_modal_msg_fail_celeb_not_exist: '该名人不存在或暂未开放',
   invite_modal_title: '邀请好友获得奖励',
   invite_modal_label: '邀请链接',
   invite_modal_copy: '复制',
