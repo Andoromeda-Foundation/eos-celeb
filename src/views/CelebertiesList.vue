@@ -21,11 +21,20 @@
           </div>
         </div>
         <div class="level-item has-text-centered">
-          <b-field label="排序方式">
+          <b-field label="排序">
             <b-select rounded v-model="orderBy">
               <option value="default">默认</option>
               <option value="asc">价格从低到高</option>
               <option value="desc">价格从高到低</option>
+            </b-select>
+          </b-field>
+        </div>
+        <div class="level-item has-text-centered">
+          <b-field label="过滤">
+            <b-select rounded v-model="filter">
+              <option value="none">显示全部名人</option>
+              <option value="buy" :disabled="account === null">已购买名人</option>
+              <option value="not-buy" :disabled="account === null">未购买名人</option>
             </b-select>
           </b-field>
         </div>
@@ -34,7 +43,7 @@
     <div class="celeb-list">
       <b-loading :is-full-page="false" :active.sync="dataIsLoading" :can-cancel="false"></b-loading>
       <div class="columns is-multiline">
-        <div class="column is-3" v-for="priceInfo in orderList(celebPriceList)" :key="priceInfo.id" v-if="celebBaseList[priceInfo.id]">
+        <div class="column is-3" v-for="priceInfo in orderList(filterList(celebPriceList))" :key="priceInfo.id" v-if="celebBaseList[priceInfo.id]">
           <div class="celeb-card">
             <div class="celeb-image">
               <img :src="`https://eosheros.togetthere.cn/image/${celebBaseList[priceInfo.id].id}.jpg`">
@@ -92,7 +101,8 @@ export default {
     isEditSloganDialogActive: false,
     currentBuy: null,
     globalCountdown: '00:00:00',
-    orderBy: 'default'
+    orderBy: 'default',
+    filter: 'none'
   }),
   created: function () {
     if (this.$route.params.account) {
@@ -140,6 +150,15 @@ export default {
         return orderBy(list, ['price', 'id'], ['desc', 'asc'])
       } else {
         return list
+      }
+    },
+    filterList (list) {
+      if (this.filter === 'buy') {
+        return list.filter(item => this.account !== null && item.owner === this.account.name)
+      } else if (this.filter === 'not-buy') {
+        return list.filter(item => this.account !== null && item.owner !== this.account.name)
+      } else {
+        return list;
       }
     },
     truncate (str) {
