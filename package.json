@@ -5,9 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-prod": "NODE_ENV=production vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy": "echo 'eoscelebrity.info' >> ./dist/CNAME && gh-pages -d dist",
-    "build-deploy": "vue-cli-service build && npm run deploy",
+    "build-deploy": "npm run build-prod && npm run deploy",
     "deploy-if-deploy-error": "rm -rf node_modules/gh-pages/.cache"
   },
   "dependencies": {
