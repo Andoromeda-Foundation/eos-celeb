@@ -37,6 +37,9 @@ const errorMessages = {
   'no enough eos': {
     message: '有人比您抢先一步买下了该名人',
     refresh: true
+  },
+  'not correct time': {
+    message: '还没有到开始时间，或已超过结束时间',
   }
 }
 
