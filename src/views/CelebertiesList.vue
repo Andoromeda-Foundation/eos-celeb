@@ -159,7 +159,7 @@ export default {
       } else if (this.filter === 'not-buy') {
         return list.filter(item => this.account !== null && item.owner !== this.account.name)
       } else {
-        return list;
+        return list
       }
     },
     truncate (str) {
