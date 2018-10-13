@@ -23,9 +23,8 @@
         <div class="level-item has-text-centered">
           <b-field label="排序">
             <b-select rounded v-model="orderBy">
-              <option value="default">默认</option>
-              <option value="asc">价格从低到高</option>
               <option value="desc">价格从高到低</option>
+              <option value="asc">价格从低到高</option>
             </b-select>
           </b-field>
         </div>
@@ -51,7 +50,9 @@
             <div class="celeb-name"><p class="title">{{celebBaseList[priceInfo.id].name}}</p></div>
             <div class="celeb-holder">
               <p class="holder">持有者: {{priceInfo.owner}}</p>
-              <p class="slogan" v-if="priceInfo.slogan">标语: {{priceInfo.slogan}}</p>
+              <b-message type="is-info" size="is-small" class="slogan" v-if="priceInfo.slogan">
+                {{priceInfo.slogan}}
+              </b-message>
             </div>
             <div class="celeb-price"><p class="is-size-4 has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
             <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
@@ -101,7 +102,7 @@ export default {
     isEditSloganDialogActive: false,
     currentBuy: null,
     globalCountdown: '00:00:00',
-    orderBy: 'default',
+    orderBy: 'desc',
     filter: 'none'
   }),
   created: function () {
@@ -213,6 +214,10 @@ export default {
 }
 
 .celeb-card .celeb-price {
+  margin: 0.5rem 0;
+}
+
+.celeb-card .slogan {
   margin: 0.5rem 0;
 }
 
