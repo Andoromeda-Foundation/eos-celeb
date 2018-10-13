@@ -1,5 +1,9 @@
 module.exports = {
   EOSCelebrity: 'EOS 加密名人',
+  switch_lang: '切换语言',
+  ENGLISH: '英语',
+  CHINESE: '中文',
+  JAPANESE: '日语',
   'My Cards': '我的卡牌',
   'Sign In': '登录游戏',
   Home: '首页',

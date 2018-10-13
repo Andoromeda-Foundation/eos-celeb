@@ -1,5 +1,9 @@
 module.exports = {
   EOSCelebrity: 'EOS Celebrity',
+  switch_lang: 'Switch Lang.',
+  ENGLISH: 'ENGLISH',
+  CHINESE: 'CHINESE',
+  JAPANESE: 'JAPANESE',
   'My Cards': 'My Cards',
   'Sign In': 'Sign In',
   Home: 'Home',
