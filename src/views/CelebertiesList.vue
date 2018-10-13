@@ -55,92 +55,92 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-import BuyModal from "@/components/BuyModal";
-import orderBy from "lodash.orderby";
+import { mapState, mapGetters } from 'vuex'
+import BuyModal from '@/components/BuyModal'
+import orderBy from 'lodash.orderby'
 
-function padTimeZero(str) {
-  let t = "00" + str;
-  return t.slice(t.length - 2, t.length);
+function padTimeZero (str) {
+  let t = '00' + str
+  return t.slice(t.length - 2, t.length)
 }
 
 export default {
-  name: "celeberties-list",
+  name: 'celeberties-list',
   components: {
     BuyModal
   },
   computed: {
     ...mapState([
-      "celebBaseList",
-      "celebPriceList",
-      "dataIsLoading",
-      "globalInfo"
+      'celebBaseList',
+      'celebPriceList',
+      'dataIsLoading',
+      'globalInfo'
     ]),
-    ...mapGetters(["account"])
+    ...mapGetters(['account'])
   },
   data: () => ({
     isDialogActive: false,
     currentBuy: null,
-    globalCountdown: "00:00:00",
-    orderBy: "default"
+    globalCountdown: '00:00:00',
+    orderBy: 'default'
   }),
-  created: function() {
+  created: function () {
     if (this.$route.params.account) {
-      console.log("Referrer: %s", this.$route.params.account);
-      localStorage.setItem("eos_celeb_referrer", this.$route.params.account);
+      console.log('Referrer: %s', this.$route.params.account)
+      localStorage.setItem('eos_celeb_referrer', this.$route.params.account)
     }
 
     this.countdownUpdater = setInterval(() => {
       if (this.globalInfo != null) {
-        const currentTimestamp = ~~(Date.now() / 1000);
+        const currentTimestamp = ~~(Date.now() / 1000)
         if (currentTimestamp >= this.globalInfo.ed) {
-          this.globalCountdown = "已结束";
+          this.globalCountdown = '已结束'
         } else {
-          let remaining = this.globalInfo.ed - currentTimestamp;
-          const seconds = remaining % 60;
-          remaining = ~~(remaining / 60);
-          const minutes = remaining % 60;
-          remaining = ~~(remaining / 60);
-          const hours = remaining;
+          let remaining = this.globalInfo.ed - currentTimestamp
+          const seconds = remaining % 60
+          remaining = ~~(remaining / 60)
+          const minutes = remaining % 60
+          remaining = ~~(remaining / 60)
+          const hours = remaining
           this.globalCountdown = `${padTimeZero(hours)}:${padTimeZero(
             minutes
-          )}:${padTimeZero(seconds)}`;
+          )}:${padTimeZero(seconds)}`
         }
       }
-    }, 1000);
+    }, 1000)
   },
-  destroyed: function() {
+  destroyed: function () {
     if (this.countdownUpdater) {
-      clearInterval(this.countdownUpdater);
+      clearInterval(this.countdownUpdater)
     }
   },
   methods: {
-    buy(priceInfo) {
-      this.currentBuy = priceInfo;
-      this.isDialogActive = true;
+    buy (priceInfo) {
+      this.currentBuy = priceInfo
+      this.isDialogActive = true
     },
-    orderList(list) {
-      if (this.orderBy === "asc") {
-        return orderBy(list, ["price", "id"], ["asc", "asc"]);
-      } else if (this.orderBy === "desc") {
-        return orderBy(list, ["price", "id"], ["desc", "asc"]);
+    orderList (list) {
+      if (this.orderBy === 'asc') {
+        return orderBy(list, ['price', 'id'], ['asc', 'asc'])
+      } else if (this.orderBy === 'desc') {
+        return orderBy(list, ['price', 'id'], ['desc', 'asc'])
       } else {
-        return list;
+        return list
       }
     },
-    truncate(str) {
+    truncate (str) {
       try {
         if (str.length > 10) {
-          return str.substr(0, 10) + "...";
+          return str.substr(0, 10) + '...'
         } else {
-          return str;
+          return str
         }
       } catch (e) {
-        return str;
+        return str
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
