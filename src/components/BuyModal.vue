@@ -33,14 +33,14 @@ import * as util from '../blockchain/util'
 
 const errorMessages = {
   'overdrawn balance': {
-    message: 'buy_modal_msg_fail_overdrawn',
+    message: 'buy_modal_msg_fail_overdrawn'
   },
   'no enough eos': {
     message: 'buy_modal_msg_fail_no_enough',
     refresh: true
   },
   'not correct time': {
-    message: 'buy_modal_msg_fail_time',
+    message: 'buy_modal_msg_fail_time'
   }
 }
 
@@ -101,7 +101,7 @@ export default {
               message: this.$t('buy_modal_msg_fail_body', {
                 priceReadable,
                 buyTarget,
-                content: `Unknown Error: <br>${util.escapeHtml(error.message)}`,
+                content: `Unknown Error: <br>${util.escapeHtml(error.message)}`
               }),
               onConfirm: () => {
                 this.$parent.close()
@@ -120,7 +120,7 @@ export default {
                 message: this.$t('buy_modal_msg_fail_body', {
                   priceReadable,
                   buyTarget,
-                  content: this.$t(errorProc.message),
+                  content: this.$t(errorProc.message)
                 }),
                 onConfirm: () => {
                   if (errorProc.refresh) {
@@ -138,7 +138,7 @@ export default {
             message: this.$t('buy_modal_msg_fail_body', {
               priceReadable,
               buyTarget,
-              content: `Unknown Error: <br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`,
+              content: `Unknown Error: <br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`
             }),
             onConfirm: () => {
               this.$parent.close()

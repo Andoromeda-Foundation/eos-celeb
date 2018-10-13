@@ -56,4 +56,26 @@ export default {
   leaderboard_label_total_value: 'Asset Value',
   leaderboard_label_celeb_count: 'Owned Celebrities',
   leaderboard_label_celeb_top: 'Most Valued 5 Celebrities',
+  about_content: `
+  <h2> Pricing Description</h2>
+  <p>The initial price per celebrity is 0.1 EOS</p>
+  <p>The next price is: the previous price *1.35.</p>
+  <p>&nbsp;</p>
+  <p>35% of premium is allocated according to the following ratio</p>
+  <ul>
+    <li>The previous person took 60%</li>
+    <li>Pot 10%</li>
+    <li>Inviters 10%, If there are no invitees, the money will be placed in the pot</li>
+    <li>Team 20% (ram fee and maintenance fee)</li>
+  </ul>
+  <h2>For example:</h2>
+  <p>The current price for Trump is 10 EOS</p>
+  <p>I need to trade with 10*1.35=13.5 EOS</p>
+  <p>10 EOS are paied to the previous buyer</p>
+  <p>The remaining 10*0.35=3.5 will be allocated according to the ratio</p>
+  <p>Previous buyer takes 3.5*60%=2.1 EOS</p>
+  <p>Pot pool takes 3.5*10%=0.35</p>
+  <p>Inviter takes 3.5 *10%=0.35</p>
+  <p>The team takes 3.5*20%=0.7</p>
+  `
 }

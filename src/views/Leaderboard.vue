@@ -46,11 +46,11 @@ export default {
   data: () => ({
   }),
   methods: {
-    generateLeaderboard() {
-      const mostValuedCeleb = orderBy(this.celebPriceList, ['price'], ['desc']);
+    generateLeaderboard () {
+      const mostValuedCeleb = orderBy(this.celebPriceList, ['price'], ['desc'])
       const categories = {
         'is-danger': {},
-        'is-warning': {},
+        'is-warning': {}
       }
       for (let i = 0; i < 10; i++) {
         categories['is-danger'][mostValuedCeleb[i].id] = true
@@ -59,36 +59,36 @@ export default {
         categories['is-warning'][mostValuedCeleb[i].id] = true
       }
 
-      let infoPerOwner = {};
+      let infoPerOwner = {}
       this.celebPriceList.forEach(item => {
         if (infoPerOwner[item.owner] === undefined) {
           infoPerOwner[item.owner] = {
             cards: 0,
             assets: [],
-            totalAssetValue: 0,
-          };
+            totalAssetValue: 0
+          }
         }
-        let infoItem = infoPerOwner[item.owner];
-        infoItem.cards += 1;
-        infoItem.assets.push(item);
-        infoItem.totalAssetValue += item.price;
+        let infoItem = infoPerOwner[item.owner]
+        infoItem.cards += 1
+        infoItem.assets.push(item)
+        infoItem.totalAssetValue += item.price
       })
-      let infoList = [];
+      let infoList = []
       for (let name in infoPerOwner) {
         infoList.push({
           name,
           ...infoPerOwner[name],
           assets: orderBy(infoPerOwner[name].assets, ['price', 'id'], ['desc', 'asc']).slice(0, 5).map(asset => {
-            let cloned = { ...asset};
-            cloned.category = 'is-info';
+            let cloned = { ...asset }
+            cloned.category = 'is-info'
             for (let kind in categories) {
               if (categories[kind][cloned.id]) {
-                cloned.category = kind;
-                break;
+                cloned.category = kind
+                break
               }
             }
-            return cloned;
-          }),
+            return cloned
+          })
         })
       }
       return orderBy(infoList, ['totalAssetValue', 'cards'], ['desc', 'desc']).slice(0, 20)

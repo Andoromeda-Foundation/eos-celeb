@@ -115,7 +115,7 @@ export default {
       if (this.globalInfo != null) {
         const currentTimestamp = ~~(Date.now() / 1000)
         if (currentTimestamp >= this.globalInfo.ed) {
-          this.globalCountdown = this.$t('info_count_down_end');
+          this.globalCountdown = this.$t('info_count_down_end')
         } else {
           let remaining = this.globalInfo.ed - currentTimestamp
           const seconds = remaining % 60

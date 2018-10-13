@@ -56,4 +56,26 @@ export default {
   leaderboard_label_total_value: '总资产',
   leaderboard_label_celeb_count: '名人数',
   leaderboard_label_celeb_top: '拥有名人 (价值 TOP 5)',
+  about_content: `
+  <h2>定价说明</h2>
+  <p>每个名人初始价格为 0.1 EOS</p>
+  <p>下一次价格为：之前的价格*1.35.</p>
+  <p>&nbsp;</p>
+  <p>溢价的35% 按照以下比率分配</p>
+  <ul>
+    <li>前一个人拿 60%</li>
+    <li>奖池 10%</li>
+    <li>邀请者 10% 如无邀请者则 这笔钱会放到奖池</li>
+    <li>团队 20% （ram费用及维护费用）</li>
+  </ul>
+  <h2>举个例子：</h2>
+  <p>如特朗普当前价格为 10 EOS</p>
+  <p>则我需要用 10*1.35=13.5 EOS 成交</p>
+  <p>10 EOS 首先给前一个购买者</p>
+  <p>剩下的 10*0.35=3.5 按照比率分配</p>
+  <p>前一个人拿：3.5*60%=2.1 EOS</p>
+  <p>奖池拿 3.5*10%=0.35</p>
+  <p>邀请者拿 3.5 *10%=0.35</p>
+  <p>团队拿 3.5*20%=0.7</p>
+  `
 }

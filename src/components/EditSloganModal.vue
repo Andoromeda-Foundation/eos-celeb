@@ -64,14 +64,14 @@ export default {
           } else {
             this.$dialog.alert({
               title: this.$t('edit_slogan_modal_msg_fail_title'),
-              message: this.$t('edit_slogan_modal_msg_fail_body', { sloganTarget, content: util.escapeHtml(error.message) }),
+              message: this.$t('edit_slogan_modal_msg_fail_body', { sloganTarget, content: util.escapeHtml(error.message) })
             })
           }
         } else {
           const errorStr = String(error)
           this.$dialog.alert({
             title: this.$t('edit_slogan_modal_msg_fail_title'),
-            message: this.$t('edit_slogan_modal_msg_fail_body', { sloganTarget, content: `<pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>` }),
+            message: this.$t('edit_slogan_modal_msg_fail_body', { sloganTarget, content: `<pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>` })
           })
         }
       }
