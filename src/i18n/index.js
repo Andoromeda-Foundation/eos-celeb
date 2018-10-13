@@ -4,8 +4,14 @@ import { messages } from './locales'
 
 Vue.use(VueI18n)
 
+const savedLocale = localStorage.getItem('eos_celeb_locale')
+let locale = 'zh'
+if (['zh', 'en'].indexOf(savedLocale) > -1) {
+  locale = savedLocale
+}
+
 export default new VueI18n({
-  locale: 'zh',
+  locale,
   fallbackLocale: 'en',
   messages
 })

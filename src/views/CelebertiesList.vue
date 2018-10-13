@@ -82,7 +82,7 @@ import { mapState, mapGetters } from 'vuex'
 import BuyModal from '@/components/BuyModal'
 import EditSloganModal from '@/components/EditSloganModal'
 import orderBy from 'lodash.orderby'
-import * as util from '../blockchain/util';
+import * as util from '../blockchain/util'
 
 export default {
   name: 'celeberties-list',
@@ -125,7 +125,7 @@ export default {
         }
       }
       if (Date.now() < 1539432000000) {
-        let remaining = ~~((1539432000000 - Date.now()) / 1000);
+        let remaining = ~~((1539432000000 - Date.now()) / 1000)
         this.newCelebCountdown = util.formatCountdown(remaining)
       } else {
         this.newCelebCountdown = null

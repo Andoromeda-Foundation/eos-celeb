@@ -62,7 +62,7 @@ export default {
       let infoPerOwner = {}
       this.celebPriceList.forEach(item => {
         if (this.celebBaseList[item.id] === undefined) {
-          return;
+          return
         }
         if (infoPerOwner[item.owner] === undefined) {
           infoPerOwner[item.owner] = {

@@ -25,7 +25,7 @@
               </div>
               <div class="navbar-end">
                 <div class="navbar-item">
-                  <b-select rounded v-model="$i18n.locale" :placeholder="$t('nav_switch_lang')">
+                  <b-select rounded v-model="$i18n.locale" :placeholder="$t('nav_switch_lang')" @input="updateLocaleConfig()">
                     <option value="en">{{$t('nav_switch_lang_en')}}</option>
                     <option value="zh">{{$t('nav_switch_lang_zh')}}</option>
                     <option disabled="disabled">{{$t('nav_switch_lang_jp')}}</option>
@@ -139,9 +139,9 @@ export default {
     invite () {
       this.isInviteDialogActive = true
     },
-    switchI18n (code) {
-      console.info('Triggered Switch I18n to: ' + code)
-      this.$i18n.locale = code
+    updateLocaleConfig () {
+      console.log('Update locale', this.$i18n.locale)
+      localStorage.setItem('eos_celeb_locale', this.$i18n.locale)
     }
   },
   computed: {

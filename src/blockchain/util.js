@@ -18,5 +18,5 @@ export function formatCountdown (remaining) {
   const minutes = remaining % 60
   remaining = ~~(remaining / 60)
   const hours = remaining
-  return `${padTimeZero(hours)}:${padTimeZero(minutes)}:${padTimeZero(seconds)}`;
+  return `${padTimeZero(hours)}:${padTimeZero(minutes)}:${padTimeZero(seconds)}`
 }
