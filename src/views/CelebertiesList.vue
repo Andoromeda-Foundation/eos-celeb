@@ -25,7 +25,7 @@
             <b-select rounded v-model="orderBy">
               <option value="default">默认</option>
               <option value="asc">价格从低到高</option>
-              <option value="desc">价格从高到底</option>
+              <option value="desc">价格从高到低</option>
             </b-select>
           </b-field>
         </div>
