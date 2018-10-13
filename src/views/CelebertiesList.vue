@@ -32,8 +32,8 @@
           <b-field label="过滤">
             <b-select rounded v-model="filter">
               <option value="none">显示全部名人</option>
-              <option value="buy" :disabled="account === null">已购买名人</option>
-              <option value="not-buy" :disabled="account === null">未购买名人</option>
+              <option value="buy" :disabled="account === null">我的名人</option>
+              <option value="not-buy" :disabled="account === null">未拥有的名人</option>
             </b-select>
           </b-field>
         </div>
