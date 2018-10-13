@@ -39,7 +39,7 @@ const errorMessages = {
     refresh: true
   },
   'not correct time': {
-    message: '还没有到开始时间，或已超过结束时间',
+    message: '还没有到开始时间，或已超过结束时间'
   }
 }
 
