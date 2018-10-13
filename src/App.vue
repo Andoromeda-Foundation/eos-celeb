@@ -57,6 +57,13 @@
     <b-modal :active.sync="isInviteDialogActive" has-modal-card>
       <invite-modal></invite-modal>
     </b-modal>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>EOS Celebrity</strong> Some Right Reserved.
+        </p>
+      </div>
+    </footer>
   </div>
 </template>
 
