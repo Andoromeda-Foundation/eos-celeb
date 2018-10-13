@@ -36,7 +36,7 @@ export default {
   methods: {
     getRefer () {
       const loc = window.location
-      return `${loc.protocol}//${loc.host}/?ref=${this.account.name}`
+      return `${loc.protocol}//${loc.host}/?#/invite/${this.account.name}`
     },
     copy () {
       this.$copyText(this.getRefer()).then(() => {

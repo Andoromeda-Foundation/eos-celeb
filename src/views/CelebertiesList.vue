@@ -25,7 +25,7 @@
             <b-select rounded v-model="orderBy">
               <option value="default">默认</option>
               <option value="asc">价格从低到高</option>
-              <option value="desc">价格从高到底</option>
+              <option value="desc">价格从高到低</option>
             </b-select>
           </b-field>
         </div>
@@ -40,6 +40,7 @@
               <img :src="`https://eosheros.togetthere.cn/image/${celebBaseList[priceInfo.id].id}.jpg`">
             </div>
             <div class="celeb-name"><p class="title">{{celebBaseList[priceInfo.id].name}}</p></div>
+            <div class="celeb-holder"><p class="subtitle">持有者： {{priceInfo.owner}}</p></div>
             <div class="celeb-price"><p class="subtitle has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
             <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
             <button class="button is-rounded is-light buy-button" v-if="account !== null" @click="buy(priceInfo)">购买</button>
@@ -69,7 +70,12 @@ export default {
     BuyModal
   },
   computed: {
-    ...mapState(['celebBaseList', 'celebPriceList', 'dataIsLoading', 'globalInfo']),
+    ...mapState([
+      'celebBaseList',
+      'celebPriceList',
+      'dataIsLoading',
+      'globalInfo'
+    ]),
     ...mapGetters(['account'])
   },
   data: () => ({
@@ -79,6 +85,11 @@ export default {
     orderBy: 'default'
   }),
   created: function () {
+    if (this.$route.params.account) {
+      console.log('Referrer: %s', this.$route.params.account)
+      localStorage.setItem('eos_celeb_referrer', this.$route.params.account)
+    }
+
     this.countdownUpdater = setInterval(() => {
       if (this.globalInfo != null) {
         const currentTimestamp = ~~(Date.now() / 1000)
@@ -91,7 +102,9 @@ export default {
           const minutes = remaining % 60
           remaining = ~~(remaining / 60)
           const hours = remaining
-          this.globalCountdown = `${padTimeZero(hours)}:${padTimeZero(minutes)}:${padTimeZero(seconds)}`
+          this.globalCountdown = `${padTimeZero(hours)}:${padTimeZero(
+            minutes
+          )}:${padTimeZero(seconds)}`
         }
       }
     }, 1000)
@@ -137,16 +150,16 @@ export default {
 
 .celeb-card {
   border-radius: 10px;
-  background: #FFF;
+  background: #fff;
   text-align: center;
   padding: 2rem;
   margin: 0.5rem;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.03), 0 10px 15px rgba(0,0,0,0.04);
-  transition: box-shadow .2s ease-out;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03), 0 10px 15px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s ease-out;
 }
 
 .celeb-card:hover {
-  box-shadow: 0 20px 40px rgba(0,0,0,0.09), 0 15px 30px rgba(0,0,0,0.09);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09), 0 15px 30px rgba(0, 0, 0, 0.09);
 }
 
 .celeb-card .celeb-image img {
