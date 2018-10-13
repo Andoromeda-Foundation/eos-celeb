@@ -26,20 +26,20 @@ export default {
   name: 'EditSloganModal',
   props: ['priceInfo'],
   data: () => ({
-    slogan: '',
+    slogan: ''
   }),
   mounted: function () {
     // Initialize default value
     this.slogan = this.priceInfo.slogan
   },
   methods: {
-    async edit() {
+    async edit () {
       const sloganTarget = this.celebBaseList[this.priceInfo.id].name
       try {
         await API.changeMySlogan({
           from: this.account.name,
           id: this.priceInfo.id,
-          memo: this.slogan,
+          memo: this.slogan
         })
         this.$toast.open({
           type: 'is-success',
@@ -64,14 +64,14 @@ export default {
           } else {
             this.$dialog.alert({
               title: '设置标语失败',
-              message: `为 ${sloganTarget} 设置标语失败：<br>未知错误：<br>${util.escapeHtml(error.message)}`,
+              message: `为 ${sloganTarget} 设置标语失败：<br>未知错误：<br>${util.escapeHtml(error.message)}`
             })
           }
         } else {
-          const errorStr = String(error);
+          const errorStr = String(error)
           this.$dialog.alert({
             title: '设置标语失败',
-            message: `为 ${sloganTarget} 设置标语失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`,
+            message: `为 ${sloganTarget} 设置标语失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`
           })
         }
       }
