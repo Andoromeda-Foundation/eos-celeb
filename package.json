@@ -5,16 +5,19 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
     "deploy": "echo 'eoscelebrity.info' >> ./dist/CNAME && gh-pages -d dist",
     "build-deploy": "vue-cli-service build && npm run deploy",
-    "deploy-if-deploy-error": "rm -rf node_modules/gh-pages/.cache",
-    "lint": "vue-cli-service lint"
+    "deploy-if-deploy-error": "rm -rf node_modules/gh-pages/.cache"
   },
   "dependencies": {
     "buefy": "^0.7.0",
     "eosjs": "^16.0.9",
     "js-cookie": "^2.2.0",
+    "lodash.orderby": "^4.6.0",
+    "query-string": "^6.2.0",
     "vue": "^2.5.17",
+    "vue-clipboard2": "^0.2.1",
     "vue-i18n": "^8.1.0",
     "vue-router": "^3.0.1",
     "vue-spinner": "^1.0.3",
@@ -25,9 +28,11 @@
     "@vue/cli-plugin-eslint": "^3.0.1",
     "@vue/cli-service": "^3.0.1",
     "@vue/eslint-config-standard": "^3.0.5",
+    "node-sass": "^4.9.3",
     "gh-pages": "^2.0.1",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.17"
   }
 }

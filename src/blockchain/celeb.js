@@ -1,32 +1,42 @@
 import { eos } from './store'
-import MockData from './mock_celeb.json'
+import celebList from './mock_celeb.json'
+import celebIdList from './mock_celebid.json'
 
-export async function getContractGlobal () {
-  const { rows } = await eos().getTableRows({
-    json: 'true',
-    code: 'myeosgroupon',
-    scope: 'myeosgroupon',
-    limit: 50,
-    table: 'global'
-  })
-  return rows[0]
+const celebIdMap = {}
+celebList.forEach(celeb => { celebIdMap[celeb.id] = celeb })
+const celebIdContractMap = {}
+for (let contractId in celebIdList) {
+  celebIdContractMap[contractId] = celebIdMap[celebIdList[contractId]]
 }
 
-export async function getCelebs () {
-  return MockData
-  /*
+export async function getGlobal () {
   const { rows } = await eos().getTableRows({
     json: 'true',
     code: 'crazytown.bp',
     scope: 'crazytown.bp',
-    limit: 10,
-    table: 'bag'
+    table: 'bagsglobal'
   })
   return rows[0]
-  */
 }
 
+export async function getCelebBaseList () {
+  return celebIdContractMap
+}
+
+export async function getCelebPriceList () {
+  const { rows } = await eos().getTableRows({
+    json: 'true',
+    code: 'crazytown.bp',
+    scope: 'crazytown.bp',
+    limit: 200,
+    table: 'bag'
+  })
+  return rows
+}
+
+/*
 export async function getCelebsPrice (celebIds) {
+  debugger;
   const queryPool = celebIds.map(id => {
     return eos().getTableRows({
       json: 'true',
@@ -38,3 +48,4 @@ export async function getCelebsPrice (celebIds) {
   })
   return Promise.all(queryPool)
 }
+*/

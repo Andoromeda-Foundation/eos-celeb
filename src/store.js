@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Eos from 'eosjs'
-import { getMyBalancesByContract, getMarketData } from './blockchain'
+import * as API from './blockchain/celeb'
+import { getMyBalancesByContract } from './blockchain'
 import { network } from './config'
 
 Vue.use(Vuex)
@@ -15,9 +16,10 @@ export default new Vuex.Store({
       eos: '0.0000 EOS',
       kby: '0.0000 KBY'
     },
-    tokenPrice: '0.0000 EOS',
-    supply: '0.0000 KBY',
-    mbalance: '0.0000 EOS'
+    celebBaseList: {},
+    celebPriceList: [],
+    dataIsLoading: true,
+    globalInfo: null
   },
   getters: {
     account: ({ scatter }) => {
@@ -35,24 +37,49 @@ export default new Vuex.Store({
     setIdentity (state, identity) {
       state.identity = identity
     },
-    setMarketData (state, data) {
-      const { price, supply, balance } = data
-      state.tokenPrice = `${price} EOS`
-      state.supply = supply
-      state.mbalance = balance
+    setCelebBase (state, baseList) {
+      state.celebBaseList = baseList
+    },
+    setCelebPrice (state, priceList) {
+      state.celebPriceList = priceList
     },
     setBalance (state, { symbol, balance }) {
       state.balance[symbol] = balance || `0.0000 ${symbol.toUpperCase()}`
+    },
+    setDataLoading (state, loading) {
+      state.dataIsLoading = loading
+    },
+    setGlobal (state, globalInfo) {
+      state.globalInfo = globalInfo
     }
   },
   actions: {
     initScatter ({ commit, dispatch }, scatter) {
       commit('setScatter', scatter)
-      dispatch('updateMarketData')
+      dispatch('updateCeleb')
+      setInterval(() => {
+        dispatch('updateCeleb', true)
+      }, 30 * 1000)
     },
-    async updateMarketData ({ commit }) {
-      const marketData = await getMarketData()
-      commit('setMarketData', marketData)
+    async updateCeleb ({ commit }, isBackground) {
+      try {
+        if (!isBackground) {
+          commit('setDataLoading', true)
+        }
+        const celebBaseList = await API.getCelebBaseList()
+        const celebPriceList = await API.getCelebPriceList()
+        commit('setCelebBase', celebBaseList)
+        commit('setCelebPrice', celebPriceList)
+      } catch (e) {
+        console.error(e)
+      }
+      commit('setDataLoading', false)
+      try {
+        const globalInfo = await API.getGlobal()
+        commit('setGlobal', globalInfo)
+      } catch (e) {
+        console.error(e)
+      }
     },
     updateBalance ({ commit }) {
       getMyBalancesByContract({ symbol: 'eos' })

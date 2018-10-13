@@ -1,91 +1,189 @@
 <template>
-    <div class="celeb-list">
-        <!-- {{celebs}} -->
-        <div class="columns is-multiline">
-            <div class="column is-3" v-for="celeb in celebs" :key="celeb.id">
-                <div class="card">
-                    <div class="card-image">
-                        <figure class="image is-4by4">
-                            <img :src="`https://eosheros.togetthere.cn/image/${celeb.id}.jpg`" class="is-rounded celeb-avatar" alt="Placeholder image">
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                        <!-- <div class="media-left">
-                            <figure class="image is-48x48">
-                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                            </figure>
-                        </div> -->
-                        <div class="media-content">
-                            <p class="title is-4">{{celeb.name}}</p>
-                            <p class="subtitle is-6"> {{celeb.price}} </p>
-                        </div>
-                        </div>
-
-                        <div class="content">
-
-                        <button class="button is-large" @click="buy(celeb)"> 以 {{celeb.price}} 购买 </button>
-                        </div>
-                    </div>
-                    </div>
-            </div>
+  <div>
+    <div class="container global-info">
+      <nav class="level" v-if="globalInfo">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">奖池大小</p>
+            <p class="title">{{ (globalInfo.pool / 10000).toFixed(4) }} EOS</p>
+          </div>
         </div>
-        <b-modal :active.sync="isComponentModalActive" has-modal-card>
-            <buy-modal :person="currentBuy"></buy-modal>
-        </b-modal>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">结束倒计时</p>
+            <p class="title">{{ globalCountdown }}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">最后购买者</p>
+            <p class="title" :title="globalInfo.last">{{ truncate(globalInfo.last) }}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <b-field label="排序方式">
+            <b-select rounded v-model="orderBy">
+              <option value="default">默认</option>
+              <option value="asc">价格从低到高</option>
+              <option value="desc">价格从高到低</option>
+            </b-select>
+          </b-field>
+        </div>
+      </nav>
     </div>
+    <div class="celeb-list">
+      <b-loading :is-full-page="false" :active.sync="dataIsLoading" :can-cancel="false"></b-loading>
+      <div class="columns is-multiline">
+        <div class="column is-3" v-for="priceInfo in orderList(celebPriceList)" :key="priceInfo.id" v-if="celebBaseList[priceInfo.id]">
+          <div class="celeb-card">
+            <div class="celeb-image">
+              <img :src="`https://eosheros.togetthere.cn/image/${celebBaseList[priceInfo.id].id}.jpg`">
+            </div>
+            <div class="celeb-name"><p class="title">{{celebBaseList[priceInfo.id].name}}</p></div>
+            <div class="celeb-holder"><p class="subtitle">持有者： {{priceInfo.owner}}</p></div>
+            <div class="celeb-holder"><p class="subtitle">标语： {{priceInfo.slogan === "" ? "空" : priceInfo.slogan}}</p></div>
+            <div class="celeb-price"><p class="subtitle has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
+            <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
+            <button class="button is-rounded is-light buy-button" v-if="account !== null" @click="buy(priceInfo)">购买</button>
+          </div>
+        </div>
+      </div>
+      <b-modal :active.sync="isDialogActive" has-modal-card>
+        <buy-modal :priceInfo="currentBuy"></buy-modal>
+      </b-modal>
+    </div>
+  </div>
 </template>
 
 <script>
-import { getCelebs } from '../blockchain/celeb'
+import { mapState, mapGetters } from 'vuex'
 import BuyModal from '@/components/BuyModal'
-import { getTokenPrice } from '../blockchain/index'
+import orderBy from 'lodash.orderby'
+
+function padTimeZero (str) {
+  let t = '00' + str
+  return t.slice(t.length - 2, t.length)
+}
+
 export default {
   name: 'celeberties-list',
   components: {
     BuyModal
   },
+  computed: {
+    ...mapState([
+      'celebBaseList',
+      'celebPriceList',
+      'dataIsLoading',
+      'globalInfo'
+    ]),
+    ...mapGetters(['account'])
+  },
   data: () => ({
-    celebs: [],
-    isComponentModalActive: false,
-    currentBuy: -1
+    isDialogActive: false,
+    currentBuy: null,
+    globalCountdown: '00:00:00',
+    orderBy: 'default'
   }),
-  async created () {
-    this.celebs = await getCelebs()
-    console.log(this.celebs)
-    var tb = await getTokenPrice()
-    console.log('ddddd')
-    console.log(tb)
+  created: function () {
+    if (this.$route.params.account) {
+      console.log('Referrer: %s', this.$route.params.account)
+      localStorage.setItem('eos_celeb_referrer', this.$route.params.account)
+    }
+
+    this.countdownUpdater = setInterval(() => {
+      if (this.globalInfo != null) {
+        const currentTimestamp = ~~(Date.now() / 1000)
+        if (currentTimestamp >= this.globalInfo.ed) {
+          this.globalCountdown = '已结束'
+        } else {
+          let remaining = this.globalInfo.ed - currentTimestamp
+          const seconds = remaining % 60
+          remaining = ~~(remaining / 60)
+          const minutes = remaining % 60
+          remaining = ~~(remaining / 60)
+          const hours = remaining
+          this.globalCountdown = `${padTimeZero(hours)}:${padTimeZero(
+            minutes
+          )}:${padTimeZero(seconds)}`
+        }
+      }
+    }, 1000)
+  },
+  destroyed: function () {
+    if (this.countdownUpdater) {
+      clearInterval(this.countdownUpdater)
+    }
   },
   methods: {
-    buy (celeb) {
-      this.currentBuy = celeb
-      this.isComponentModalActive = true
+    buy (priceInfo) {
+      this.currentBuy = priceInfo
+      this.isDialogActive = true
+    },
+    orderList (list) {
+      if (this.orderBy === 'asc') {
+        return orderBy(list, ['price', 'id'], ['asc', 'asc'])
+      } else if (this.orderBy === 'desc') {
+        return orderBy(list, ['price', 'id'], ['desc', 'asc'])
+      } else {
+        return list
+      }
+    },
+    truncate (str) {
+      try {
+        if (str.length > 10) {
+          return str.substr(0, 10) + '...'
+        } else {
+          return str
+        }
+      } catch (e) {
+        return str
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.card {
+.celeb-list {
+  min-height: 500px;
+}
+
+.celeb-card {
+  border-radius: 10px;
+  background: #fff;
   text-align: center;
+  padding: 2rem;
+  margin: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03), 0 10px 15px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s ease-out;
 }
-.media-content * {
-  text-align: center;
+
+.celeb-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.09), 0 15px 30px rgba(0, 0, 0, 0.09);
 }
-.image{
-    height: 250px !important;
+
+.celeb-card .celeb-image img {
+  border: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
-.card-content {
-    padding-top: 2.5rem;
+
+.celeb-card .celeb-name {
+  margin: 0.5rem 0;
 }
-.image img {
-    display: block;
-    width: 90%;
-    height: 90%;
-    margin: auto;
+
+.celeb-card .celeb-price {
+  margin: 0.5rem 0;
 }
-.card:hover{
-    transform: scale(1.05);
+
+.celeb-card .buy-button {
+  min-width: 150px;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 </style>
