@@ -46,9 +46,8 @@
             </div>
             <div class="celeb-price"><p class="is-size-4 has-text-info">{{ (priceInfo.price * 1.35 / 10000).toFixed(4) }} EOS</p></div>
             <button class="button is-rounded is-light buy-button" v-if="account === null" disabled>登录后购买</button>
-            <!-- TODO: Switch back logic -->
-            <button class="button is-rounded is-light buy-button" v-if="account !== null && priceInfo.owner == account.name" @click="buy(priceInfo)">购买</button>
-            <button class="button is-rounded is-primary buy-button" v-if="account !== null && priceInfo.owner != account.name" @click="edit(priceInfo)">修改标语</button>
+            <button class="button is-rounded is-light buy-button" v-if="account !== null && priceInfo.owner != account.name" @click="buy(priceInfo)">购买</button>
+            <button class="button is-rounded is-primary buy-button" v-if="account !== null && priceInfo.owner == account.name" @click="edit(priceInfo)">修改标语</button>
           </div>
         </div>
       </div>

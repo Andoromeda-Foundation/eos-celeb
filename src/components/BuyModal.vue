@@ -29,6 +29,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import * as util from '../blockchain/util'
 
 const errorMessages = {
   'overdrawn balance': {
@@ -39,17 +40,8 @@ const errorMessages = {
     refresh: true
   },
   'not correct time': {
-    message: '还没有到开始时间，或已超过结束时间',
+    message: '还没有到开始时间，或已超过结束时间'
   }
-}
-
-function escapeHtml (unsafe) {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
 }
 
 export default {
@@ -106,7 +98,7 @@ export default {
           } else {
             this.$dialog.alert({
               title: '购买失败',
-              message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br>${escapeHtml(error.message)}`,
+              message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br>${util.escapeHtml(error.message)}`,
               onConfirm: () => {
                 this.$parent.close()
                 this.$store.dispatch('updateCeleb')
@@ -135,7 +127,7 @@ export default {
           // Error: unknown error
           this.$dialog.alert({
             title: '购买失败',
-            message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${escapeHtml(errorStr)}</pre>`,
+            message: `抱歉，以 ${priceReadable} 购买 ${buyTarget} 失败：<br>未知错误：<br><pre style="white-space:pre-wrap;word-wrap:break-word;">${util.escapeHtml(errorStr)}</pre>`,
             onConfirm: () => {
               this.$parent.close()
               this.$store.dispatch('updateCeleb')

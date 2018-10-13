@@ -62,8 +62,6 @@ export default new Vuex.Store({
       }, 30 * 1000)
     },
     async updateCeleb ({ commit }, isBackground) {
-      await API.setSlogan()
-
       try {
         if (!isBackground) {
           commit('setDataLoading', true)

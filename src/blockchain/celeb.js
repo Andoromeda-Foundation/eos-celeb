@@ -1,6 +1,13 @@
 import { eos } from './store'
 import celebList from './mock_celeb.json'
 import celebIdList from './mock_celebid.json'
+import { network } from '@/config'
+
+const theContractAccount = 'crazytown.bp'
+
+const requiredFields = {
+  accounts: [network]
+}
 
 const celebIdMap = {}
 celebList.forEach(celeb => { celebIdMap[celeb.id] = celeb })
@@ -34,8 +41,11 @@ export async function getCelebPriceList () {
   return rows
 }
 
-export async function setSlogan () {
-  await eos().contract('crazytown.bp').then((contract) => {
-    console.log(contract)
+export async function changeMySlogan ({ from, id, memo, authority = 'active' }) {
+  const contract = await eos().contract(theContractAccount, {
+    requiredFields
+  })
+  return contract.setslogan(from, id, memo, {
+    authorization: [`${from}@${authority}`]
   })
 }
