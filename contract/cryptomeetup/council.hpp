@@ -21,12 +21,42 @@ using eosio::symbol_type;
 using eosio::permission_level;
 using eosio::action;
 
-class eosplanet : public eosio::contract {
-    public: eosplanet(account_name self) :
+class council : public eosio::contract {
+    public: council(account_name self) :
         contract(self),
         _voters(_self, _self),
-        _proxy(_self, _self),
+        _proxies(_self, _self),
         _council(_self, _self);
+    
+    // @abi action
+    void stake(account_name from) {
+        auto itr = _voters.find(from);
+        if (itr == _voters.end()) {
+            
+        } else {
+
+        }
+    }
+
+    // @abi action
+    void unstake(account_name from) {
+
+    }    
+
+    // @abi action
+    void vote(account_name from) {
+
+    }
+
+    // @abi action
+    void run_for_proxy(account_name from) {
+
+    }    
+
+    // @abi action
+    void run_for_council(account_name from) {
+
+    }        
 
     // @abi table voter_table
     struct voter_info {
@@ -58,5 +88,12 @@ class eosplanet : public eosio::contract {
         uint64_t     unpaid = 0;
 
         uint64_t primary_key()const { return owner; }
-    };                    
+    };          
+
+    typedef eosio::multi_index<N(voters),  voter_info>  voters_table;
+    typedef eosio::multi_index<N(proxies), voter_info>  proxies_table;
+    typedef eosio::multi_index<N(council), voter_info>  council_table;    
+    voters_table _voters;
+    proxies_table _proxies;
+    council_table _council;
 };

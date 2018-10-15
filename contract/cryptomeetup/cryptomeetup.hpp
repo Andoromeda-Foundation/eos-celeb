@@ -7,6 +7,7 @@
 #include <eosiolib/asset.hpp>
 #include <eosiolib/singleton.hpp>
 #include <eosiolib/transaction.hpp>
+#include <council.hpp>
 // #include <cmath>
 // #include <string>
 
@@ -29,24 +30,16 @@ using eosio::symbol_type;
 using eosio::permission_level;
 using eosio::action;
 
-class eoscrazytown : public eosio::contract {
-    public:    
-        eoscrazytown(account_name self) :
-        contract(self),
-        _global(_self, _self),_bagsglobal(_self,_self),
-        players(_self, _self),bags(_self,_self){}
-
+class cryptomeetup : public council {
+    public: cryptomeetup(account_name self) :
+        council(self);
 
     // @abi action
-    void init(const checksum256& hash);
+    void init();
     // @abi action
     void clear();     
     // @abi action
     void test();
-    // @abi action
-    void verify( const checksum256& seed, const checksum256& hash );                        
-    // @abi action
-    void reveal(const checksum256& seed, const checksum256& hash);
 
     // @abi action
     void transfer(account_name   from,
@@ -59,6 +52,7 @@ class eoscrazytown : public eosio::contract {
                     asset          &quantity,
                     string         &memo);
 
+    /*
     // @abi action
     void receipt(const rec_reveal& reveal) {
         require_auth(_self);
@@ -146,6 +140,7 @@ private:
                 vector<int64_t> &vbets, int64_t &totalBets  );                
 
     auto getResult( const card &a,  const card &b ) ;
+    */
 };
 
 
