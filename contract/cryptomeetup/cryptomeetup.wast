@@ -37,6 +37,9 @@
  (export "_ZneRK11checksum160S1_" (func $_ZneRK11checksum160S1_))
  (export "now" (func $now))
  (export "_ZN5eosio12require_authERKNS_16permission_levelE" (func $_ZN5eosio12require_authERKNS_16permission_levelE))
+ (export "_ZN3NFT6createEy" (func $_ZN3NFT6createEy))
+ (export "_ZN3NFT8transferEyy" (func $_ZN3NFT8transferEyy))
+ (export "_ZN3NFT3buyEy" (func $_ZN3NFT3buyEy))
  (export "_Z7explodeRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEERKc" (func $_Z7explodeRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEERKc))
  (export "_Z15string_to_priceNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE" (func $_Z15string_to_priceNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE))
  (export "_Z13string_to_intNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE" (func $_Z13string_to_intNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE))
@@ -92,6 +95,12 @@
     (get_local $0)
    )
   )
+ )
+ (func $_ZN3NFT6createEy (param $0 i64)
+ )
+ (func $_ZN3NFT8transferEyy (param $0 i64) (param $1 i64)
+ )
+ (func $_ZN3NFT3buyEy (param $0 i64)
  )
  (func $_Z7explodeRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEERKc (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -3296,7 +3305,7 @@
      (i32.load offset=4
       (i32.const 0)
      )
-     (i32.const 128)
+     (i32.const 208)
     )
    )
   )
@@ -3411,6 +3420,84 @@
    (i32.add
     (get_local $3)
     (i32.const 120)
+   )
+   (i32.const 0)
+  )
+  (i64.store offset=128
+   (get_local $3)
+   (get_local $0)
+  )
+  (i64.store
+   (i32.add
+    (get_local $3)
+    (i32.const 136)
+   )
+   (get_local $0)
+  )
+  (i64.store
+   (i32.add
+    (get_local $3)
+    (i32.const 144)
+   )
+   (i64.const -1)
+  )
+  (i32.store
+   (i32.add
+    (get_local $3)
+    (i32.const 152)
+   )
+   (i32.const 0)
+  )
+  (i32.store
+   (i32.add
+    (get_local $3)
+    (i32.const 156)
+   )
+   (i32.const 0)
+  )
+  (i32.store
+   (i32.add
+    (get_local $3)
+    (i32.const 160)
+   )
+   (i32.const 0)
+  )
+  (i64.store offset=168
+   (get_local $3)
+   (get_local $0)
+  )
+  (i64.store
+   (i32.add
+    (get_local $3)
+    (i32.const 176)
+   )
+   (get_local $0)
+  )
+  (i64.store
+   (i32.add
+    (get_local $3)
+    (i32.const 184)
+   )
+   (i64.const -1)
+  )
+  (i32.store
+   (i32.add
+    (get_local $3)
+    (i32.const 192)
+   )
+   (i32.const 0)
+  )
+  (i32.store
+   (i32.add
+    (get_local $3)
+    (i32.const 196)
+   )
+   (i32.const 0)
+  )
+  (i32.store
+   (i32.add
+    (get_local $3)
+    (i32.const 200)
    )
    (i32.const 0)
   )

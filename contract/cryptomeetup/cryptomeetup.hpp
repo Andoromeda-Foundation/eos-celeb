@@ -9,7 +9,7 @@
 #include <eosiolib/transaction.hpp>
 
 #include "council.hpp"
-//#include "NFT.hpp"
+#include "NFT.hpp"
 // #include <cmath>
 // #include <string>
 
@@ -28,7 +28,9 @@ using eosio::action;
 
 class cryptomeetup : public council {
     public: cryptomeetup(account_name self) :
-        council(self){}
+        council(self),
+        _land(_self, _self),
+        _player(_self, _self){}
 
     // @abi action
     void init();
@@ -49,6 +51,38 @@ class cryptomeetup : public council {
                     string         &memo);
 
     void apply(account_name code, action_name action);
+
+    // @abi table bag i64
+    struct land : public NFT::tradeable_token {
+        uint64_t parent;
+        void tax() {
+        }
+        uint64_t next_price() const {
+            return price * 1.35;
+        }
+    };
+    
+    // @abi table player
+    struct player {
+        account_name  account;
+        uint64_t land_profit;
+        uint64_t ref_profit;
+        uint64_t fee_profit;
+        uint64_t pool_profit;
+        uint64_t staked_income;
+        uint64_t council_income;
+
+        uint64_t primary_key() const {return account;}        
+        void withdraw() {
+        }
+    };
+        
+    typedef eosio::multi_index<N(land), land> land_index;
+    land_index _land;   
+
+    typedef eosio::multi_index<N(player), player> player_index;
+    player_index _player;  
+    
     /*
     // @abi action
     void receipt(const rec_reveal& reveal) {
@@ -77,15 +111,7 @@ class cryptomeetup : public council {
     singleton_bagsglobal _bagsglobal;   
 
 
-    // @abi table player
-    struct player {
-        account_name  account;
-        vector<int64_t> vbets ;
-        uint64_t     primary_key() const { return account; }
-        // EOSLIB_SERIALIZE(player, (account)(vbets)) 
-    };
-    typedef eosio::multi_index<N(player), player> player_index;
-    player_index players;  
+
 
 
     uint64_t get_next_defer_id() {
@@ -107,26 +133,6 @@ class cryptomeetup : public council {
 
   // @abi action
   void setslogan(account_name &from, uint64_t id,string memo);
-
-
-
-        // @abi table bag i64
-        struct bag {
-            uint64_t id;         
-            account_name owner;
-            uint64_t price;
-            string slogan;
-
-            uint64_t primary_key() const { return id; }
-            uint64_t next_price() const {
-                return price * 1.35;
-            }
-        };
-        typedef eosio::multi_index<N(bag), bag> bag_index;
-        bag_index bags;   
-
-
-    
   
 private:
     const vector<int64_t> getBets(const string &s, const char &c) ;

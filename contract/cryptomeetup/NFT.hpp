@@ -24,15 +24,22 @@ using eosio::action;
 namespace NFT {
     
     void create(account_name from) {
-
     }
 
     void transfer(account_name from, account_name to) {
     }
 
-    struct NFT {
+    void buy(account_name from) {
+        
+    }
+
+    struct token {
         uint64_t     id;
         account_name owner = 0;
         uint64_t primary_key()const { return id; }
-    };          
+    };    
+
+    struct tradeable_token : public token {
+        uint64_t price;        
+    };
 };
