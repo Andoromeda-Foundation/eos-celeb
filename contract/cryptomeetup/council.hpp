@@ -26,7 +26,7 @@ class council : public eosio::contract {
         contract(self),
         _voters(_self, _self),
         _proxies(_self, _self),
-        _council(_self, _self);
+        _council(_self, _self){}
     
     // @abi action
     void stake(account_name from) {

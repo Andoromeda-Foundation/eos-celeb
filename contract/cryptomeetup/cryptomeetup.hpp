@@ -7,7 +7,9 @@
 #include <eosiolib/asset.hpp>
 #include <eosiolib/singleton.hpp>
 #include <eosiolib/transaction.hpp>
-#include <council.hpp>
+
+#include "council.hpp"
+//#include "NFT.hpp"
 // #include <cmath>
 // #include <string>
 
@@ -15,13 +17,7 @@
 #include "utils.hpp"
 // #include "eosio.token.hpp"
  
-#define EOS_SYMBOL S(4, EOS)
-#define TOKEN_CONTRACT N(eosio.token)
-
 typedef double real_type;
-typedef uint8_t card ;
-
-
 
 using std::string;
 using eosio::symbol_name;
@@ -32,7 +28,7 @@ using eosio::action;
 
 class cryptomeetup : public council {
     public: cryptomeetup(account_name self) :
-        council(self);
+        council(self){}
 
     // @abi action
     void init();
@@ -52,6 +48,7 @@ class cryptomeetup : public council {
                     asset          &quantity,
                     string         &memo);
 
+    void apply(account_name code, action_name action);
     /*
     // @abi action
     void receipt(const rec_reveal& reveal) {
@@ -129,7 +126,7 @@ class cryptomeetup : public council {
         bag_index bags;   
 
 
-    void apply(account_name code, action_name action);
+    
   
 private:
     const vector<int64_t> getBets(const string &s, const char &c) ;
@@ -143,27 +140,26 @@ private:
     */
 };
 
-
-void eoscrazytown::apply(account_name code, action_name action) {   
+void cryptomeetup::apply(account_name code, action_name action) {   
     auto &thiscontract = *this;
 
     if (action == N(transfer)) {
         if (code == N(eosio.token)) {
-            execute_action(&thiscontract, &eoscrazytown::onTransfer);
+            execute_action(&thiscontract, &cryptomeetup::onTransfer);
         }
         return;
     }
 
     if (code != _self) return;
     switch (action) {
-        EOSIO_API(eoscrazytown, (init)(test)(clear)(reveal)(newbag)(setslogan));
+        EOSIO_API(cryptomeetup, (init));
     };
 }
 
 extern "C" {
     [[noreturn]] void apply(uint64_t receiver, uint64_t code, uint64_t action) 
     {
-        eoscrazytown p(receiver);
+        cryptomeetup p(receiver);
         p.apply(code, action);
         eosio_exit(0);
     }
