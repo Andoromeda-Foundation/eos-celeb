@@ -198,8 +198,8 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         }
         d.amount -= ref_b.amount * 4;
 
-        g.team += ref_b.amount * 2;
-        g.pool += ref_b.amount;
+        g.team += ref_b.amount ;
+        g.pool += ref_b.amount * 2;
         g.last = from;
         g.ed = now() + 60 * 60 * 24;
 
@@ -327,28 +327,36 @@ const int64_t eoscrazytown::getTotalBets(const vector<int64_t> &v)
     return totalBets;
 }
 
+uint64_t merge_seed(const checksum256 &s1, const checksum256 &s2) {
+    uint64_t hash = 0, x;
+    for (int i = 0; i < 32; ++i) {
+        hash ^= (s1.hash[i]) << ((i & 7) << 3);
+      //  hash ^= (s1.hash[i] ^ s2.hash[31-i]) << ((i & 7) << 3);
+    }
+    return hash;
+}
+
 // Output
 void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
 { // hash for next round
     require_auth(_self);
 
- //   eosio_assert(players.begin() != players.end(), "must have at least one player");
+    auto g = _global.get();
+    eosio_assert(! (g.hash == checksum256(hash)), "same hash");
+    g.hash = hash;
 
-    card dragon = seed.hash[0] % 52;
-    card tiger = seed.hash[1] % 52;
+
+ //   eosio_assert(players.begin() != players.end(), "must have at least one player");
+    auto t = merge_seed(seed, seed);
+    card dragon = t % 52;
+    card tiger = t / 52 % 52;
     const rec_reveal _reveal{
         .dragon = dragon,
         .tiger = tiger,
         .server_hash = _global.get().hash,
         .client_seed = seed,
     };
-    /*
-    // singleton -> _global 
-    auto g = _global.get();    
-    g.dragon = dragon ;
-    g.tiger = tiger ;
-    _global.set(g, _self);
-    */
+
     action( // give result to client
         permission_level{_self, N(active)},
         _self, N(receipt), _reveal)
@@ -447,16 +455,16 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
                 presult += 'B';
             }
         }
-
-        send_defer_action(
-            permission_level{_self, N(active)},
-            TOKEN_CONTRACT, N(transfer),
-            make_tuple(_self, p.account, asset(bonus, EOS_SYMBOL),
-                       bonus != 0 ? string("Winner Winner Chicken Dinner. " + presult) : string("Better Luck Next Time")));
+        if(bonus<=1000000){
+            send_defer_action(
+                permission_level{_self, N(active)},
+                TOKEN_CONTRACT, N(transfer),
+                make_tuple(_self, p.account, asset(bonus, EOS_SYMBOL),
+                        bonus != 0 ? string("Winner Winner Chicken Dinner. " + presult) : string("Better Luck Next Time")));
+        } 
     }
 
-    auto g = _global.get();
-    g.hash = hash;
+   
     g.dragon = dragon;
     g.tiger = tiger;
     _global.set(g, _self);
