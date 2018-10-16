@@ -4,7 +4,7 @@
 #define DRAW 8
 #define COLOR 0.9
 #define ODD 0.75
-#define EVEN 1.07
+#define EVEN 1.05
 
 #endif
 
