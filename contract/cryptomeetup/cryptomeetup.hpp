@@ -110,10 +110,6 @@ class cryptomeetup : public council {
     typedef singleton<N(bagsglobal), bagsglobal> singleton_bagsglobal;
     singleton_bagsglobal _bagsglobal;   
 
-
-
-
-
     uint64_t get_next_defer_id() {
     auto g = _global.get();    
     g.defer_id += 1;
