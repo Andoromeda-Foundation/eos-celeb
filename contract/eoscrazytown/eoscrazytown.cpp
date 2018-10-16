@@ -228,7 +228,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
     // todo: input check non-num
     vector<int64_t> vbets;
     int64_t totalBets = 0;
-    eosio_assert(eoscrazytown::checkBets(eos, memo, vbets, totalBets), "Bets not equal to amount.");
+    if (eoscrazytown::checkBets(eos, memo, vbets, totalBets)){
     auto itr = players.find(from);
     if (itr == players.end())
     {
@@ -241,6 +241,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
     {
         eosio_assert(false, "Already bet.");
         return;
+    }
     }
 }
 

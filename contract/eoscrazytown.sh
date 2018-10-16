@@ -1,12 +1,10 @@
 #cleos wallet unlock -n www --password PW5JDQJvz73w73eNEtthCRhLn9gieFki5uiZu1JZdjwMftVA3f4cG
-eosio-cpp eoscrazytown.cpp -o eoscrazytown.wasm
-
 
 cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4LZ1u
 /usr/local/eosio/bin/eosiocpp -g eoscrazytown/eoscrazytown.abi  eoscrazytown/eoscrazytown.cpp
 /usr/local/eosio/bin/eosiocpp -o eoscrazytown/eoscrazytown.wast eoscrazytown/eoscrazytown.cpp
 
-cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "minakokojima", "knowncarried", "360.2802 EOS", "" ]' -p minakokojima@active
+#cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "minakokojima", "knowncarried", "360.2802 EOS", "" ]' -p minakokojima@active
 
 # push action eosio.token transfer '[ "eosotcbackup", "crazytown.bp", "0.0330 EOS", "buy 0" ]' -p eosotcbackup@active
 
