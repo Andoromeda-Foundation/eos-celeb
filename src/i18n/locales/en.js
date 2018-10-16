@@ -1,5 +1,5 @@
 export default {
-  announcement: 'Announcement: We have adjusted pot ratio to 20%, starting from Oct 14 00:00 CST.',
+  announcement: 'Announcement: According to opinions from majority, we decided to close this project at Oct 18 00:00:00 CST. Celebrity owners will devide the pot according to the bid price at that moment. If you have questions or is against to this move, please join our Telegram group (see About page) to discuss.',
   EOSCelebrity: 'EOS Celebrity',
   nav_switch_lang: 'Language',
   nav_switch_lang_en: 'ENGLISH',
@@ -60,7 +60,9 @@ export default {
   leaderboard_label_celeb_count: 'Owned Celebrities',
   leaderboard_label_celeb_top: 'Most Valued 5 Celebrities',
   about_content: `
-  <h2> Pricing Description</h2>
+  <h2>Join Community</h2>
+  <p><a href="https://t.me/joinchat/GwrwAxBDAxSDsIlzB1V19w" target="_blank">Telegram group</a>
+  <h2>Pricing Description</h2>
   <p>The initial price per celebrity is 0.1 EOS</p>
   <p>The next price is: the previous price *1.35.</p>
   <p>&nbsp;</p>

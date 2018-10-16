@@ -1,5 +1,5 @@
 export default {
-  announcement: '公告：奖池分配比例从北京时间 10 月 14 日 00:00 起调整至 20%。',
+  announcement: '公告：根据大多数群友的意见，我们决定于北京时间 2018 年 10 月 18 日零点关闭该项目，按关闭时的购买额度瓜分奖池。若有疑问或表示反对，请加入我们的电报群（见「关于」页面）。',
   EOSCelebrity: 'EOS 加密名人',
   nav_switch_lang: '切换语言',
   nav_switch_lang_en: '英语',
@@ -60,6 +60,8 @@ export default {
   leaderboard_label_celeb_count: '名人数',
   leaderboard_label_celeb_top: '拥有名人 (价值 TOP 5)',
   about_content: `
+  <h2>加入社区</h2>
+  <p><a href="https://t.me/joinchat/GwrwAxBDAxSDsIlzB1V19w" target="_blank">电报群</a>
   <h2>定价说明</h2>
   <p>每个名人初始价格为 0.1 EOS</p>
   <p>下一次价格为：之前的价格*1.35.</p>
