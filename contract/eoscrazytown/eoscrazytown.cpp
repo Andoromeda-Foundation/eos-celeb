@@ -252,6 +252,8 @@ auto eoscrazytown::getResult(const card &a, const card &b)
     auto bS = b / 13;
     auto aP = a % 13;
     auto bP = b % 13;
+    aP ++;
+    bP ++;
 
     if (aP > bP)
         result[0] = o; // (1)
@@ -313,7 +315,7 @@ auto eoscrazytown::getBeton(const vector<int64_t> &v)
 {
     string beton = "";
     for (auto n : v)
-        beton += (n != 0) ? 'O' : 'X';
+        beton += (n != 0) ? 'O' : 'n';
 
     return beton;
 }
