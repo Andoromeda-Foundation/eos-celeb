@@ -15,6 +15,7 @@
 // #include "eosio.token.hpp"
  
 #define EOS_SYMBOL S(4, EOS)
+#define CTN_SYMBOL S(4, CTN)
 #define TOKEN_CONTRACT N(eosio.token)
 
 typedef double real_type;

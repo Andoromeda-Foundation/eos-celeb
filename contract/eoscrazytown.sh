@@ -4,10 +4,10 @@ cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4
 /usr/local/eosio/bin/eosiocpp -g eoscrazytown/eoscrazytown.abi  eoscrazytown/eoscrazytown.cpp
 /usr/local/eosio/bin/eosiocpp -o eoscrazytown/eoscrazytown.wast eoscrazytown/eoscrazytown.cpp
 
-#cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "minakokojima", "knowncarried", "360.2802 EOS", "" ]' -p minakokojima@active
+#cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "minakokojima", "crazytown.bp", "150.2802 EOS", "" ]' -p minakokojima@active
 
-# push action eosio.token transfer '[ "eosotcbackup", "crazytown.bp", "0.0330 EOS", "buy 0" ]' -p eosotcbackup@active
-
+#cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "crazytown.bp", "fakemonk1234", "118.8000 EOS", "Winner Winner Chicken Dinner" ]' -p crazytown.bp@active
+#158.4
 #cleos -u http://api.eosbeijing.one push action crazytown.bp newbag '[ "minakokojima", "0.0100 EOS" ]' -p crazytown.bp@active minakokojima@active
 
 
@@ -15,8 +15,12 @@ cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4
 
 cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
 
+#cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
+
 #cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp bag
 #cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp bagsglobal
+
+#cleos -u http://api-direct.eosasia.one push action crazytown.bp init '[]' -p crazytown.bp@active
 
 #cleos -u http://api-direct.eosasia.one push action crazytown.bp init '[]' -p crazytown.bp@active
 
@@ -41,6 +45,8 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 #cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "eosotcbackup", "crazytown.bp", "0.0010 PXL", "0.0010 EOS" ]' -p eosotcbackup@active
 
 #cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "minakokojima", "crazytown.bp", "0.0100 EOS", "0.0100 PUB" ]' -p minakokojima@active
+
+#cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "crazytown.bp", "intimexixixi", "780.1653 EOS", "Congratulation!" ]' -p crazytown.bp@active
 
 #cleos -u http://api-direct.eosasia.one get table crazytown.bp crazytown.bp global
 

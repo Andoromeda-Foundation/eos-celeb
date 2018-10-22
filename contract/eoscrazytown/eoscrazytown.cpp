@@ -1,5 +1,7 @@
 #include "eoscrazytown.hpp"
 
+#include <eosiolib/crypto.h>
+
 // @abi action
 void eoscrazytown::init(const checksum256 &hash)
 {
@@ -177,7 +179,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         d.amount = itr->next_price() - itr->price;
 
         auto ref_b = d;
-        ref_b.amount /= 10;
+        ref_b.amount /= 20;
 
 
         auto ref = eosio::string_to_name(memo.c_str());
@@ -196,12 +198,12 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         {
             g.team += ref_b.amount;
         }
-        d.amount -= ref_b.amount * 4;
+        d.amount -= ref_b.amount * 8;
 
-        g.team += ref_b.amount ;
-        g.pool += ref_b.amount * 2;
+        g.team += ref_b.amount * 1;
+        g.pool += ref_b.amount * 6;
         g.last = from;
-        g.ed = now() + 60 * 60 * 24;
+        g.ed = now() + 60 * 60;
 
         _bagsglobal.set(g, _self);
 
@@ -229,19 +231,12 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
     vector<int64_t> vbets;
     int64_t totalBets = 0;
     if (eoscrazytown::checkBets(eos, memo, vbets, totalBets)){
-    auto itr = players.find(from);
-    if (itr == players.end())
-    {
+        auto itr = players.find(from);
+        eosio_assert(itr == players.end(), "Already bet.");
         players.emplace(_self, [&](auto &p) {
             p.account = from;
             p.vbets = vbets;
-        });
-    }
-    else
-    {
-        eosio_assert(false, "Already bet.");
-        return;
-    }
+        });       
     }
 }
 
@@ -345,6 +340,9 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
     require_auth(_self);
 
     auto g = _global.get();
+
+ //   assert_sha256((char *)&seed, sizeof(seed), (const checksum256 *)&g.hash);
+
     eosio_assert(! (g.hash == checksum256(hash)), "same hash");
     g.hash = hash;
 
@@ -458,12 +456,20 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
                 presult += 'B';
             }
         }
-        if(bonus<=1000000){
+
+        if(bonus == 0) {
+            send_defer_action(
+                permission_level{_self, N(active)},
+                N(dacincubator), N(transfer),
+                make_tuple(_self, p.account, asset(1, CTN_SYMBOL),
+                        string("Better next time")));                  
+        }
+        else if(bonus<=2000000){            
             send_defer_action(
                 permission_level{_self, N(active)},
                 TOKEN_CONTRACT, N(transfer),
                 make_tuple(_self, p.account, asset(bonus, EOS_SYMBOL),
-                        bonus != 0 ? string("Winner Winner Chicken Dinner. " + presult) : string("Better Luck Next Time")));
+                        string("Winner Winner Chicken Dinner. " + presult)));                
         } 
     }
 
