@@ -161,10 +161,10 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         memo.erase(0, s + 1);
         auto itr = bags.find(id);
         eosio_assert(itr != bags.end(), "no character exist");
-        eosio_assert(eos.amount >= itr->next_price(), "no enough eos");
+        eosio_assert((eos.amount * 95 / 100) >= itr->next_price(), "no enough eos");
         eosio_assert(from != itr->owner, "cannot buy with yourself" );
 
-        asset d(eos.amount - itr->next_price(), EOS_SYMBOL);
+        asset d(eos.amount - (itr->next_price() * 20/19), EOS_SYMBOL);
 
         if (d.amount > 0 && _self != from){
 
@@ -176,10 +176,10 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
             .send();
         }
 
-        d.amount = itr->next_price() - itr->price;
+        d.amount = itr->next_price() * 20/19;
 
         auto ref_b = d;
-        ref_b.amount /= 20;
+        ref_b.amount /= 19;
 
 
         auto ref = eosio::string_to_name(memo.c_str());
@@ -198,17 +198,18 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
         {
             g.team += ref_b.amount;
         }
-        d.amount -= ref_b.amount * 8;
+        d.amount -= ref_b.amount; // d.amount == itr->next_price()
+        d.amount = (d.amount - itr->price) / 20;
 
-        g.team += ref_b.amount * 1;
-        g.pool += ref_b.amount * 6;
+        g.team += d.amount * 2;
+        g.pool += d.amount * 6;
         g.last = from;
         g.ed = now() + 60 * 60;
 
         _bagsglobal.set(g, _self);
 
         auto delta = d;
-        delta.amount += itr->price;
+        delta.amount = delta.amount*12 + itr->price;
 
     if(delta.amount > 0 &&  _self !=itr->owner){
         action( // winner winner chicken dinner
