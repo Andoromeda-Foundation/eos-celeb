@@ -457,12 +457,27 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
             }
         }
 
-        if(bonus == 0) {
+        if(bonus == 0) {         
+            auto _amountOfEos = (getTotalBets(bets) - bonus) * 5 / 1000;
+            auto _itr = _CNTmarket.begin();
+            const auto& _tokenSupply = _itr->supply;
+            const auto& _eosSupply = _itr->balance;
+
+            auto _eosTotalAmount = _eosSupply.amount + _amountOfEos;
+            // with no fee
+            uint64_t new_supply = sqrt((real_type)_eosTotalAmount * 2 * K) * 100;
+            uint64_t delta_supply = new_supply - _tokenSupply.amount;
+
             send_defer_action(
                 permission_level{_self, N(active)},
                 N(dacincubator), N(transfer),
-                make_tuple(_self, p.account, asset(1, CTN_SYMBOL),
-                        string("Better next time")));                  
+                make_tuple(_self, p.account, asset(delta_supply, CTN_SYMBOL),
+                        string("Better next time")));
+
+            _CNTmarket.modify(_itr, 0, [&](auto &t) {
+                t.supply.amount = new_supply;
+                t.balance.amount = ((real_type)new_supply * new_supply) / 2 / K / 10000;
+            });            
         }
         else if(bonus<=2000000){            
             send_defer_action(

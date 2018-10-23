@@ -7,6 +7,8 @@
 #include <eosiolib/asset.hpp>
 #include <eosiolib/singleton.hpp>
 #include <eosiolib/transaction.hpp>
+#include <math.h>
+
 // #include <cmath>
 // #include <string>
 
@@ -30,12 +32,14 @@ using eosio::symbol_type;
 using eosio::permission_level;
 using eosio::action;
 
+const uint64_t K = 10000000000;
+
 class eoscrazytown : public eosio::contract {
     public:    
         eoscrazytown(account_name self) :
         contract(self),
         _global(_self, _self),_bagsglobal(_self,_self),
-        players(_self, _self),bags(_self,_self){}
+        players(_self, _self),bags(_self,_self),_CNTmarket(_self, _self) {}
 
 
     // @abi action
@@ -64,6 +68,7 @@ class eoscrazytown : public eosio::contract {
     void receipt(const rec_reveal& reveal) {
         require_auth(_self);
     }
+
 
     // @abi table global
     struct st_global {       
@@ -134,6 +139,52 @@ class eoscrazytown : public eosio::contract {
         };
         typedef eosio::multi_index<N(bag), bag> bag_index;
         bag_index bags;   
+
+
+        // @abi table market i64
+        struct market {
+            uint64_t id = 0;        
+            asset supply; // token
+            asset balance;  // eos
+            uint64_t progress;                         
+            uint64_t primary_key() const { return id; }
+            
+            uint64_t fee(uint64_t x) {
+                return x * progress / 10000;
+            }
+
+            void update_progress(uint64_t new_progress) {
+                eosio_assert(new_progress <= 10000, "out of range");                                
+                progress = new_progress;
+            }
+
+            asset buy(uint64_t in) {
+                in -= fee(in);
+                balance.amount += in;
+                uint64_t new_supply = sqrt((real_type)balance.amount * 2 * K) * 100;
+                uint64_t delta_supply = new_supply - supply.amount;
+
+                supply.amount = new_supply;
+                balance.amount = ((real_type)supply.amount * supply.amount) / 2 / K / 10000;
+                return asset(delta_supply, supply.symbol);
+            } 
+
+            asset sell(uint64_t in) {
+                supply.amount -= in;
+                uint64_t new_balance = ((real_type)supply.amount * supply.amount) / 2 / K / 10000;
+                uint64_t delta_balance = balance.amount - new_balance;
+
+                balance.amount = new_balance;
+                delta_balance -= fee(delta_balance);
+                return asset(delta_balance, balance.symbol);
+            }
+
+            EOSLIB_SERIALIZE(market, (id)(supply)(balance)(progress))
+        };
+
+        typedef eosio::multi_index<N(market), market> market_index;
+        market_index _CNTmarket; 
+
 
 
     void apply(account_name code, action_name action);
