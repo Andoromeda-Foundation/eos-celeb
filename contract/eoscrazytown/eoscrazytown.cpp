@@ -137,6 +137,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
     eosio_assert(eos.is_valid(), "Invalid token transfer...");
     eosio_assert(eos.symbol == EOS_SYMBOL, "only EOS token is allowed");
     eosio_assert(eos.amount > 0, "must buy a positive amount");
+    
     //    eosio_assert(memo != "" , "must have something in memo") ;
     //    eosio_assert(memo.size() >= 21  , "bets wrong...") ;
     
@@ -231,6 +232,16 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
     vector<int64_t> vbets;
     int64_t totalBets = 0;
     if (eoscrazytown::checkBets(eos, memo, vbets, totalBets)){
+        eosio_assert( totalBets >= 1, "Bets should >= 1 EOS");
+        eosio_assert( totalBets <= 100, "Bets should not > 100 EOS");
+
+        // balance check
+        const auto& sym = eosio::symbol_type(EOS_SYMBOL).name();
+        accounts eos_account(N(eosio.token), _self);
+        auto old_balance = eos_account.get(sym).balance;
+        eosio_assert( totalBets <= old_balance.amount / 20, "Bets too big");
+
+
         auto itr = players.find(from);
         eosio_assert(itr == players.end(), "Already bet.");
         players.emplace(_self, [&](auto &p) {
