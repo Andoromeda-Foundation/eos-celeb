@@ -3,31 +3,31 @@
 #include <eosiolib/crypto.h>
 
 // @abi action
-void eoscrazytown::init(const checksum256 &hash) {
+void eoscrazytown::init(const checksum256 &hash)
+{
     require_auth(_self);
+
+    // clear() ;
+    // _global.remove();
     /*
-    uint64_t _totalPrice = 0;
-    for (int i = 0; i < 150; ++i) {
-        auto itr = bags.find(i);
-        uint64_t _price = itr->price;
-        _totalPrice += _price;
+    auto g = _global.get_or_create( _self, st_global{.hash = hash});    
+    g.hash = hash;
+    _global.set(g, _self); */
+
+    for (int i=0;i<100;++i) {
+        auto itr = bags.find(i);        
+        bags.modify(itr, 0, [&](auto &t) {
+            t.price = 1000;
+        });
     }
-    uint64_t amount = 3000 * 10000;
-    for (int k = 50; k < 150; ++k) {
-        auto itr = bags.find(k);
-        uint64_t _price = itr->price;
-        account_name _owner = itr->owner;
-        uint64_t _amountCMU = _price * amount / _totalPrice;
-        action( // winner winner chicken dinner
-            permission_level{_self, N(active)},
-            N(cryptomeetup), N(airdrop),
-            make_tuple(_owner, _amountCMU)
-        ).send();    
-    }*/
+/*
+    _bagsglobal.remove();    
 
-    //_global.remove();
-    _global.get_or_create(_self, st_global{});
+    auto g = _bagsglobal.get_or_create(_self, bagsglobal{
+         .pool = 0, .team = 0, .last = N(vitalik11111), .st = 1539403200, .ed = 1539403200 + 60 * 60 * 24});
 
+                                                  
+    _bagsglobal.set(g, _self);*/
 }
 // @abi action
 void eoscrazytown::clear()
@@ -54,42 +54,8 @@ void eoscrazytown::clear()
     // }
 }
 // @abi action
-void eoscrazytown::test() {
-}
-
-void eoscrazytown::make_profit(uint64_t amount) {
-    auto g = _global.get();
-    g.earnings_per_share += amount / g.total_staked;
-    _global.set(g, _self);
-}
-
-void eoscrazytown::claim(account_name from) {
-    require_auth(from);
-    /*
-    singleton_players _players(_self, from);
-    auto p = _players.get_or_create(_self, player_info{});
-
-    if (p.pool_profit > 0) {
-        send_defer_action(
-            permission_level{_self, N(active)},
-            N(dacincubator), N(transfer),
-            make_tuple(_self, from, 
-                asset(p.pool_profit, CMU_SYMBOL),
-                string("claim")
-            )
-        );
-    }
-
-    p.pool_profit = 0;
-    _players.set(p, _self);    */
-}
-
-void eoscrazytown::unstake(account_name from, asset quantity) {
-    require_auth(from);
-    council::unstake(from, quantity.amount);
-    auto g = _global.get();
-    g.total_staked -= quantity.amount;
-    _global.set(g, _self);      
+void eoscrazytown::test()
+{
 }
 
 void eoscrazytown::newbag(account_name &from, asset &eos)
@@ -110,7 +76,7 @@ void eoscrazytown::setslogan(account_name &from, uint64_t id, string memo)
     auto itr = bags.find(id);
     eosio_assert(itr != bags.end(), "no character exist");
     eosio_assert(memo.size() <= 64, "too long");
-    eosio_assert(from == itr->owner, "not the owner.");
+    eosio_assert(from == itr->owner, "not the owner...");
     bags.modify(itr, from, [&](auto &t) {
         t.slogan = memo;
     });
@@ -162,34 +128,116 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
 }*/
 
 // input
-void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset quantity, string memo)
+void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, string &memo)
 {
-    if (to != _self) return;
+    if (to != _self)
+        return;
+
     require_auth(from);
+    eosio_assert(eos.is_valid(), "Invalid token transfer...");
+    eosio_assert(eos.symbol == EOS_SYMBOL, "only EOS token is allowed");
+    eosio_assert(eos.amount > 0, "must buy a positive amount");
     //    eosio_assert(memo != "" , "must have something in memo") ;
     //    eosio_assert(memo.size() >= 21  , "bets wrong...") ;
-
-    eosio_assert(quantity.is_valid(), "Invalid token transfer");
-    eosio_assert(quantity.amount > 0, "must buy a positive amount");
-    auto params = split(memo, ' ');
-    eosio_assert(params.size() >= 1, "error memo");    
     
-    if (params[0] == "stake") {        
-        eosio_assert(quantity.contract == N(dacincubator), "must use true CTN to stake");
-        eosio_assert(quantity.symbol == CTN_SYMBOL, "must use CTN to stake");
-        stake(from, quantity.amount);
-        auto g = _global.get();
-        g.total_staked += quantity.amount;
-        _global.set(g, _self);     
-        return;
-    }    
+    if (memo.substr(0, 3) == "buy")
+    {   
 
-    if (params[0] == "make_profit") {
-        eosio_assert(quantity.contract == N(eosio.token), "must use true EOS to make profit");
-        eosio_assert(quantity.symbol == EOS_SYMBOL, "must use EOS to make profit");
-        make_profit(quantity.amount);
+        auto g = _bagsglobal.get();
+
+        eosio_assert( g.st <= now() && now() <= g.ed, "not correct time.");                                                      
+
+
+        memo.erase(0, 4);
+        std::size_t s = memo.find(' ');
+        if (s == string::npos)
+        {
+            s = memo.size();
+        }
+
+        auto id = string_to_price(memo.substr(0, s));
+        eosio_assert(id <= 100 || now() >= 1539403200 + 8*60*60, "no character exist");
+        //  auto id = 0;
+        memo.erase(0, s + 1);
+        auto itr = bags.find(id);
+        eosio_assert(itr != bags.end(), "no character exist");
+        eosio_assert(eos.amount >= itr->next_price(), "no enough eos");
+        eosio_assert(from != itr->owner, "cannot buy with yourself" );
+
+        asset d(eos.amount - itr->next_price(), EOS_SYMBOL);
+
+        if (d.amount > 0 && _self != from){
+
+        action( // winner winner chicken dinner
+            permission_level{_self, N(active)},
+            TOKEN_CONTRACT, N(transfer),
+            make_tuple(_self, from, d,
+                       std::string("refund")))
+            .send();
+        }
+
+        d.amount = itr->next_price() - itr->price;
+
+        auto ref_b = d;
+        ref_b.amount /= 20;
+
+
+        auto ref = eosio::string_to_name(memo.c_str());
+        if (is_account(ref) && ref != from && _self != from)
+        {   
+            if (ref_b.amount > 0) {
+            action( // winner winner chicken dinner
+                permission_level{_self, N(active)},
+                N(eosio.token), N(transfer),
+                make_tuple(_self, ref, ref_b,
+                           std::string("ref bonus")))
+                .send();
+            }
+        }
+        else
+        {
+            g.team += ref_b.amount;
+        }
+        d.amount -= ref_b.amount * 8;
+
+        g.team += ref_b.amount * 1;
+        g.pool += ref_b.amount * 6;
+        g.last = from;
+        g.ed = now() + 60 * 60;
+
+        _bagsglobal.set(g, _self);
+
+        auto delta = d;
+        delta.amount += itr->price;
+
+    if(delta.amount > 0 &&  _self !=itr->owner){
+        action( // winner winner chicken dinner
+            permission_level{_self, N(active)},
+            N(eosio.token), N(transfer),
+            make_tuple(_self, itr->owner, delta,
+                       std::string("next hodl")))
+            .send();
     }
 
+        bags.modify(itr, 0, [&](auto &t) {
+            t.owner = from;
+            t.price = itr->next_price();
+        });
+
+        return;
+    }
+
+    // todo: input check non-num
+    vector<int64_t> vbets;
+    int64_t totalBets = 0;
+    if (eoscrazytown::checkBets(eos, memo, vbets, totalBets)){
+        auto itr = players.find(from);
+        eosio_assert(itr == players.end(), "Already bet.");
+        players.emplace(_self, [&](auto &p) {
+            p.account = from;
+            p.vbets = vbets;
+        });       
+    }
 }
 
 auto eoscrazytown::getResult(const card &a, const card &b)
@@ -434,7 +482,7 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
         else if(bonus<=2000000){            
             send_defer_action(
                 permission_level{_self, N(active)},
-                N(eosio.token), N(transfer),
+                TOKEN_CONTRACT, N(transfer),
                 make_tuple(_self, p.account, asset(bonus, EOS_SYMBOL),
                         string("Winner Winner Chicken Dinner. " + presult)));                
         } 

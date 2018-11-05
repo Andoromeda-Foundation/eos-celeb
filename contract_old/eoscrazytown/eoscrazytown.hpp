@@ -8,35 +8,36 @@
 #include <eosiolib/singleton.hpp>
 #include <eosiolib/transaction.hpp>
 #include <math.h>
-const uint64_t K = 10000000000;
+
 // #include <cmath>
 // #include <string>
 
 #include "config.hpp"
 #include "utils.hpp"
-#include "council.hpp"
 // #include "eosio.token.hpp"
-//#include "kyubey.hpp"
  
+#define EOS_SYMBOL S(4, EOS)
+#define CTN_SYMBOL S(4, CTN)
+#define TOKEN_CONTRACT N(eosio.token)
+
 typedef double real_type;
 typedef uint8_t card ;
 
 
 
 using std::string;
-using eosio::asset;
-using eosio::extended_asset;
 using eosio::symbol_name;
+using eosio::asset;
 using eosio::symbol_type;
 using eosio::permission_level;
 using eosio::action;
 
-// const uint64_t K = 10000000000;
+const uint64_t K = 10000000000;
 
-class eoscrazytown : public council {
+class eoscrazytown : public eosio::contract {
     public:    
         eoscrazytown(account_name self) :
-        council(self),
+        contract(self),
         _global(_self, _self),_bagsglobal(_self,_self),
         players(_self, _self),bags(_self,_self),_CNTmarket(_self, _self) {}
 
@@ -52,30 +53,21 @@ class eoscrazytown : public council {
     // @abi action
     void reveal(const checksum256& seed, const checksum256& hash);
 
-   // typedef eosio::multi_index<N(market), kyubey::market> market_index;
-   // market_index _market;        
-
     // @abi action
     void transfer(account_name   from,
                   account_name   to,
                   asset          quantity,
                   string         memo);
     
-    void onTransfer(account_name   from,
-                    account_name   to,
-                    extended_asset quantity,
-                    string         memo);
+    void onTransfer(account_name   &from,
+                    account_name   &to,
+                    asset          &quantity,
+                    string         &memo);
 
     // @abi action
     void receipt(const rec_reveal& reveal) {
         require_auth(_self);
     }
-    // @abi action
-    void unstake(account_name from, asset quantity);
-    // @abi action
-    void claim(account_name from);
-
-    void make_profit(uint64_t amount);
 
 
     // @abi table global
@@ -84,32 +76,10 @@ class eoscrazytown : public council {
         checksum256 hash;
         uint8_t dragon ;
         uint8_t tiger ;
-        uint64_t total_staked;
-        uint64_t earnings_per_share;
+        EOSLIB_SERIALIZE( st_global, (defer_id)(hash)(dragon)(tiger)) ;
     };
     typedef singleton<N(global), st_global> singleton_global;
-    singleton_global _global;      
-
-        /*
-    // @abi table global
-    struct global {       
-        uint64_t team;
-        uint64_t pool;
-        uint64_t defer_id;
-        
-        account_name last;
-        time st, ed;
-    };
-
-    typedef eosio::multi_index<N(land), land> land_index;
-    land_index _land;
-
-    typedef eosio::multi_index<N(market), kyubey::market> market_index;
-    market_index _market;    
-
-    typedef singleton<N(global), global> singleton_global;
-    singleton_global _global;  */   
-
+    singleton_global _global;        
 
     // @abi table bagsglobal
     struct bagsglobal {      
@@ -152,6 +122,8 @@ class eoscrazytown : public council {
 
   // @abi action
   void setslogan(account_name &from, uint64_t id,string memo);
+
+
 
         // @abi table bag i64
         struct bag {
@@ -229,19 +201,13 @@ private:
 };
 
 
-struct st_transfer {
-    account_name from;
-    account_name to;
-    asset        quantity;
-    string       memo;
-};
-
 void eoscrazytown::apply(account_name code, action_name action) {   
     auto &thiscontract = *this;
 
     if (action == N(transfer)) {
-        auto transfer_data = unpack_action_data<st_transfer>();
-        onTransfer(transfer_data.from, transfer_data.to, extended_asset(transfer_data.quantity, code), transfer_data.memo);               
+        if (code == N(eosio.token)) {
+            execute_action(&thiscontract, &eoscrazytown::onTransfer);
+        }
         return;
     }
 

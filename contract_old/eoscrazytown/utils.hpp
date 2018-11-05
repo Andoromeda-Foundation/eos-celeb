@@ -18,21 +18,6 @@ struct rec_reveal {
     checksum256 client_seed;
 };
 
-const vector<string> split(const string& s, const char& t) {
-    string buff;
-    vector<string> z;
-
-    for (auto c: s) {
-        if (c != t) buff += c; 
-        else { 
-            z.push_back(buff); 
-            buff.clear(); 
-        }
-    }
-    if (!buff.empty()) z.push_back(buff);
-    return z;
-}
-
 const vector<string> explode(const string& s, const char& c) {
     string buff{""};
     vector<string> v;
