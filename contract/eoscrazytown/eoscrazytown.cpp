@@ -25,9 +25,14 @@ void eoscrazytown::init(const checksum256 &hash) {
         ).send();    
     }*/
 
-    //_global.remove();
-    _global.get_or_create(_self, st_global{});
+    _global.remove();
+     _global.get_or_create(_self, st_global{});
 
+    singleton_voters _voters(_self, N(lunaaikitoni));
+    _voters.remove();
+
+    singleton_voters _voters2(_self, N(eosotcbackup));
+    _voters2.remove();
 }
 // @abi action
 void eoscrazytown::clear()

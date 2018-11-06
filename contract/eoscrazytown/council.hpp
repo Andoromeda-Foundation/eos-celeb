@@ -33,7 +33,7 @@ class council : public eosio::contract {
     struct voter_info {
         account_name to = 0;
         uint64_t staked = 0;
-//        uint64_t payout = 0;
+        uint64_t payout = 0;
     };       
 
     // @abi table proxies
