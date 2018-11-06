@@ -9,8 +9,9 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 #
 #
 
-#cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "eosotcbackup", "crazytown.bp", "0.0001 CTN", "stake" ]' -p eosotcbackup@active
+#cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "eosotcbackup", "crazytown.bp", "0.0100 CTN", "stake" ]' -p eosotcbackup@active
 
+#cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "minakokojima", "crazytown.bp", "0.0100 EOS", "make_profit" ]' -p minakokojima@active
 #cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp players
 
 #cleos -u http://api-direct.eosasia.one push action crazytown.bp init '[123]' -p crazytown.bp@active
@@ -34,6 +35,15 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 #cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
 
 #cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
+
+
+#leos -u http://api.eosbeijing.one get table crazytown.bp eosotcbackup voter
+
+
+#cleos -u http://api-direct.eosasia.one push action crazytown.bp unstake '[ "eosotcbackup"]' -p eosotcbackup@active
+
+
+
 
 #cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp bag
 #cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp bagsglobal

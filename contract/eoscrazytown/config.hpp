@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _DFF_CONFIG_HPP
 
 #define EOS_SYMBOL S(4, EOS)
@@ -6,7 +7,7 @@
 #define TOKEN_SYMBOL CTN_SYMBOL
 #define TOKEN_CONTRACT N(dacincubator)
 
-
+const uint128_t MAGNITUDE = 1ll<<32;
 
 #define SIDE 0.98
 #define DRAW 8

@@ -25,14 +25,18 @@ void eoscrazytown::init(const checksum256 &hash) {
         ).send();    
     }*/
 
-    _global.remove();
-     _global.get_or_create(_self, st_global{});
+  //  _global.remove();
+    _global.get_or_create(_self, st_global{});
 
+/*
     singleton_voters _voters(_self, N(lunaaikitoni));
     _voters.remove();
 
     singleton_voters _voters2(_self, N(eosotcbackup));
     _voters2.remove();
+
+    singleton_voters _voters3(_self, N(minakokojima));
+    _voters3.remove();    */
 }
 // @abi action
 void eoscrazytown::clear()
@@ -62,9 +66,9 @@ void eoscrazytown::clear()
 void eoscrazytown::test() {
 }
 
-void eoscrazytown::make_profit(uint64_t amount) {
+void eoscrazytown::make_profit(uint128_t amount) {
     auto g = _global.get();
-    g.earnings_per_share += amount / g.total_staked;
+    g.earnings_per_share += MAGNITUDE * amount / g.total_staked;
     _global.set(g, _self);
 }
 
@@ -193,6 +197,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
         eosio_assert(quantity.contract == N(eosio.token), "must use true EOS to make profit");
         eosio_assert(quantity.symbol == EOS_SYMBOL, "must use EOS to make profit");
         make_profit(quantity.amount);
+        return;
     }
 
 }
@@ -457,3 +462,5 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
 
     // init( hash ) ;
 }
+
+

@@ -27,7 +27,7 @@ using eosio::action;
 
 class council : public eosio::contract {
     public: council(account_name self) :
-        contract(self){}
+        contract(self),_global(_self,_self){}
 
     // @abi table voters
     struct voter_info {
@@ -61,27 +61,45 @@ class council : public eosio::contract {
         eosio_assert(delta > 0, "must stake a positive amount");
         singleton_voters _voters(_self, from);
         auto v = _voters.get_or_create(_self, voter_info{});
+        auto g = _global.get();
         v.staked += delta;
+        v.payout += g.earnings_per_share * delta / MAGNITUDE;
         _voters.set(v, _self);
     }
     
-    void unstake(account_name from, uint64_t amount) {
+    void unstake(account_name from, uint64_t delta) {
         require_auth(from);
         singleton_voters _voters(_self, from);
         auto v = _voters.get_or_create(_self, voter_info{});
-        eosio_assert(amount <= v.staked, "don't have enough CMU for unstake");
+        auto g = _global.get();
+        eosio_assert(delta <= v.staked, "don't have enough CMU for unstake");
         // TODO(minakokojima): unvote(v);
 
         action( // winner winner chicken dinner
             permission_level{_self, N(active)},
             N(dacincubator), N(transfer),
-            make_tuple(_self, from, asset(amount, TOKEN_SYMBOL),
+            make_tuple(_self, from, asset(delta, TOKEN_SYMBOL),
                 std::string("transfer token by unstake"))
         ).send();
-            
-        v.staked -= amount;
+
+        v.payout -= g.earnings_per_share * delta / MAGNITUDE;
+        v.staked -= delta;
+
         _voters.set(v, _self);
     }    
+
+    // @abi table global
+    struct st_global {       
+        uint64_t defer_id = 0;
+        checksum256 hash;
+        uint8_t dragon ;
+        uint8_t tiger ;
+        uint64_t total_staked;
+        uint128_t earnings_per_share;
+    };
+    typedef singleton<N(global), st_global> singleton_global;
+    singleton_global _global;    
+
     /*
     void unvote(voters_table::const_iterator itr) {
     

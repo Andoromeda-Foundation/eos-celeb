@@ -12,7 +12,6 @@ const uint64_t K = 10000000000;
 // #include <cmath>
 // #include <string>
 
-#include "config.hpp"
 #include "utils.hpp"
 #include "council.hpp"
 // #include "eosio.token.hpp"
@@ -36,8 +35,7 @@ using eosio::action;
 class eoscrazytown : public council {
     public:    
         eoscrazytown(account_name self) :
-        council(self),
-        _global(_self, _self),_bagsglobal(_self,_self),
+        council(self),_bagsglobal(_self,_self),
         players(_self, _self),bags(_self,_self),_CNTmarket(_self, _self) {}
 
 
@@ -75,20 +73,10 @@ class eoscrazytown : public council {
     // @abi action
     void claim(account_name from);
 
-    void make_profit(uint64_t amount);
+    void make_profit(uint128_t amount);
 
 
-    // @abi table global
-    struct st_global {       
-        uint64_t defer_id = 0;
-        checksum256 hash;
-        uint8_t dragon ;
-        uint8_t tiger ;
-        uint64_t total_staked;
-        uint64_t earnings_per_share;
-    };
-    typedef singleton<N(global), st_global> singleton_global;
-    singleton_global _global;      
+  
 
         /*
     // @abi table global
