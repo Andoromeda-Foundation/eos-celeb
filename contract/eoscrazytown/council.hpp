@@ -71,7 +71,7 @@ class council : public eosio::contract {
         require_auth(from);
         singleton_voters _voters(_self, from);
         auto v = _voters.get_or_create(_self, voter_info{});
-        auto g = _global.get();
+        auto g = _global.get();        
         eosio_assert(delta <= v.staked, "don't have enough CMU for unstake");
         // TODO(minakokojima): unvote(v);
 
