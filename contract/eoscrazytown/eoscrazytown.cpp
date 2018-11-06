@@ -26,17 +26,46 @@ void eoscrazytown::init(const checksum256 &hash) {
     }*/
 
   //  _global.remove();
-    _global.get_or_create(_self, st_global{});
+    auto g = _global.get();
+  //  g.earnings_per_share = 0;
+//    _global.set(g, _self);   
 
-/*
-    singleton_voters _voters(_self, N(lunaaikitoni));
-    _voters.remove();
+    singleton_voters _v1(_self, N(thinksaturna));
+    auto v1 = _v1.get();
+    singleton_voters _v2(_self, N(chenkaioneos));
+    auto v2 = _v2.get();
+    singleton_voters _v3(_self, N(chenlei33333));
+    auto v3 = _v3.get();
+    singleton_voters _v4(_self, N(eosotcbackup));
+    auto v4 = _v4.get();        
+    singleton_voters _v5(_self, N(huaeoshuaeos));
+    auto v5 = _v5.get();
+    singleton_voters _v6(_self, N(laowantong11));
+    auto v6 = _v6.get();   
+    singleton_voters _v7(_self, N(lunaaikitoni));
+    auto v7 = _v7.get();         
 
-    singleton_voters _voters2(_self, N(eosotcbackup));
-    _voters2.remove();
 
-    singleton_voters _voters3(_self, N(minakokojima));
-    _voters3.remove();    */
+    v1.payout = 0;
+    v2.payout = 0;
+    v3.payout = 0;
+    v4.payout = 0;
+    v5.payout = 0;
+    v6.payout = 0;
+    v7.payout = 0;
+    _v1.set(v1,_self);
+    _v2.set(v2,_self);
+    _v3.set(v3,_self);
+    _v4.set(v4,_self);
+    _v5.set(v5,_self);
+    _v6.set(v6,_self);
+    _v7.set(v7,_self);
+
+
+
+    eosio_assert(g.total_staked == v1.staked + v2.staked + v3.staked + v4.staked + v5.staked + v6.staked + v7.staked, "wtf");
+    g.earnings_per_share = 0;
+    _global.set(g, _self);   
 }
 // @abi action
 void eoscrazytown::clear()
@@ -61,6 +90,9 @@ void eoscrazytown::clear()
     //while (players.begin() != players.end()) {
     //    players.erase(players.begin());
     // }
+
+
+
 }
 // @abi action
 void eoscrazytown::test() {
@@ -79,7 +111,12 @@ void eoscrazytown::claim(account_name from) {
     auto v = _voters.get_or_create(_self, voter_info{});
     auto g = _global.get();        
     // TODO(minakokojima): unvote(v);
-    auto delta = g.earnings_per_share * v.staked / MAGNITUDE - v.payout;
+    uint64_t delta = 0;
+    if (g.earnings_per_share * v.staked / MAGNITUDE <= v.payout) {
+        delta = 0;
+    } else {
+        delta = g.earnings_per_share * v.staked / MAGNITUDE - v.payout;
+    }
     v.payout = g.earnings_per_share * v.staked / MAGNITUDE;
     _voters.set(v, _self);    
     

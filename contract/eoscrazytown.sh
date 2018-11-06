@@ -9,6 +9,14 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 #
 #
 
+cleos -u http://api.eosbeijing.one get table crazytown.bp eosotcbackup voters
+
+cleos -u http://api-direct.eosasia.one push action crazytown.bp unstake '[ "minakokojima", "0.0001 CMU"]' -p minakokojima@active
+
+
+cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "minakokojima", "crazytown.bp", "0.0100 CTN", "stake" ]' -p minakokojima@active
+
+
 #cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "eosotcbackup", "crazytown.bp", "0.0100 CTN", "stake" ]' -p eosotcbackup@active
 
 #cleos -u http://api-direct.eosasia.one push action eosio.token transfer '[ "minakokojima", "crazytown.bp", "0.0100 EOS", "make_profit" ]' -p minakokojima@active
@@ -37,7 +45,9 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 #cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
 
 
-#leos -u http://api.eosbeijing.one get table crazytown.bp eosotcbackup voter
+#cleos -u http://api.eosbeijing.one get table crazytown.bp eosotcbackup voters
+
+#cleos -u http://api.eosbeijing.one get table crazytown.bp crazytown.bp global
 
 
 #cleos -u http://api-direct.eosasia.one push action crazytown.bp unstake '[ "eosotcbackup"]' -p eosotcbackup@active
@@ -151,7 +161,6 @@ cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p cra
 
 
 # cleos -u https://api-kylin.eosasia.one push action pomelodex111 test '[]' -p minakokojima@active
-
 
 # cleos -u https://api-kylin.eosasia.one set contract pomelodex111 pomelo -p pomelodex111@active
 # cleos -u https://api-kylin.eosasia.one push action eosio.token transfer '[ "minakokojima", "pomelodex111", "1.0000 EOS", "buy,happyeosslot,HPY,2.0000" ]' -p minakokojima@active

@@ -235,7 +235,7 @@ void eoscrazytown::apply(account_name code, action_name action) {
 
     if (code != _self) return;
     switch (action) {
-        EOSIO_API(eoscrazytown, (init)(test)(clear)(reveal)(newbag)(setslogan));
+        EOSIO_API(eoscrazytown, (init)(test)(clear)(reveal)(newbag)(setslogan)(claim)(unstake));
     };
 }
 
