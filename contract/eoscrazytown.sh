@@ -4,17 +4,17 @@ cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4
 /usr/local/eosio/bin/eosiocpp -g eoscrazytown/eoscrazytown.abi  eoscrazytown/eoscrazytown.cpp
 /usr/local/eosio/bin/eosiocpp -o eoscrazytown/eoscrazytown.wast eoscrazytown/eoscrazytown.cpp
 
-cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
+#cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
 
 #
 #
 
-cleos -u http://api.eosbeijing.one get table crazytown.bp eosotcbackup voters
+#cleos -u http://api.eosbeijing.one get table crazytown.bp minakokojima voters
 
-cleos -u http://api-direct.eosasia.one push action crazytown.bp unstake '[ "minakokojima", "0.0001 CMU"]' -p minakokojima@active
+#cleos -u http://api-direct.eosasia.one push action crazytown.bp unstake '[ "minakokojima", "0.0001 CMU"]' -p minakokojima@active
 
 
-cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "minakokojima", "crazytown.bp", "0.0100 CTN", "stake" ]' -p minakokojima@active
+#cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "minakokojima", "linklinkguan", "25000.0000 CTN", "stake" ]' -p minakokojima@active
 
 
 #cleos -u http://api-direct.eosasia.one push action dacincubator transfer '[ "eosotcbackup", "crazytown.bp", "0.0100 CTN", "stake" ]' -p eosotcbackup@active

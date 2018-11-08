@@ -82,7 +82,14 @@ class council : public eosio::contract {
                 std::string("transfer token by unstake"))
         ).send();
 
-        v.payout -= g.earnings_per_share * delta / MAGNITUDE;
+
+      
+        if (g.earnings_per_share * delta / MAGNITUDE <= v.payout) {
+            v.payout -= g.earnings_per_share * delta / MAGNITUDE;
+        } else {
+            v.payout = 0;
+        }        
+
         v.staked -= delta;
 
         _voters.set(v, _self);
