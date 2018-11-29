@@ -209,10 +209,11 @@ cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["ethdofucke
 
 
 ##########################
-
+tengavinwood
 cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
 cleos -u http://api.eosbeijing.one push action crazytown.bp init '["f42818057006d85bbdb654ccceae273854bac39dd766947f67db900bcb485b85"]' -p crazytown.bp@active
-cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,winninetysix"]' -p tengavinwood@active
+cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000"]' -p tengavinwood@active
 
 cleos -u http://api.eosbeijing.one push action crazytown.bp reveal '["f12818057006d85bbdb654caceae273854bac39dd76a947f67db900bcb485b85","f42118052006a84bb4b654ccceae273894bac39dd766947f67db900bcb485b85"]' -p crazytown.bp@active
 
+cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,"]' -p tengavinwood@active

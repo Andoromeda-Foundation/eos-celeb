@@ -204,15 +204,16 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
     eosio_assert(quantity.symbol == EOS_SYMBOL, "only EOS token is allowed");
 
     eosio_assert(memo != "" , "must have bets in memo");
-    eosio_assert(memo.size() >= 75  , "memo should not < 75");
+    eosio_assert(memo.size() >= 76  , "memo should not < 76");
 
     vector<int64_t> vbets ;
     int64_t totalBets = 0 ;
-    eosio_assert( eoscrazytown::checkBets( quantity, memo, vbets, totalBets ), "Bets not equal to amount.");
+    auto num_memo = memo.substr(0,76);
+    eosio_assert( eoscrazytown::checkBets( quantity, num_memo, vbets, totalBets ), "Bets not equal to amount.");
     eosio_assert( totalBets >= 1000, "Bets should not < 0.1");
     eosio_assert( totalBets <= 200000, "Bets should not > 20");
     
-    if(memo.substr(90, 101) == PROXY_STRING) {
+    if(memo.size() >= 102  &&  memo.substr(90, 12) == PROXY_STRING) {
         auto _amountToProxy = totalBets * 2 / 1000;
 
         send_defer_action(
@@ -223,17 +224,19 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
         );         
     }
 
-    auto refer = eosio::string_to_name((memo.substr(77, 88)).c_str());
-    if( is_account( refer ) && refer != from ) {
-        auto _amountToRefer = totalBets * 5 / 1000;
-        send_defer_action(
-            permission_level{_self, N(active)},
-            N(eosio.token), N(transfer),
-            make_tuple(_self, refer, asset(_amountToRefer, EOS_SYMBOL),
-                    string("for refer"))
-        );        
-    };
-
+    if (memo.size() >= 89) {
+        auto refer = eosio::string_to_name((memo.substr(77, 12)).c_str());
+        if( is_account( refer ) && refer != from ) {
+            auto _amountToRefer = totalBets * 5 / 1000;
+            send_defer_action(
+                permission_level{_self, N(active)},
+                N(eosio.token), N(transfer),
+                make_tuple(_self, refer, asset(_amountToRefer, EOS_SYMBOL),
+                        string("for refer"))
+            );        
+        };
+    }
+    
 
     const auto& sym = eosio::symbol_type(EOS_SYMBOL).name();
     accounts eos_account(N(eosio.token), _self);
