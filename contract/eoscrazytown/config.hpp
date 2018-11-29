@@ -7,8 +7,36 @@
 #define TOKEN_SYMBOL CTN_SYMBOL
 #define TOKEN_CONTRACT N(dacincubator)
 
+#define PROXY N(winninetysix)
+#define PROXY_STRING "winninetysix"
+
 const uint128_t MAGNITUDE = 1ll<<32;
 
+#define SIDE 0.98
+#define DRAW 8
+#define COLOR 0.96
+#define ODD 0.82
+#define EVEN 1.12
+
+#endif
+
+/*
+new(20181129):
+(1)	龙赢：0.98
+(2)	虎赢：0.98
+(3)	和：8
+(4)	龙红：0.96
+(5)	虎红：0.96
+(6)	龙黑：0.96
+(7)	虎黑：0.96
+(8)	龙单：0.82
+(9)	龙双：1.12
+(10) 虎单：0.82
+(11) 虎双：1.12
+
+
+
+old:
 #define SIDE 0.98
 #define DRAW 8
 #define COLOR 0.9
@@ -17,7 +45,6 @@ const uint128_t MAGNITUDE = 1ll<<32;
 
 #endif
 
-/*
 (1)	龙赢：龙方牌面数值大于虎方
 (2)	虎赢：虎方牌面数值大于龙方
 (3)	和：双方牌面数值一样大
