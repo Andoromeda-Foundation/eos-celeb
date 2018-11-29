@@ -14645,25 +14645,52 @@
    )
    (i64.store offset=144
     (get_local $15)
-    (i64.sub
-     (i64.load offset=144
-      (get_local $15)
-     )
-     (i64.or
-      (i64.load32_u offset=12
-       (get_local $15)
+    (select
+     (i64.const 0)
+     (i64.sub
+      (tee_local $10
+       (i64.load offset=144
+        (get_local $15)
+       )
       )
-      (i64.shl
-       (i64.load
-        (i32.add
-         (i32.add
-          (get_local $15)
-          (i32.const 8)
+      (tee_local $9
+       (i64.or
+        (i64.load32_u offset=12
+         (get_local $15)
+        )
+        (i64.shl
+         (tee_local $12
+          (i64.load
+           (i32.add
+            (i32.add
+             (get_local $15)
+             (i32.const 8)
+            )
+            (i32.const 8)
+           )
+          )
          )
-         (i32.const 8)
+         (i64.const 32)
         )
        )
-       (i64.const 32)
+      )
+     )
+     (select
+      (i64.lt_u
+       (get_local $10)
+       (get_local $9)
+      )
+      (i64.ne
+       (tee_local $10
+        (i64.shr_u
+         (get_local $12)
+         (i64.const 32)
+        )
+       )
+       (i64.const 0)
+      )
+      (i64.eqz
+       (get_local $10)
       )
      )
     )
