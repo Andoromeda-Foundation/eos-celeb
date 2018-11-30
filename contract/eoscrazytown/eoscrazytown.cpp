@@ -5,67 +5,10 @@
 // @abi action
 void eoscrazytown::init(const checksum256 &hash) {
     require_auth(_self);
-    /*
-    uint64_t _totalPrice = 0;
-    for (int i = 0; i < 150; ++i) {
-        auto itr = bags.find(i);
-        uint64_t _price = itr->price;
-        _totalPrice += _price;
-    }
-    uint64_t amount = 3000 * 10000;
-    for (int k = 50; k < 150; ++k) {
-        auto itr = bags.find(k);
-        uint64_t _price = itr->price;
-        account_name _owner = itr->owner;
-        uint64_t _amountCMU = _price * amount / _totalPrice;
-        action( // winner winner chicken dinner
-            permission_level{_self, N(active)},
-            N(cryptomeetup), N(airdrop),
-            make_tuple(_owner, _amountCMU)
-        ).send();    
-    }*/
 
-  //  _global.remove();
-    auto g = _global.get();
-  //  g.earnings_per_share = 0;
-//    _global.set(g, _self);   
-
-    singleton_voters _v1(_self, N(thinksaturna));
-    auto v1 = _v1.get();
-    singleton_voters _v2(_self, N(chenkaioneos));
-    auto v2 = _v2.get();
-    singleton_voters _v3(_self, N(chenlei33333));
-    auto v3 = _v3.get();
-    singleton_voters _v4(_self, N(eosotcbackup));
-    auto v4 = _v4.get();        
-    singleton_voters _v5(_self, N(huaeoshuaeos));
-    auto v5 = _v5.get();
-    singleton_voters _v6(_self, N(laowantong11));
-    auto v6 = _v6.get();   
-    singleton_voters _v7(_self, N(lunaaikitoni));
-    auto v7 = _v7.get();         
-
-
-    v1.payout = 0;
-    v2.payout = 0;
-    v3.payout = 0;
-    v4.payout = 0;
-    v5.payout = 0;
-    v6.payout = 0;
-    v7.payout = 0;
-    _v1.set(v1,_self);
-    _v2.set(v2,_self);
-    _v3.set(v3,_self);
-    _v4.set(v4,_self);
-    _v5.set(v5,_self);
-    _v6.set(v6,_self);
-    _v7.set(v7,_self);
-
-
-
-    eosio_assert(g.total_staked == v1.staked + v2.staked + v3.staked + v4.staked + v5.staked + v6.staked + v7.staked, "wtf");
-    g.earnings_per_share = 0;
-    _global.set(g, _self);   
+    auto g = _global.get_or_create( _self, st_global{.hash = hash});    
+    g.hash = hash;
+    _global.set(g, _self); 
 }
 // @abi action
 void eoscrazytown::clear()
@@ -217,6 +160,7 @@ void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, 
 }*/
 
 // input
+/*
 void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset quantity, string memo)
 {
     if (to != _self) return;
@@ -246,6 +190,68 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
         return;
     }
 
+}
+*/
+void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset quantity, string memo)
+{
+    if (to != _self) return;
+    if (quantity.contract != N(eosio.token)) return;
+
+    require_auth(from);
+
+    eosio_assert(quantity.is_valid(), "Invalid token transfer");
+    eosio_assert(quantity.amount > 0, "must buy a positive amount");
+    eosio_assert(quantity.symbol == EOS_SYMBOL, "only EOS token is allowed");
+
+    eosio_assert(memo != "" , "must have bets in memo");
+    eosio_assert(memo.size() >= 76  , "memo should not < 76");
+
+    vector<int64_t> vbets ;
+    int64_t totalBets = 0 ;
+    auto num_memo = memo.substr(0,76);
+    eosio_assert( eoscrazytown::checkBets( quantity, num_memo, vbets, totalBets ), "Bets not equal to amount.");
+    eosio_assert( totalBets >= 1000, "Bets should not < 0.1");
+    eosio_assert( totalBets <= 200000, "Bets should not > 20");
+    
+    if(memo.size() >= 102  &&  memo.substr(90, 12) == PROXY_STRING) {
+        auto _amountToProxy = totalBets * 2 / 1000;
+
+        send_defer_action(
+            permission_level{_self, N(active)},
+            N(eosio.token), N(transfer),
+            make_tuple(_self, PROXY, asset(_amountToProxy, EOS_SYMBOL),
+                    string("for proxy"))
+        );         
+    }
+
+    if (memo.size() >= 89) {
+        auto refer = eosio::string_to_name((memo.substr(77, 12)).c_str());
+        if( is_account( refer ) && refer != from ) {
+            auto _amountToRefer = totalBets * 5 / 1000;
+            send_defer_action(
+                permission_level{_self, N(active)},
+                N(eosio.token), N(transfer),
+                make_tuple(_self, refer, asset(_amountToRefer, EOS_SYMBOL),
+                        string("for refer"))
+            );        
+        };
+    }
+    
+
+    const auto& sym = eosio::symbol_type(EOS_SYMBOL).name();
+    accounts eos_account(N(eosio.token), _self);
+    auto old_balance = eos_account.get(sym).balance;
+
+    auto itr = players.find(from);
+    if (itr == players.end()) {
+        players.emplace(_self, [&](auto& p) {
+            p.account = from;
+            p.vbets = vbets ;
+        });
+    } else {
+        eosio_assert( false, "Already bet.");
+        return ;
+    }
 }
 
 auto eoscrazytown::getResult(const card &a, const card &b)
@@ -419,84 +425,70 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
                     presult += '2';
                 }
             }
+        }
+        
+        if (result[3] == beton[3])
+        {
+            bonus += bets[3] + bets[3] * COLOR; // (4)
+            presult += '4';
+        }
 
-            if (result[3] == beton[3])
-            {
-                bonus += bets[3] + bets[3] * COLOR; // (4)
-                presult += '4';
-            }
+        if (result[4] == beton[4])
+        {
+            bonus += bets[4] + bets[4] * COLOR; // (5)
+            presult += '5';
+        }
 
-            if (result[4] == beton[4])
-            {
-                bonus += bets[4] + bets[4] * COLOR; // (5)
-                presult += '5';
-            }
+        if (result[5] == beton[5])
+        {
+            bonus += bets[5] + bets[5] * COLOR; // (6)
+            presult += '6';
+        }
+        if (result[6] == beton[6])
+        {
+            bonus += bets[6] + bets[6] * COLOR; // (7)
+            presult += '7';
+        }
 
-            if (result[5] == beton[5])
-            {
-                bonus += bets[5] + bets[5] * COLOR; // (6)
-                presult += '6';
-            }
-            if (result[6] == beton[6])
-            {
-                bonus += bets[6] + bets[6] * COLOR; // (7)
-                presult += '7';
-            }
-
-            if (result[7] == beton[7])
-            {
-                bonus += bets[7] + bets[7] * ODD; // (8)
+        if (result[7] == beton[7])
+        {
+            bonus += bets[7] + bets[7] * ODD; // (8)
                 presult += '8';
-            }
-            if (result[8] == beton[8])
-            {
-                bonus += bets[8] + bets[8] * EVEN; // (9)
-                presult += '9';
-            }
-            if (result[9] == beton[9])
-            {
-                bonus += bets[9] + bets[9] * ODD; // (10)
-                presult += 'A';
-            }
-            if (result[10] == beton[10])
-            {
-                bonus += bets[10] + bets[10] * EVEN; // (11)
-                presult += 'B';
-            }
         }
-
-        if(bonus == 0) {         
-            auto _amountOfEos = (getTotalBets(bets) - bonus) * 5 / 1000;
-            auto _itr = _CNTmarket.begin();
-            const auto& _tokenSupply = _itr->supply;
-            const auto& _eosSupply = _itr->balance;
-
-            auto _eosTotalAmount = _eosSupply.amount + _amountOfEos;
-            // with no fee
-            uint64_t new_supply = sqrt((real_type)_eosTotalAmount * 2 * K) * 100;
-            uint64_t delta_supply = new_supply - _tokenSupply.amount;
-
-            send_defer_action(
-                permission_level{_self, N(active)},
-                N(dacincubator), N(transfer),
-                make_tuple(_self, p.account, asset(delta_supply, CTN_SYMBOL),
-                        string("Better next time")));
-
-            _CNTmarket.modify(_itr, 0, [&](auto &t) {
-                t.supply.amount = new_supply;
-                t.balance.amount = ((real_type)new_supply * new_supply) / 2 / K / 10000;
-            });            
+        if (result[8] == beton[8])
+        {
+            bonus += bets[8] + bets[8] * EVEN; // (9)
+            presult += '9';
         }
-        else if(bonus<=2000000){            
+        if (result[9] == beton[9])
+        {
+            bonus += bets[9] + bets[9] * ODD; // (10)
+            presult += 'A';
+        }
+        if (result[10] == beton[10])
+        {
+            bonus += bets[10] + bets[10] * EVEN; // (11)
+            presult += 'B';
+        }        
+
+        if(bonus != 0 && bonus<=2000000){    
             send_defer_action(
                 permission_level{_self, N(active)},
                 N(eosio.token), N(transfer),
                 make_tuple(_self, p.account, asset(bonus, EOS_SYMBOL),
-                        string("Winner Winner Chicken Dinner. " + presult)));                
-        } 
+                        string("Winner Winner Chicken Dinner. " + presult)));            
+        }
+        auto _amountOfEos = getTotalBets(bets);
+        auto _amountToMiner = _amountOfEos * 40;
+
+        send_defer_action(
+            permission_level{_self, N(active)},
+            N(dacincubator), N(transfer),
+            make_tuple(_self, p.account, asset(_amountToMiner, CTN_SYMBOL),
+                string("for miner." + presult))
+        );        
     }
 
-   
     g.dragon = dragon;
     g.tiger = tiger;
     _global.set(g, _self);
