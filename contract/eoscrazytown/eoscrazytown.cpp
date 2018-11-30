@@ -485,7 +485,7 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
             permission_level{_self, N(active)},
             N(dacincubator), N(transfer),
             make_tuple(_self, p.account, asset(_amountToMiner, CTN_SYMBOL),
-                string("for miner"))
+                string("for miner." + presult))
         );        
     }
 

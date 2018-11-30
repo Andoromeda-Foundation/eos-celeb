@@ -229,3 +229,9 @@ cleos -u http://api.eosbeijing.one push action eosio.token transfer '["cryptomee
 0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,winninetysix
 0.0000,0.0000,0.0000,0.0000,0.2500,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,winninetysix,winninetysix
 0.2500,0.0000,0.0000,0.0000,0.2500,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,ha4donbsgege,winninetysix
+
+cleos -u http://api.eosbeijing.one set contract crazytowntea crazytowntea -p crazytowntea@active
+cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0500,0.0500,0.0000,0.0000,0.0000,0.0000,0.0000"]' -p tengavinwood@active
+
+
+0.0000,0.0000,0.0000,0.0000,0.5000,0.5000,0.0000,0.0000,0.0000,0.0000,0.0000
