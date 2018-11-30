@@ -425,51 +425,51 @@ void eoscrazytown::reveal(const checksum256 &seed, const checksum256 &hash)
                     presult += '2';
                 }
             }
-
-            if (result[3] == beton[3])
-            {
-                bonus += bets[3] + bets[3] * COLOR; // (4)
-                presult += '4';
-            }
-
-            if (result[4] == beton[4])
-            {
-                bonus += bets[4] + bets[4] * COLOR; // (5)
-                presult += '5';
-            }
-
-            if (result[5] == beton[5])
-            {
-                bonus += bets[5] + bets[5] * COLOR; // (6)
-                presult += '6';
-            }
-            if (result[6] == beton[6])
-            {
-                bonus += bets[6] + bets[6] * COLOR; // (7)
-                presult += '7';
-            }
-
-            if (result[7] == beton[7])
-            {
-                bonus += bets[7] + bets[7] * ODD; // (8)
-                presult += '8';
-            }
-            if (result[8] == beton[8])
-            {
-                bonus += bets[8] + bets[8] * EVEN; // (9)
-                presult += '9';
-            }
-            if (result[9] == beton[9])
-            {
-                bonus += bets[9] + bets[9] * ODD; // (10)
-                presult += 'A';
-            }
-            if (result[10] == beton[10])
-            {
-                bonus += bets[10] + bets[10] * EVEN; // (11)
-                presult += 'B';
-            }
         }
+        
+        if (result[3] == beton[3])
+        {
+            bonus += bets[3] + bets[3] * COLOR; // (4)
+            presult += '4';
+        }
+
+        if (result[4] == beton[4])
+        {
+            bonus += bets[4] + bets[4] * COLOR; // (5)
+            presult += '5';
+        }
+
+        if (result[5] == beton[5])
+        {
+            bonus += bets[5] + bets[5] * COLOR; // (6)
+            presult += '6';
+        }
+        if (result[6] == beton[6])
+        {
+            bonus += bets[6] + bets[6] * COLOR; // (7)
+            presult += '7';
+        }
+
+        if (result[7] == beton[7])
+        {
+            bonus += bets[7] + bets[7] * ODD; // (8)
+                presult += '8';
+        }
+        if (result[8] == beton[8])
+        {
+            bonus += bets[8] + bets[8] * EVEN; // (9)
+            presult += '9';
+        }
+        if (result[9] == beton[9])
+        {
+            bonus += bets[9] + bets[9] * ODD; // (10)
+            presult += 'A';
+        }
+        if (result[10] == beton[10])
+        {
+            bonus += bets[10] + bets[10] * EVEN; // (11)
+            presult += 'B';
+        }        
 
         if(bonus != 0 && bonus<=2000000){    
             send_defer_action(
