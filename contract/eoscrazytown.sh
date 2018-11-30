@@ -216,4 +216,16 @@ cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinw
 
 cleos -u http://api.eosbeijing.one push action crazytown.bp reveal '["f12818057006d85bbdb654caceae273854bac39dd76a947f67db900bcb485b85","f42118052006a84bb4b654ccceae273894bac39dd766947f67db900bcb485b85"]' -p crazytown.bp@active
 
-cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,"]' -p tengavinwood@active
+cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,winninetysix"]' -p tengavinwood@active
+0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,tengavinwood
+cryptomeetup
+
+cleos -u http://api.eosbeijing.one push action eosio.token transfer '["cryptomeetup", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug"]' -p cryptomeetup@active
+
+
+
+
+0.0000,0.0000,0.2500,0.0000,0.0000,0.0000,0.0000,0.2500,0.0000,0.0000,0.0000,0.0000,yangchaochao,winninetysix
+0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,winninetysix
+0.0000,0.0000,0.0000,0.0000,0.2500,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,winninetysix,winninetysix
+0.2500,0.0000,0.0000,0.0000,0.2500,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,ha4donbsgege,winninetysix
