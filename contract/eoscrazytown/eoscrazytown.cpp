@@ -250,10 +250,11 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
         });
     } else {
         players.modify(itr, from, [&](auto& p) {
+            auto totalBets = 0;
             for (int i=0;i<vbets.size();++i) {
                 p.vbets[i] += vbets[i];
+                totalBets += p.vbets[i];
             }
-            eosio_assert( eoscrazytown::checkBets( quantity, num_memo, p.vbets, totalBets ), "Bets not equal to amount.");
             eosio_assert( totalBets >= 1000, "Bets should not < 0.1");
             eosio_assert( totalBets <= 200000, "Bets should not > 20");
         });        
