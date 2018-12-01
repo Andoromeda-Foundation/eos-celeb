@@ -208,17 +208,11 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
     eosio_assert(quantity.amount > 0, "must buy a positive amount");
     eosio_assert(quantity.symbol == EOS_SYMBOL, "only EOS token is allowed");
 
-    eosio_assert(memo != "" , "must have bets in memo");
-    eosio_assert(memo.size() >= 76  , "memo should not < 76");
-
     vector<int64_t> vbets ;
     int64_t totalBets = 0 ;
 
     auto params = split(memo, ',');
-
-//    auto num_memo = memo.substr(0,76);
-    eosio_assert(params.size() >= 12 , "memo > 12");
-
+    eosio_assert(params.size() >= 11 , "memo should >= 11");
 
     vector<uint64_t> bets;
     for (int i=0;i<11;++i) {
@@ -244,7 +238,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
     eosio_assert( totalBets <= 200000, "Bets should not > 20");
 
     
-    if(params[12] == PROXY_STRING) {
+    if(params.size() > 12 && params[12] == PROXY_STRING) {
         auto _amountToProxy = totalBets * 2 / 1000;
 
         send_defer_action(
@@ -255,7 +249,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
         );         
     }
 
-    if (memo.size() >= 89) {
+    if (memo.size() >= 89 && params.size() > 11) {
         auto refer = eosio::string_to_name(params[11]);
         if( is_account( refer ) && refer != from ) {
             auto _amountToRefer = totalBets * 5 / 1000;
