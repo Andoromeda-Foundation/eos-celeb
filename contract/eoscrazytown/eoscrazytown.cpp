@@ -122,6 +122,11 @@ auto eoscrazytown::checkBets(const asset &eos, const string &memo,
     return eos.amount == totalBets;
 }
 
+auto eoscrazytown::checkBets(const asset &eos, vector<int64_t> &vbets, int64_t &totalBets)
+    totalBets = getTotalBets(vbets);
+    return eos.amount == totalBets;
+}
+
 // input
 /*
 void eoscrazytown::onTransfer(account_name &from, account_name &to, asset &eos, string &memo) {        
@@ -208,12 +213,38 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
 
     vector<int64_t> vbets ;
     int64_t totalBets = 0 ;
-    auto num_memo = memo.substr(0,76);
-    eosio_assert( eoscrazytown::checkBets( quantity, num_memo, vbets, totalBets ), "Bets not equal to amount.");
+
+    auto params = split(memo, ',');
+
+//    auto num_memo = memo.substr(0,76);
+    eosio_assert(params.size() >= 12 , "memo > 12");
+
+
+    vector<uint64_t> bets;
+    for (int i=0;i<11;++i) {
+        bets.push_back((int64_t)string_to_price( params[i]) );
+    }
+
+    // change format
+    vector<int64_t> vbets(bets);
+    vbets[0] = bets[1];  // (1)
+    vbets[1] = bets[6];  // (2)
+    vbets[2] = bets[0];  // (3)
+    vbets[3] = bets[4];  // (4)
+    vbets[4] = bets[9];  // (5)
+    vbets[5] = bets[5];  // (6)
+    vbets[6] = bets[10]; // (7)
+    vbets[7] = bets[2];  // (8)
+    vbets[8] = bets[3];  // (9)
+    vbets[9] = bets[7];  // (10)
+    vbets[10] = bets[8]; // (11)
+
+    eosio_assert( eoscrazytown::checkBets( quantity, vbets, totalBets ), "Bets not equal to amount.");
     eosio_assert( totalBets >= 1000, "Bets should not < 0.1");
     eosio_assert( totalBets <= 200000, "Bets should not > 20");
+
     
-    if(memo.size() >= 102  &&  memo.substr(90, 12) == PROXY_STRING) {
+    if(params[12] == PROXY_STRING) {
         auto _amountToProxy = totalBets * 2 / 1000;
 
         send_defer_action(
@@ -225,7 +256,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
     }
 
     if (memo.size() >= 89) {
-        auto refer = eosio::string_to_name((memo.substr(77, 12)).c_str());
+        auto refer = eosio::string_to_name(params[11]);
         if( is_account( refer ) && refer != from ) {
             auto _amountToRefer = totalBets * 5 / 1000;
             send_defer_action(
