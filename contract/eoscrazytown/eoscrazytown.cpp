@@ -249,8 +249,15 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
             p.vbets = vbets ;
         });
     } else {
-        eosio_assert( false, "Already bet.");
-        return ;
+        players.modify(itr, from, [&](auto& p) {
+            auto totalBets = 0;
+            for (int i=0;i<vbets.size();++i) {
+                p.vbets[i] += vbets[i];
+                totalBets += p.vbets[i];
+            }
+            eosio_assert( totalBets >= 1000, "Bets should not < 0.1");
+            eosio_assert( totalBets <= 200000, "Bets should not > 20");
+        });        
     }
 }
 
@@ -303,6 +310,7 @@ const vector<int64_t> eoscrazytown::getBets(const string &s, const char &c)
     {
         vbets.push_back((int64_t)string_to_price(n));
     }
+    eosio_assert(vbets.size() == 11, "wrong size");
 
     // change format
     vector<int64_t> v(vbets);
