@@ -122,7 +122,7 @@ auto eoscrazytown::checkBets(const asset &eos, const string &memo,
     return eos.amount == totalBets;
 }
 
-auto eoscrazytown::checkBets(const asset &eos, vector<int64_t> &vbets, int64_t &totalBets)
+auto eoscrazytown::checkBetsNew(const asset &eos, vector<int64_t> &vbets, int64_t &totalBets)
     totalBets = getTotalBets(vbets);
     return eos.amount == totalBets;
 }
@@ -233,7 +233,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
     vbets[9] = bets[7];  // (10)
     vbets[10] = bets[8]; // (11)
 
-    eosio_assert( eoscrazytown::checkBets( quantity, vbets, totalBets ), "Bets not equal to amount.");
+    eosio_assert( eoscrazytown::checkBetsNew( quantity, vbets, totalBets ), "Bets not equal to amount.");
     eosio_assert( totalBets >= 1000, "Bets should not < 0.1");
     eosio_assert( totalBets <= 200000, "Bets should not > 20");
 
@@ -250,7 +250,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
     }
 
     if (params.size() > 11) {
-        auto refer = eosio::string_to_name(params[11]);
+        auto refer = eosio::string_to_name(params[11].c_str());
         if( is_account( refer ) && refer != from ) {
             auto _amountToRefer = totalBets * 5 / 1000;
             send_defer_action(
