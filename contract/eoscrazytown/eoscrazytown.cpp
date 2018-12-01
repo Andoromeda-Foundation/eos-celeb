@@ -249,7 +249,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
         );         
     }
 
-    if (memo.size() >= 89 && params.size() > 11) {
+    if (params.size() > 11) {
         auto refer = eosio::string_to_name(params[11]);
         if( is_account( refer ) && refer != from ) {
             auto _amountToRefer = totalBets * 5 / 1000;
