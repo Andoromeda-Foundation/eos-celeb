@@ -1,6 +1,8 @@
 #cleos wallet unlock -n www --password PW5JDQJvz73w73eNEtthCRhLn9gieFki5uiZu1JZdjwMftVA3f4cG
 
 cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4LZ1u
+#cleos -u http://api.eosbeijing.one push action eosio.token transfer '["minakokojima", "crazytown.bp", "0.2500 EOS", "0.0000,0.0000,0.0000,0.0000,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,dacincubator,aa"]' -p minakokojima@active
+
 /usr/local/eosio/bin/eosiocpp -g eoscrazytown/eoscrazytown.abi  eoscrazytown/eoscrazytown.cpp
 /usr/local/eosio/bin/eosiocpp -o eoscrazytown/eoscrazytown.wast eoscrazytown/eoscrazytown.cpp
 
@@ -175,63 +177,3 @@ cleos wallet unlock --password PW5JaGpLtoM1vtD1WxiAC4RDsr82FRUczmKgocw1KJZqVahB4
 
 # buy,happyeosslot,HPY,2.0000
 
-
-
-cleos -u http://eos.eosza.io:8888 push action eosio buyram '["eoscrazytown","eoscrazytown","90.0000 EOS"]' -p eoscrazytown@active
-cleos -u http://eos.eosza.io:8888 set contract eoscrazytown eoscrazytown -p eoscrazytown@active
-f42818057006d85bbdb654ccceae273854bac39dd766947f67db900bcb485b85
-
-cleos -u http://eos.eosza.io:8888 push action eoscrazytown init '["f42818057006d85bbdb654ccceae273854bac39dd766947f67db900bcb485b85"]' -p eoscrazytown@active
-
-0,0,0,5,0,0,0,0,1,0,0,ethdofuckeos,winninetysix
-
-cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["ethdofuckeos", "eoscrazytown", "6.0000 EOS", "0,0,0,5,0,0,0,0,1,0,0,ethdofuckeos,winninetysix"]' -p ethdofuckeos@active
-cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["bookwilllook", "eoscrazytown", "6.0000 EOS", "0,0,0,5,0,0,0,0,1,0,0"]' -p bookwilllook@active
-0.0000,0.0000,0.0000,0.0000,0.2000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,chenkaioneos
-cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["bookwilllook", "eoscrazytown", "1.0000 EOS", "0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,chenkaioneos,winninetysix"]' -p bookwilllook@active
-
-cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["bookwilllook", "eoscrazytown", "0.0100 EOS", "0.0000,0.0000,0.0000,0.0000,0.0100,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,chenkaioneos"]' -p bookwilllook@active
-
-
-cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["ethdofuckeos", "eoscrazytown", "0.0100 EOS", "0.0000,0.0000,0.0000,0.0000,0.0100,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,chenkaioneos"]' -p ethdofuckeos@active
-
-cleos -u http://eos.eosza.io:8888 push action eoscrazytown reveal '["f42818057006d85bbdb654caceae273854bac39dd76a947f67db900bcb485b85","f42818057006a84bb4b654ccceae273894bac39dd766947f67db900bcb485b85"]' -p eoscrazytown@active
-
-
-cleos -u http://eos.eosza.io:8888 set account permission eoscrazytown active '{"threshold": 1,"keys": [{"key": "EOS71Gmaixv2YpopCM1mZfrX8jzfrRz1Qe7ENybPyz2RDesqmhFjw","weight": 1}],"accounts": [{"permission":{"actor":"eoscrazytown","permission":"eosio.code"},"weight":1}]}' owner -p eoscrazytown
-
-
-cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["ethdofuckeos", "eoscrazytown", "20.0000 EOS", "0.0000,0.0000,0.00010"]' -p ethdofuckeos@active
-
-0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,chenkaioneos,winninetysix
-
-cleos -u http://eos.eosza.io:8888 push action eosio.token transfer '["ethdofuckeos", "eoscrazytown", "1.0000 EOS", "0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,bookwilllook,winninetysix"]' -p ethdofuckeos@active
-
-
-##########################
-tengavinwood
-cleos -u http://api.eosbeijing.one set contract crazytown.bp eoscrazytown -p crazytown.bp@active
-cleos -u http://api.eosbeijing.one push action crazytown.bp init '["f42818057006d85bbdb654ccceae273854bac39dd766947f67db900bcb485b85"]' -p crazytown.bp@active
-cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000"]' -p tengavinwood@active
-
-cleos -u http://api.eosbeijing.one push action crazytown.bp reveal '["f12818057006d85bbdb654caceae273854bac39dd76a947f67db900bcb485b85","f42118052006a84bb4b654ccceae273894bac39dd766947f67db900bcb485b85"]' -p crazytown.bp@active
-
-cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,winninetysix"]' -p tengavinwood@active
-0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,tengavinwood
-cryptomeetup
-
-cleos -u http://api.eosbeijing.one push action eosio.token transfer '["cryptomeetup", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug"]' -p cryptomeetup@active
-
-
-
-
-0.0000,0.0000,0.2500,0.0000,0.0000,0.0000,0.0000,0.2500,0.0000,0.0000,0.0000,0.0000,yangchaochao,winninetysix
-0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1000,0.0000,0.0000,0.0000,blackholebug,winninetysix
-0.0000,0.0000,0.0000,0.0000,0.2500,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,winninetysix,winninetysix
-0.2500,0.0000,0.0000,0.0000,0.2500,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,ha4donbsgege,winninetysix
-
-cleos -u http://api.eosbeijing.one set contract crazytowntea crazytowntea -p crazytowntea@active
-cleos -u http://api.eosbeijing.one push action eosio.token transfer '["tengavinwood", "crazytown.bp", "0.1000 EOS", "0.0000,0.0000,0.0000,0.0000,0.0500,0.0500,0.0000,0.0000,0.0000,0.0000,0.0000"]' -p tengavinwood@active
-
-
-0.0000,0.0000,0.0000,0.0000,0.5000,0.5000,0.0000,0.0000,0.0000,0.0000,0.0000

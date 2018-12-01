@@ -122,7 +122,7 @@ auto eoscrazytown::checkBets(const asset &eos, const string &memo,
     return eos.amount == totalBets;
 }
 
-auto eoscrazytown::checkBetsNew(const asset &eos, vector<int64_t> &vbets, int64_t &totalBets)
+auto eoscrazytown::checkBetsNew(const asset &eos, vector<int64_t> &vbets, int64_t &totalBets) {
     totalBets = getTotalBets(vbets);
     return eos.amount == totalBets;
 }
@@ -208,17 +208,17 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
     eosio_assert(quantity.amount > 0, "must buy a positive amount");
     eosio_assert(quantity.symbol == EOS_SYMBOL, "only EOS token is allowed");
 
-    vector<int64_t> vbets ;
-    int64_t totalBets = 0 ;
+
 
     auto params = split(memo, ',');
     eosio_assert(params.size() >= 11 , "memo should >= 11");
 
-    vector<uint64_t> bets;
+    vector<int64_t> bets;
     for (int i=0;i<11;++i) {
         bets.push_back((int64_t)string_to_price( params[i]) );
     }
 
+    int64_t totalBets = 0 ;
     // change format
     vector<int64_t> vbets(bets);
     vbets[0] = bets[1];  // (1)
@@ -274,7 +274,7 @@ void eoscrazytown::onTransfer(account_name from, account_name to, extended_asset
             p.vbets = vbets ;
         });
     } else {
-        players.modify(itr, from, [&](auto& p) {
+        players.modify(itr, _self, [&](auto& p) {
             auto totalBets = 0;
             for (int i=0;i<vbets.size();++i) {
                 p.vbets[i] += vbets[i];

@@ -213,7 +213,7 @@ private:
     auto checkBets( const asset &eos, const string &memo,
                 vector<int64_t> &vbets, int64_t &totalBets  ); 
 
-    auto checkBetsNew(const asset &eos, vector<int64_t> &vbets, int64_t &totalBets)
+    auto checkBetsNew(const asset &eos, vector<int64_t> &vbets, int64_t &totalBets);
 
     auto getResult( const card &a,  const card &b ) ;
 };
